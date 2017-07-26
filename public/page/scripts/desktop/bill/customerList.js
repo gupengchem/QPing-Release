@@ -16,7 +16,7 @@ $(function () {
             let me = this;
 
             $('.btn_add').click(function () {
-                $('#dataModal').modal('show');
+                $('#customerDataModal').modal('show');
             });
 
             $('.btn_query').click(function () {
@@ -24,7 +24,8 @@ $(function () {
             });
 
             $('.btn_save').click(function () {
-                let data = Dolphin.form.getValue('data_form');
+                console.log('... enter btn_save...');
+                let data = Dolphin.form.getValue('customer_data_form');
                 if (!me.selectData) {
                     delete data.parent;
                 } else {
@@ -33,14 +34,16 @@ $(function () {
                     };
                 }
                 data.category = data.category || '1';
+                console.log('... customer save...');
+                console.log(data);
                 Dolphin.ajax({
-                    url: '/api/742445c653654caaa4a1fa69eb651a9a',
+                    url: '/api/4bcfbb1d07ff4b2ab018dc14b104b1db',
                     type: Dolphin.requestMethod.PUT,
                     data: Dolphin.json2string(data),
                     success: function (reData, textStatus) {
                         if (reData.success) {
                             $('.btn_query').click();
-                            $('#dataModal').modal('hide');
+                            $('#customerDataModal').modal('hide');
                         } else {
                             $("#error_message").html(reData.msg);
                         }
@@ -73,8 +76,8 @@ $(function () {
                 });
             });
 
-            $('#dataModal').on('hidden.bs.modal', function () {
-                Dolphin.form.empty('#data_form');
+            $('#customerDataModal').on('hidden.bs.modal', function () {
+                Dolphin.form.empty('#customer_data_form');
                 $("#error_message").empty();
             });
             $('#appConfigModal').on('hidden.bs.modal', function () {
@@ -154,7 +157,7 @@ $(function () {
                 rowIndex: true,
                 checkbox: true,
                 ajaxType: Dolphin.requestMethod.POST,
-                url: '/api/742445c653654caaa4a1fa69eb651a9a',
+                url: '/api/826f7a47aa94482a9a0c6bc7b59fc931',
                 pagination: true,
                 onChecked: function (data) {
                     console.log(data);
@@ -164,7 +167,7 @@ $(function () {
                     org.breezee.buttons.editCallback('1423c7225d134248944babc34f3a36f4', 'id', function (data) {
                         if (data.value.customerId)
                             $("#customerId").val(data.value.customerId);
-                        $('#dataModal').modal('show');
+                        $('#customerDataModal').modal('show');
                     });
                     org.breezee.buttons.delCallback('1423c7225d134248944babc34f3a36f4', function (data) {
                         $('.btn_query').click();

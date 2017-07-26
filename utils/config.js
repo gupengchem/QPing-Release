@@ -13,6 +13,6 @@ module.exports = {
     production:false,
 
     uploadPath: 'D:\\mywork\\workspace5\\pcp\\pcp-web\\pcp-backoffice\\public\\uploadFiles\\images',
-    apiServerUrl: 'http://127.0.0.1:11007/services',
+    apiServerUrl: 'http://127.0.0.1:6031/',
     apiFilePath: '/../apiConfig.json'
 };

@@ -1,0 +1,26 @@
+<% const ctx = global.config.contextPath+global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include foodMenu %>
+        </div>
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+
+</body>
+</html>

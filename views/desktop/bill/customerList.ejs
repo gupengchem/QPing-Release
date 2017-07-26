@@ -61,6 +61,67 @@
     </div>
 </div>
 
+<div class="modal fade" id="customerDataModal" tabindex="-1" role="dialog" aria-labelledby="customerDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">客户编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="customer_data_form" method="post" action="">
+                            <input type="hidden" name="id"/>
+                            <input type="hidden" name="parent.id"/>
+                            <div class="form-group">
+                                <label class="form-control-label" for="category">客户分类</label>
+                                <select class="form-control col-md-8" name="category" id="category">
+                                    <option value="" selected>--请选择--</option>
+                                    <option value="0">集团客户</option>
+                                    <option value="1">分支机构</option>
+                                    <option value="2">门店站点</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="code">客户编码</label>
+                                <input type="text" class="form-control" id="code" name="code" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="name">客户名称</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="mobile">联系手机</label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="person">联系人</label>
+                                <input type="tel" class="form-control" id="person" name="person" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="industry">行业</label>
+                                <select class="form-control col-md-6" name="industry" id="industry">
+                                    <option value="">--请选择--</option>
+                                    <option value="canyin">餐饮</option>
+                                    <option value="lingshou">零售</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="dataModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-primary" role="document">
         <div class="modal-content">

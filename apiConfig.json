@@ -133,7 +133,7 @@
     "8fa200b02def4bdf88f4edaaec3b259e": "/pms/materiel/{id}",
     "f4cd29f771044f2d8d90d33b238fd371": "/pms/materiel/save/",
     "53afe452392f44b19d64ae88d1de7491": "/pms/materiel/page",
-    "3416f9ded3b64ca19ed78a80d54c7653":  "/shop/list",
+    "3416f9ded3b64ca19ed78a80d54c7653": "/shop/list",
     "95d7cd8d08884789841d354411849ba7": "/pms/shopPrice/save",
     "00b5f7f9915f456f935de39f419ec641": "/bpm/completeTask",
     "a95f7a0ee3944c09bec8099c7b4c85bc": "/bpm/findUndo",
@@ -146,7 +146,14 @@
     "88f533f6186b47c1a7c348cab1835c39": "/aeko/{id}",
 
     "6b4c345c3988f533f6188cab1837c1a7": "/fetch/page",
-    "e452d64ae88d1392de749153aff44b19": "/fetchId/{id}"
+    "e452d64ae88d1392de749153aff44b19": "/fetchId/{id}",
+
+
+    "df995a1ed3b64d708170c09927542c9e": "/dealdetail/page/",
+    "826f7a47aa94482a9a0c6bc7b59fc931": "/customer/page/",
+    "4bcfbb1d07ff4b2ab018dc14b104b1db": "/customer/"
+
+
 
 
 

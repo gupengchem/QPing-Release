@@ -17,7 +17,7 @@ $(function () {
 
             $('.btn_download').click(function () {
                 let data = Dolphin.form.getValue('data_form');
-                // console.log(data);
+                console.log(data);
                 Dolphin.ajax({
                     url: '/sync',
                     type: Dolphin.requestMethod.POST,
@@ -46,7 +46,6 @@ $(function () {
                     data.totalAmount_gt = Number(data.totalAmount_gt);
                 if (data.totalAmount_le)
                     data.totalAmount_le = Number(data.totalAmount_le);
-                let data = {};
                 me._dataList.load(null, data);
             });
 
@@ -154,11 +153,10 @@ $(function () {
                 rowIndex: true,
                 checkbox: false,
                 ajaxType: Dolphin.requestMethod.POST,
-                url: '/api/df995a1ed3b64d708170c09927542c9e',
+                url: '/api/905c5c466a3b4c08957487b7273f0018',
                 data: {rows: []},
                 pagination: true,
                 onLoadSuccess: function (data) {
-                    console.log(data);
                     if (data.value) {
                         $('#totalSum').html(data.value.total);
                         $('#feeSum').html(data.value.charge);
