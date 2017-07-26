@@ -1,0 +1,36 @@
+{
+  "name": "breezee-backoffice",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/backoffice"
+  },
+  "dependencies": {
+    "body-parser": "latest",
+    "cookie-parser": "latest",
+    "debug": "latest",
+    "ejs": "latest",
+    "express": "latest",
+    "express-session": "latest",
+    "session-file-store" : "latest",
+    "morgan": "latest",
+    "serve-favicon": "latest",
+    "extend": "latest",
+    "request": "latest",
+    "uuid": "latest",
+    "log4js" : "^1.1.1",
+    "formidable" : "latest",
+    "i18n": "latest",
+    "md5":"latest",
+    "sha1":"latest",
+    "basic-xml2json":"latest",
+    "express-xml-bodyparser" : "latest",
+    "js2xmlparser":"latest",
+    "node-schedule" : "latest",
+    "alipay-node-sdk": "latest",
+    "cross-unzip":"latest",
+    "win-7zip":"latest",
+    "iconv-lite":"latest",
+    "bufferhelper":"latest"
+  }
+}

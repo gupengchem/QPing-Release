@@ -1,0 +1,9 @@
+.div_focus{
+    background-color: #e74c3c;
+    color: #fff;
+}
+.error-input {
+    border-color: #e74c3c;
+    box-shadow: none;
+    color: #e74c3c;
+}
