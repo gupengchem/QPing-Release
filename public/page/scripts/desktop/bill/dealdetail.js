@@ -46,7 +46,6 @@ $(function () {
                     data.totalAmount_gt = Number(data.totalAmount_gt);
                 if (data.totalAmount_le)
                     data.totalAmount_le = Number(data.totalAmount_le);
-                let data = {};
                 me._dataList.load(null, data);
             });
 
