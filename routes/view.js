@@ -10,6 +10,7 @@ const _route = {
     , task: require('./viewRoutes/task')
     , system: require('./viewRoutes/system')
     , news: require('./viewRoutes/news')
+    , bill : require('./viewRoutes/bill')
 };
 
 router.all('*', security.checkLogin, security.requireAuthentication, security.loadUser);
