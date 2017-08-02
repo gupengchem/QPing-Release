@@ -149,14 +149,9 @@
     "e452d64ae88d1392de749153aff44b19": "/fetchId/{id}",
 
 
-    "df995a1ed3b64d708170c09927542c9e": "/dealdetail/page/",
-    "826f7a47aa94482a9a0c6bc7b59fc931": "/customer/page/",
+    "df995a1ed3b64d708170c09927542c9e": "/dealdetail/page",
+    "826f7a47aa94482a9a0c6bc7b59fc931": "/customer/page",
     "4bcfbb1d07ff4b2ab018dc14b104b1db": "/customer/"
-
-
-
-
-
 
 
 }

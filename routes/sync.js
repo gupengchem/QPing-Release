@@ -23,7 +23,7 @@ router.use('/', function (req, res, next) {
     }, function (error, response, body) {
         if (body && body.rows) {
             for (let i = 0; i < body.rows.length; i++) {
-                if (body.rows[i].type == 'wepay') {
+                if (body.rows[i].type === 'wepay') {
                     weChat.paymentList({
                         appid: body.rows[i].appId,
                         mch_id: body.rows[i].name,
