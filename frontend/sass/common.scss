@@ -1,0 +1,151 @@
+//common
+//path
+$publicPath: '';
+//color
+$primaryColor: #fff200;
+$secondColor: #231f20;
+$thirdColor: #6ec0b6;
+$activeColor: #337ab7;
+
+$borderColor: #231f20;
+$secondBorderColor: #aaaaaa;
+$fontColor: #231f20;
+$bgColor: #e7e7e7;
+$titleBgColor: #393f41;
+$redColor: red;
+$whiteColor: #ffffff;
+
+@import "writeSimpliQ";
+
+/*common*/
+body{
+  background: #eee;
+  position: relative;
+}
+body > nav.navbar-custom{
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 0;
+  border-bottom: 2px solid #1d99bd;
+  box-shadow: 0 0 5px 0 #00a6e4;
+}
+body > nav.navbar-custom .navbar-brand{
+  padding: 0;
+}
+body > nav.navbar-custom .navbar-brand > img{
+  display: inline-block;
+  height: 50px;
+}
+body > .page-content{
+  margin-top: 10px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+}
+@media (min-width: 1200px){
+  .container{
+    width: 1240px;
+  }
+}
+
+a.link{
+  color: $activeColor;
+  text-decoration: underline;
+}
+a.link:hover{
+  color: $activeColor * 1.5%;
+  text-decoration: underline;
+}
+
+/*水平翻转*/
+.flipx {
+  -moz-transform:scaleX(-1);
+  -webkit-transform:scaleX(-1);
+  -o-transform:scaleX(-1);
+  transform:scaleX(-1);
+}
+/*垂直翻转*/
+.flipy {
+  -moz-transform:scaleY(-1);
+  -webkit-transform:scaleY(-1);
+  -o-transform:scaleY(-1);
+  transform:scaleY(-1);
+}
+
+.detail-form .form-group{
+  margin-bottom: 0;
+}
+
+/*title*/
+.page-header:first-child {
+  margin: 0 0 12px;
+  border-bottom: 1px dotted #e2e2e2;
+  position: relative;
+}
+
+.page-header:first-child h1 {
+  padding: 0;
+  margin: 0 8px;
+  font-size: 24px;
+  font-weight: lighter;
+  color: #2679b5;
+  text-align: left;
+}
+
+.page-header:first-child h1 small {
+  margin: 0 6px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #8089a0;
+}
+
+
+/*panel*/
+.operationButton {
+  height: 35px;
+  margin-bottom : 5px;
+  text-align: right;
+}
+.operationButton.autoHeight {
+  height: auto;
+  margin-bottom : 5px;
+}
+
+.operationButton .btn-group.float-right {
+  margin-left: 10px;
+}
+.page-header .operationButton{
+  position: absolute;
+  right: 3px;
+  top: -4px;
+}
+
+
+/*form*/
+.form-buttons{
+  text-align: center;
+}
+
+/*checkbox block*/
+.checkbox-block{
+
+}
+.checkbox-block > input[type='checkbox'],
+.checkbox-block > input[type='radio']{
+  display: none;
+}
+.checkbox-block > label{
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+}
+.checkbox-block > input[type='checkbox']:checked + label,
+.checkbox-block > input[type='radio']:checked + label{
+  border: 2px solid #337ab7;
+}
+
+/*tool*/
+.inline-block{
+  display: inline-block !important;
+}

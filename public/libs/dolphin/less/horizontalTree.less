@@ -1,0 +1,106 @@
+/*************************************** horizontal tree *******************************************/
+._horizontal_tree {
+  width: 100%;
+  overflow: auto;
+}
+
+._horizontal_tree table {
+  border-collapse: collapse;
+}
+
+._horizontal_tree._horizontal_fluid table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+._horizontal_tree td {
+  border: 1px solid #bbbbbb;
+  min-width: 150px;
+}
+
+._horizontal_tree ._level {
+  width: 150px;
+  min-width: 150px;
+  height: 350px;
+  position: relative;
+  display: inline-block;
+}
+
+._horizontal_tree._horizontal_fluid ._level {
+  width: 100%;
+}
+
+._horizontal_tree ._level ._title {
+  background-color: #eee;
+  border-bottom: 1px solid #bbbbbb;
+  text-align: center;
+  font-weight: 700;
+}
+
+._horizontal_tree ._level ._items {
+
+}
+
+._horizontal_tree ._level ._items ._item {
+  margin: 5px 5px 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0 3px;
+}
+
+._horizontal_tree ._level ._items ._item.active {
+  cursor: pointer;
+  background: #CCCCCC;
+}
+._horizontal_tree ._level ._items ._item.selected {
+  background: #356aa0;
+  color: #ffffff;
+}
+._horizontal_tree ._level ._items ._item:hover{
+  background: #5bc0de;
+  color : #ffffff;
+}
+
+._horizontal_tree ._level ._items ._item ._itemName{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 65%;
+  display: inline-block;
+  vertical-align: sub;
+}
+
+._horizontal_tree ._level ._items ._item ._itemButtons{
+  float: right;
+  margin-right: 5px;
+}
+
+._horizontal_tree ._level ._items ._item ._itemButtons > .glyphicon {
+  margin-left: 5px;
+  display: none;
+}
+._horizontal_tree ._level ._items ._item:hover ._itemButtons > .glyphicon{
+  display: inline-block;
+}
+._horizontal_tree ._level ._items ._item ._itemButtons > .glyphicon {
+  transition:All 0.3s ease-in-out;
+  -webkit-transition:All 0.3s ease-in-out;
+  -moz-transition:All 0.3s ease-in-out;
+  -o-transition:All 0.3s ease-in-out;
+}
+._horizontal_tree ._level ._items ._item ._itemButtons > .glyphicon:hover {
+  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  color: #d9534f;
+  /*color: #4cae4c;*/
+}
+
+._horizontal_tree ._level ._button {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+}

@@ -1,0 +1,52 @@
+<script>
+    'use strict';
+    const contextData = {
+        data : JSON.parse('<%= JSON.stringify(data) %>'.replace(/&#34;/g, '"') || "{}"),
+        body : JSON.parse('<%= JSON.stringify(body) %>'.replace(/&#34;/g, '"') || "{}"),
+        userData : JSON.parse('<%= JSON.stringify(userData || {}) %>'.replace(/&#34;/g, '"') || "{}"),
+        contextPath: "<%= global.config.path.contextPath %>",
+        viewPrefix: "<%= global.config.path.viewPrefix %>"
+    };
+
+</script>
+
+<script src="<%=global.config.cdn.path %>/jquery/2.2.0/jquery.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery-migrate-1.4.1.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/bootstrap.min.js"></script>
+
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.ui.touch-punch.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.sparkline.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/fullcalendar.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/excanvas.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.flot.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.flot.pie.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.flot.stack.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.flot.resize.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.flot.time.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.autosize.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/jquery.placeholder.min.js"></script>
+
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/custom.min.js"></script>
+<script src="<%= global.config.path.publicPath %>/simpliQ/js/core.min.js"></script>
+
+<!-- bootstrap-datetimepicker -->
+<script src="<%= global.config.path.publicPath %>/libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="<%= global.config.path.publicPath %>/libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<!-- file-upload -->
+<script src="<%= global.config.path.publicPath %>/libs/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="<%= global.config.path.publicPath %>/libs/jquery-file-upload/js/jquery.fileupload.js"></script>
+
+<!--dolphin-->
+<script src="<%= global.config.path.publicPath %>/libs/dolphin/dolphin.js"></script>
+<script src="<%= global.config.path.publicPath %>/libs/dolphin/local/message_zh-CN.js"></script>
+<script src="<%= global.config.path.publicPath %>/custom/js/DolphinConfig.js"></script>
+<script src="<%= global.config.path.publicPath %>/custom/js/customValidate.js"></script>
+
+<!--custom script-->
+<script src="<%= global.config.path.publicPath %>/custom/js/common.js"></script>
+<script src="<%= global.config.path.publicPath %>/custom/js/menu.js"></script>
+
+<!--page script-->
+<script src="<%= global.config.path.publicPath %>/page-script<%=path %>.js"></script>

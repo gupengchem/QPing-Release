@@ -1,0 +1,48 @@
+.dolphin-row{
+  position: relative;
+  margin-left : -15px;
+  margin-right : -15px;
+}
+
+.dolphin-row:before, .dolphin-row:after {
+  display: table;
+  content: " ";
+}
+.dolphin-row:after {
+  clear: both;
+}
+
+.modal-body .dolphin-row{
+  position: relative;
+  margin-left : -10px;
+  margin-right : -10px;
+}
+
+.generate-columns(24);
+
+.generate-columns(@n, @i: 0) when (@i =< @n) {
+  .dolphin-col-@{i} {
+    width: (@i * 100% / @n);
+    &:extend(.dolphin-col);
+  }
+
+  .modal-body .dolphin-col-@{i}{
+    padding-left : 10px;
+    padding-right: 10px;
+  }
+  .generate-columns(@n, (@i + 1));
+}
+
+.dolphin-col{
+  float : left;
+  position: relative;
+  min-height: 1px;
+  padding-left : 15px;
+  padding-right: 15px;
+}
+
+.dolphin-col, .dolphin-row, .dolphin-row:before, .dolphin-row.after{
+  box-sizing : border-box;
+}
+
+

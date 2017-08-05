@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include meta.ejs %>
+    <title>登录</title>
+    <% include public.ejs %>
+    <style>
+        body{
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<!--<div class="container">-->
+
+    <!--<form class="form-signin" action="/login" method="post" id="loginForm">-->
+        <!--<input type="hidden" value="<%=redirect %>" id="redirectUrl" />-->
+        <!--<h2 class="form-signin-heading">请登录</h2>-->
+        <!--<label for="inputEmail" class="sr-only">用户名</label>-->
+        <!--<input type="text" class="form-control" placeholder="用户名" name="username" autofocus>-->
+        <!--<label for="inputPassword" class="sr-only">密码</label>-->
+        <!--<input type="password" class="form-control" placeholder="密码" name="password">-->
+        <!--<br/>-->
+        <!--<button class="btn btn-lg btn-primary btn-block" type="submit" id="LoginButton">登录</button>-->
+    <!--</form>-->
+<!--</div>-->
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="login-box">
+                <h2>请登录你的账户</h2>
+                <form class="form-horizontal" action="/login" method="post" id="loginForm">
+                    <fieldset>
+                        <input type="hidden" value="<%=redirect %>" id="redirectUrl" />
+
+                        <input class="input-large col-xs-12" name="username" id="username" type="text" placeholder="用户名" autofocus />
+
+                        <input class="input-large col-xs-12" name="password" id="password" type="password" placeholder="密码"/>
+
+                        <div class="clearfix"></div>
+
+                        <label class="remember" for="remember"><input type="checkbox" id="remember" />下次自动登录</label>
+
+                        <div class="clearfix"></div>
+
+                        <button type="submit" class="btn btn-primary col-xs-12">登录</button>
+                    </fieldset>
+
+                </form>
+                <hr>
+                <h3>忘记密码</h3>
+                <p>
+                    请 <a href="login.html#" class="link">点击这里</a> 来修改密码
+                </p>
+            </div>
+        </div><!--/row-->
+
+    </div><!--/row-->
+
+</div><!--/container-->
+<% include ../common/script.ejs %>
+</body>
+</html>

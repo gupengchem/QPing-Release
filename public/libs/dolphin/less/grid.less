@@ -1,0 +1,51 @@
+.grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grid>tbody>tr>td {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.grid>tbody>tr>td:first-child {
+  border-left: 1px solid #000;
+}
+
+.grid>tbody>tr>td:last-child {
+  border-right: 1px solid #000;
+}
+
+.grid .title {
+  padding: 5px 10px;
+  background: #eee;
+}
+
+.grid .title>span {
+  margin: 0px 20px 0 0;
+}
+
+.grid .details > td {
+  padding:10px;
+}
+
+.grid .gridButton{
+  float:right;
+  cursor:pointer;
+}
+.grid .gridButton span:hover{
+  color:red;
+}
+
+//loading
+.dolphin_grid{
+  position: relative;
+}
+.dolphin_grid .loading{
+  z-index: inherit;
+}
+.dolphin_grid .loading .progress{
+  top: 50%;
+  z-index: inherit;
+  margin-top: -27px;
+}

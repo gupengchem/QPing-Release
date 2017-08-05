@@ -1,0 +1,45 @@
+header{
+  .container{
+    padding: 0;
+
+    a.navbar-brand{
+      margin-left: 0 !important;
+      position: relative;
+      height: 40px;
+    }
+
+    a#main-menu-toggle.main-menu{
+      position: relative;
+      float: left;
+      padding: 9px 12px;
+      margin: 0;
+
+      &.active{
+        background: #ffffff;
+        color: #36a9e1;
+        //background: #f5f5f5;
+        //color: #333333;
+      }
+    }
+  }
+}
+
+//左侧菜单
+.nav-tabs.nav-stacked{
+  > li{
+    > ul{
+      > li{
+        > a{
+          padding: 10px 20px 10px 40px;
+
+        }
+
+        &.active{
+          > a{
+            background: #000000;
+          }
+        }
+      }
+    }
+  }
+}
