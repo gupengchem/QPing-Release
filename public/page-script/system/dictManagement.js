@@ -157,6 +157,5 @@ page.formatterDate = function (val) {
 
 
 $(function () {
-    Menu.select("dictList");
     page.init();
 });

@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.detail-form .col-lg-1, .detail-form .col-lg-10, .detail-form .col-lg-11, .detail-form .col-lg-12, .detail-form .col-lg-2, .detail-form .col-lg-3, .detail-form .col-lg-4, .detail-form .col-lg-5, .detail-form .col-lg-6, .detail-form .col-lg-7, .detail-form .col-lg-8, .detail-form .col-lg-9, .detail-form .col-md-1, .detail-form .col-md-10, .detail-form .col-md-11, .detail-form .col-md-12, .detail-form .col-md-2, .detail-form .col-md-3, .detail-form .col-md-4, .detail-form .col-md-5, .detail-form .col-md-6, .detail-form .col-md-7, .detail-form .col-md-8, .detail-form .col-md-9, .detail-form .col-sm-1, .detail-form .col-sm-10, .detail-form .col-sm-11, .detail-form .col-sm-12, .detail-form .col-sm-2, .detail-form .col-sm-3, .detail-form .col-sm-4, .detail-form .col-sm-5, .detail-form .col-sm-6, .detail-form .col-sm-7, .detail-form .col-sm-8, .detail-form .col-sm-9, .detail-form .col-xs-1, .detail-form .col-xs-10, .detail-form .col-xs-11, .detail-form .col-xs-12, .detail-form .col-xs-2, .detail-form .col-xs-3, .detail-form .col-xs-4, .detail-form .col-xs-5, .detail-form .col-xs-6, .detail-form .col-xs-7, .detail-form .col-xs-8, .detail-form .col-xs-9, .edit-form .col-lg-1, .edit-form .col-lg-10, .edit-form .col-lg-11, .edit-form .col-lg-12, .edit-form .col-lg-2, .edit-form .col-lg-3, .edit-form .col-lg-4, .edit-form .col-lg-5, .edit-form .col-lg-6, .edit-form .col-lg-7, .edit-form .col-lg-8, .edit-form .col-lg-9, .edit-form .col-md-1, .edit-form .col-md-10, .edit-form .col-md-11, .edit-form .col-md-12, .edit-form .col-md-2, .edit-form .col-md-3, .edit-form .col-md-4, .edit-form .col-md-5, .edit-form .col-md-6, .edit-form .col-md-7, .edit-form .col-md-8, .edit-form .col-md-9, .edit-form .col-sm-1, .edit-form .col-sm-10, .edit-form .col-sm-11, .edit-form .col-sm-12, .edit-form .col-sm-2, .edit-form .col-sm-3, .edit-form .col-sm-4, .edit-form .col-sm-5, .edit-form .col-sm-6, .edit-form .col-sm-7, .edit-form .col-sm-8, .edit-form .col-sm-9, .edit-form .col-xs-1, .edit-form .col-xs-10, .edit-form .col-xs-11, .edit-form .col-xs-12, .edit-form .col-xs-2, .edit-form .col-xs-3, .edit-form .col-xs-4, .edit-form .col-xs-5, .edit-form .col-xs-6, .edit-form .col-xs-7, .edit-form .col-xs-8, .edit-form .col-xs-9 {
+  padding-left: 10px;
+  padding-right: 10px; }
+
 header .container {
   padding: 0; }
   header .container a.navbar-brand {
@@ -20,9 +24,11 @@ header .container {
 .nav-tabs.nav-stacked > li > ul > li.active > a {
   background: #000000; }
 
+.nav-tabs.nav-stacked > li.active > a {
+  background: #000000; }
+
 /*common*/
 body {
-  background: #eee;
   position: relative; }
 
 body > nav.navbar-custom {

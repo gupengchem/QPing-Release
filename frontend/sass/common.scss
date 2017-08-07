@@ -15,11 +15,11 @@ $titleBgColor: #393f41;
 $redColor: red;
 $whiteColor: #ffffff;
 
-@import "writeSimpliQ";
+@import "rewriteBootstrap";
+@import "rewriteSimpliQ";
 
 /*common*/
 body{
-  background: #eee;
   position: relative;
 }
 body > nav.navbar-custom{

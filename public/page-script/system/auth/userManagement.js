@@ -220,6 +220,5 @@ page.toggleEditState = function (state, flag) {
 
 
 $(function () {
-    Menu.select("User");
     page.init();
 });
