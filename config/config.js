@@ -41,13 +41,6 @@ module.exports = {
         defaultLocale : 'zh'
     }
 
-    //,database : {
-    //    connectionLimit : 10,
-    //    host     : 'localhost',
-    //    user     : 'root',
-    //    password : '1qaz@WSX',
-    //    database : 'family'
-    //}
     ,db : {
         host : '127.0.0.1',
         // host : 'gy.rechange.cn',
@@ -59,7 +52,8 @@ module.exports = {
             server: {
                 auto_reconnect: true,
                 poolSize: 10
-            }
+            },
+            useMongoClient: true,
         }
     }
     ,dbUser : {

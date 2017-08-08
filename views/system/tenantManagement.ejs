@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <<%="%"%> include <%= path.basePath %>views/common/meta.ejs <%="%"%>>
-    <<%="%"%> include <%= path.basePath %>views/common/public.ejs <%="%"%>>
+    <% include ../../views/common/meta.ejs %>
+    <% include ../../views/common/public.ejs %>
 </head>
 <body>
-<<%="%"%> include <%= path.basePath %>views/common/header.ejs <%="%"%>>
+<% include ../../views/common/header.ejs %>
 
 <div class="container">
     <div class="row">
-        <<%="%"%> include <%= path.basePath %>views/common/menu.ejs <%="%"%>>
+        <% include ../../views/common/menu.ejs %>
 
         <div id="content" class="col-lg-10 col-sm-11">
             <div class="page-header">
                 <h1>
-                    <%= modelNameText %>管理
+                    租户管理
                     <small id="parseInfo">
 
                     </small>
@@ -73,24 +73,60 @@
                 <div class="col-md-4">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <div class="panel-title"><%= modelNameText %>信息</div>
+                            <div class="panel-title">租户信息</div>
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal detail-form" id="detail-form"><% for(key in field){if(!unDetail[key]){%>
+                            <form class="form-horizontal detail-form" id="detail-form">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label"><%= nameFormatter[key] || key %></label>
+                                    <label class="col-md-3 control-label">编码</label>
                                     <div class="col-md-9">
-                                        <p class="form-control-static" name="<%= key %>"></p>
+                                        <p class="form-control-static" name="code"></p>
                                     </div>
-                                </div><% }} %>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">名称</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="name"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">remark</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="remark"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">创建时间</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="createTime"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">更新时间</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="updateTime"></p>
+                                    </div>
+                                </div>
                             </form>
-                            <form class="form-horizontal edit-form default-hidden" id="edit-form"><% var key;%><% for(key in field){if(!unEditor[key]){%>
+                            <form class="form-horizontal edit-form default-hidden" id="edit-form">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label"><%= nameFormatter[key] || key %></label>
+                                    <label class="col-md-3 control-label">编码</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" name="<%= key %>" type="text" />
+                                        <input class="form-control" name="code" type="text" />
                                     </div>
-                                </div><% }} %>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">名称</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="name" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">remark</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="remark" type="text" />
+                                    </div>
+                                </div>
                                 <div class="text-center">
                                     <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
                                     <button type="button" class="btn btn-default btn-small" id="edit_form_cancel">取消</button>
@@ -104,8 +140,8 @@
     </div>
 </div>
 
-<<%="%"%> include <%= path.basePath %>views/common/footer.ejs <%="%"%>>
-<<%="%"%> include <%= path.basePath %>views/common/script.ejs <%="%"%>>
+<% include ../../views/common/footer.ejs %>
+<% include ../../views/common/script.ejs %>
 
 
 </body>
