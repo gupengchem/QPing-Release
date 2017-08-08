@@ -18,7 +18,7 @@ const schema = new Schema({
     _id : {type : String, default: uuid.v4},
     name : { type: String },                        //名称
     code: {type: String, unique: true},             //编码
-    menus: [{ type: String, ref:'Menu' }],          //可见菜单
+    menus: [{ type: String, ref:'M_Menu' }],          //可见菜单
 
     state : { type: Number, default : 1},           //状态
     createTime: {type: Date, default: Date.now},    //创建时间
@@ -27,6 +27,6 @@ const schema = new Schema({
     updater : { type: String, ref : "M_User", default: config.dbUser.robot._id}         //最后更新者
 });
 
-const Model = mongoose.model('Role',schema);
+const Model = mongoose.model('M_Role',schema);
 
 module.exports = Model;

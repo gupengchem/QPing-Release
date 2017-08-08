@@ -32,7 +32,7 @@ const schema = new Schema({
     updater : { type: String, ref : "M_User", default: config.dbUser.robot._id}         //最后更新者
 });
 
-const model = mongoose.model('Dict',schema);
+const model = mongoose.model('M_Dict',schema);
 
 
 module.exports = model;

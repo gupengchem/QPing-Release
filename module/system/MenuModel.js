@@ -23,7 +23,7 @@ const schema = new Schema({
     icon: {type: String },                          //图标
     sort : { type: Number },                        //排序
 
-    parent : { type: String, ref: 'Menu' },         //父级节点
+    parent : { type: String, ref: 'M_Menu' },         //父级节点
     __type: {type: String, default : Constant.TREE_MODEL.LEAF},       //节点类型
 
     state : { type: Number, default : 1},           //状态
@@ -33,6 +33,6 @@ const schema = new Schema({
     updater : { type: String, ref : "M_User", default: config.dbUser.robot._id}         //最后更新者
 });
 
-const Model = mongoose.model('Menu',schema);
+const Model = mongoose.model('M_Menu',schema);
 
 module.exports = Model;
