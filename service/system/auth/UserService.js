@@ -11,7 +11,14 @@ const CommonService = require("../../../service/common/dbService");
 const Model = require("../../../module/system/auth/UserModel");
 
 const defaultParams = {
-    model : Model
+    model : Model,
+    findCondition: (curUser) => {
+        let condition = { state: 1 };
+        return condition;
+    },
+    saveExtend: (curUser) => {
+        return {}
+    }
 };
 
 class ModuleService extends CommonService{

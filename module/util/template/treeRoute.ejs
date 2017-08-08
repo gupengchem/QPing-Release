@@ -61,8 +61,6 @@ router.post('/save/:id', function(req, res, next) {
     let data = req.body;
     let _id = req.params.id;
 
-    data.updater = req.session.userData._id;
-
     service
         .updateById(req.curUser, _id, data)
         .then(
@@ -73,8 +71,6 @@ router.post('/save/:id', function(req, res, next) {
 //新增
 router.post('/save', function(req, res, next) {
     let data = req.body;
-    data.creater = req.session.userData._id;
-    data.updater = req.session.userData._id;
 
     service
         .save(req.curUser, data)

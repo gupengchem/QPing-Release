@@ -50,6 +50,7 @@ router.post('/', function(req, res, next){
                         code: data.code,
                         org: data.org,
                         role : data.role,
+                        tenant : data.tenant,
                         menu : menus
                     };
                     logger.info(data.name, data.code, data);
@@ -64,6 +65,7 @@ router.post('/', function(req, res, next){
                     code: data.code,
                     org: data.org,
                     role : data.role,
+                    tenant : data.tenant,
                     menu : {rows:[]}
                 };
                 logger.info(data.name, data.code, data);

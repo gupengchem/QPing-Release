@@ -1,5 +1,10 @@
 @import "constant";
 
+input[placeholder], [placeholder], *[placeholder]{
+  color: inherit !important;
+}
+
+
 header{
   .container{
     padding: 0;

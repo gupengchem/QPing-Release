@@ -1,5 +1,5 @@
 /**
-* Created by wangshuyi on 8/8/2017, 12:58:00 PM.
+* Created by wangshuyi on 8/8/2017, 1:12:24 PM.
 */
 
 'use strict';
@@ -44,14 +44,14 @@ page.initElement = function () {
         title : "租户列表",
         queryParams : Dolphin.form.getValue('queryConditionForm'),
         columns : [{
-                code: "code",
-                title : "编码",
-            },{
                 code: "name",
                 title : "名称",
             },{
+                code: "code",
+                title : "编码",
+            },{
                 code: "remark",
-                title : "remark",
+                title : "备注",
             }
         ],
         onClick: function (data) {

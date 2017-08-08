@@ -9,6 +9,7 @@ const logger = require('log4js').getLogger("sys");
 
 const CommonService = require("<%= path.basePath %>service/common/<%= serviceType %>");
 const Model = require("<%= path.Model %>");
+const SYSTEM_CONSTANT = require('<%= path.basePath %>config/systemConstant');
 
 const defaultParams = {
     model : Model
@@ -32,7 +33,7 @@ class ModuleService extends CommonService{
             };
 
             let find = (parent, level) => {
-                this.find(curUser, extend({parent: parent._id}, condition), 'parent', {'sort':1}).then(result => {
+                super.find(curUser, extend({parent: parent._id}, condition), 'parent', {'sort':1}).then(result => {
                     if(result.length > 0){
                         _level = Math.max(level, _level);
                         if(parent._doc){
@@ -71,7 +72,7 @@ class ModuleService extends CommonService{
                 }, err => reject(err));
             });
         }else{
-            promise = this.save(curUser, data);
+            promise = super.save(curUser, data);
         }
 
         return promise;

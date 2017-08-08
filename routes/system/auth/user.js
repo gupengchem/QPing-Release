@@ -112,7 +112,7 @@ router.post('/remove', function(req, res, next) {
 //详情
 router.get('/detail/:id', function(req, res, next) {
     let _id = req.params.id;
-    let populate = 'creater updater role';
+    let populate = 'creater updater role tenant';
 
     service
         .findById(req.curUser, _id, populate)

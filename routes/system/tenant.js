@@ -1,5 +1,5 @@
 /**
-* Created by wangshuyi on 8/8/2017, 12:58:00 PM.
+* Created by wangshuyi on 8/8/2017, 1:12:24 PM.
 */
 
 'use strict';
@@ -136,8 +136,8 @@ router.post('/import', function (req, res, next) {
                     let _data = {};
 
                     if(data[0]){ids.push(data[0]);_data['_id'] = data[0];}
-                    if(data[1]){_data['code'] = data[1];}
-                    if(data[2]){_data['name'] = data[2];}
+                    if(data[1]){_data['name'] = data[1];}
+                    if(data[2]){_data['code'] = data[2];}
                     if(data[3]){_data['remark'] = data[3];}
                     if(data[4]){_data['state'] = data[4];}
                     if(data[5]){_data['createTime'] = data[5];}
@@ -172,9 +172,9 @@ router.get('/export', function(req, res, next) {
     service.find(req.curUser, condition).then(data => {
         _data.push([
             '_id',
-            '编码',
             '名称',
-            'remark',
+            '编码',
+            '备注',
             '状态',
             '创建时间',
             '创建人',
@@ -185,8 +185,8 @@ router.get('/export', function(req, res, next) {
         data.forEach(d => {
             _data.push([
                 d['_id'],
-                d['code'],
                 d['name'],
+                d['code'],
                 d['remark'],
                 d['state'],
                 d['createTime'],

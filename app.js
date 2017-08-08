@@ -106,13 +106,13 @@ app.use(function(err, req, res, next) {
             error: err
         });
     } else if (err.status == 401) {
-        res.render(req.session.endType + '/forbid', {
+        res.render('common/forbidden', {
             message: err.message,
             error: err
         });
     } else {
         res.status(err.status || 500);
-        res.render('error', {
+        res.render('common/error', {
             message: err.message,
             error: err
         });

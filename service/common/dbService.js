@@ -8,7 +8,13 @@ const logger = require('log4js').getLogger("sys");
 const config = require("../../config/config");
 
 const defaultParams = {
-    model: null
+    model: null,
+    findCondition: (curUser) => {
+        return { state: 1, tenant: curUser.tenant }
+    },
+    saveExtend: (curUser) => {
+        return { tenant: curUser.tenant }
+    }
 };
 
 class CommonService {
@@ -27,7 +33,7 @@ class CommonService {
      */
     find(curUser = null, condition = {}, populate = "", sort = {updateTime: -1}, fields = null) {
         let thisService = this, promise;
-        condition = extend({}, condition, {state:1});
+        condition = extend({}, this.opts.findCondition(curUser), condition);
 
         promise = new Promise(function (resolve, reject) {
             let exec = thisService.opts.model
@@ -76,7 +82,7 @@ class CommonService {
 
         skip = pageSize * pageNumber;
         size = Number(pageSize);
-        condition = extend({}, condition, {state:1});
+        condition = extend({}, this.opts.findCondition(curUser), condition);
 
         promise = new Promise(function (resolve, reject) {
             thisService.opts.model.count(condition).exec(function (err, count) {
@@ -166,6 +172,8 @@ class CommonService {
     findOne(curUser = null, condition = {}, populate = "", fields = null) {
         let thisService = this, promise;
 
+        condition = Object.assign({}, this.opts.findCondition(curUser), condition);
+
         promise = new Promise(function (resolve, reject) {
             let exec = thisService.opts.model.findOne(condition);
 
@@ -207,6 +215,7 @@ class CommonService {
             data.creater = curUser._id;
             data.updater = curUser._id;
         }
+        data = Object.assign({}, this.opts.saveExtend(curUser), data);
 
         model = new thisService.opts.model(data);
 
@@ -257,6 +266,8 @@ class CommonService {
      */
     remove(curUser = null, condition = {}) {
         const thisService = this;
+        condition = extend({}, this.opts.findCondition(curUser), condition);
+
         let promise;
         promise = new Promise(function (resolve, reject) {
             thisService.opts.model.remove(condition, function (err, result) {
@@ -304,10 +315,11 @@ class CommonService {
      * @param data
      * @returns {Promise}
      */
-    update(curUser = null, condition = {}, data = {}) {
+    update(curUser = null, condition = {}, data = {}, option = {}) {
         const thisService = this;
         let promise;
 
+        condition = extend({}, this.opts.findCondition(curUser), condition);
         if(curUser){
             data.updater = curUser._id || config.dbUser.robot._id;
         }
@@ -368,7 +380,7 @@ class CommonService {
      */
     count(curUser = null, condition = {}) {
         let thisService = this, promise;
-        condition = extend({}, condition, {state:1});
+        condition = extend({}, this.opts.findCondition(curUser), condition);
 
         promise = new Promise(function (resolve, reject) {
             thisService.opts.model.count(condition).exec(function (err, result) {

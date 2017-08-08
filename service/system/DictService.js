@@ -6,7 +6,13 @@ const CommonService = require("../../service/common/dbService");
 const Model = require("../../module/system/DictModel");
 
 const defaultParams = {
-    model : Model
+    model : Model,
+    findCondition: (curUser) => {
+        return { state: 1 }
+    },
+    saveExtend: (curUser) => {
+        return {}
+    }
 };
 
 class ModuleService extends CommonService{

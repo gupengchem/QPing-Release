@@ -20,6 +20,9 @@
   padding-left: 10px;
   padding-right: 10px; }
 
+input[placeholder], [placeholder], *[placeholder] {
+  color: inherit !important; }
+
 header .container {
   padding: 0; }
   header .container a.navbar-brand {

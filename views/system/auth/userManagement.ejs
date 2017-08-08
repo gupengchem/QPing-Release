@@ -126,6 +126,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-3 control-label">所属租户</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="tenant.name"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-3 control-label">创建时间</label>
                                     <div class="col-md-9">
                                         <p class="form-control-static" name="createTime"></p>
@@ -180,6 +186,14 @@
                                     <div class="col-md-9">
                                         <select name="role" class="form-control" options
                                                 optionUrl="/system/auth/role/find" ajaxType="get" codeField="_id" nameField="name">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">所属租户</label>
+                                    <div class="col-md-9">
+                                        <select name="tenant" class="form-control" options
+                                                optionUrl="/system/tenant/find" ajaxType="get" codeField="_id" nameField="name">
                                         </select>
                                     </div>
                                 </div>

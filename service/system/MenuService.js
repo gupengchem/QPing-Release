@@ -13,7 +13,13 @@ const Model = require("../../module/system/MenuModel");
 const SYSTEM_CONSTANT = require('../../config/systemConstant');
 
 const defaultParams = {
-    model : Model
+    model : Model,
+    findCondition: (curUser) => {
+        return { state: 1 }
+    },
+    saveExtend: (curUser) => {
+        return {}
+    }
 };
 
 class ModuleService extends CommonService{
@@ -34,7 +40,7 @@ class ModuleService extends CommonService{
             };
 
             let find = (parent, level) => {
-                this.find(curUser, extend({parent: parent._id}, condition), 'parent', {'sort':1}).then(result => {
+                super.find(curUser, extend({parent: parent._id}, condition), 'parent', {'sort':1}).then(result => {
                     if(result.length > 0){
                         _level = Math.max(level, _level);
                         if(parent._doc){
@@ -73,7 +79,7 @@ class ModuleService extends CommonService{
                 }, err => reject(err));
             });
         }else{
-            promise = this.save(curUser, data);
+            promise = super.save(curUser, data);
         }
 
         return promise;

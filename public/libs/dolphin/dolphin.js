@@ -405,6 +405,7 @@
                     thisTool.alert(reData[thisTool.defaults.ajax.returnMsgKey]
                         || thisTool.i18n.get('core_ajax_error'), {
                         countDownFlag:false,
+                        width: '1000px',
                         callback : function(){
                             if(typeof param.onError === 'function'){
                                 param.onError(reData);
@@ -418,7 +419,8 @@
                     return_data = XMLHttpRequest.responseText;
                 }else if(XMLHttpRequest.status == 500){
                     thisTool.alert(textStatus + "<br/>" + XMLHttpRequest.status + "<br/>" + XMLHttpRequest.responseText, {
-                        countDownFlag:false
+                        countDownFlag:false,
+                        width: '1000px',
                     });
                 }else if(XMLHttpRequest.status == 403){
                     thisTool.alert(thisTool.i18n.get('core_login_timeout') + '<br/>' + '<a href=".">'+thisTool.i18n.get('core_reLogin')+'</a>', {
@@ -426,7 +428,8 @@
                     });
                 }else if(XMLHttpRequest.status == 404){
                     thisTool.alert(textStatus + "<br/>" + XMLHttpRequest.status + "<br/>"+this.url, {
-                        countDownFlag:false
+                        countDownFlag:false,
+                        width: '1000px',
                     });
                     return_data = textStatus;
                     if(typeof param.onError === 'function'){
@@ -434,7 +437,8 @@
                     }
                 }else{
                     thisTool.alert(textStatus + "<br/>" + XMLHttpRequest.status, {
-                        countDownFlag:false
+                        countDownFlag:false,
+                        width: '1000px',
                     });
                     return_data = textStatus;
                     if(typeof param.onError === 'function'){

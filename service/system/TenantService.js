@@ -1,5 +1,5 @@
 /**
-* Created by wangshuyi on 8/8/2017, 12:58:00 PM.
+* Created by wangshuyi on 8/8/2017, 1:12:24 PM.
 */
 
 'use strict';
@@ -11,7 +11,13 @@ const CommonService = require("../../service/common/dbService");
 const Model = require("../../module/system/TenantModel");
 
 const defaultParams = {
-    model : Model
+    model : Model,
+    findCondition: (curUser) => {
+        return { state: 1 }
+    },
+    saveExtend: (curUser) => {
+        return {}
+    }
 };
 
 class ModuleService extends CommonService{
