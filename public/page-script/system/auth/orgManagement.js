@@ -1,5 +1,5 @@
 /**
-* Created by wangshuyi on <%= new Date().toLocaleString() %>.
+* Created by wangshuyi on 8/8/2017, 2:04:11 PM.
 */
 
 'use strict';
@@ -9,24 +9,26 @@ const page = {
     queryConditionForm: $('#queryConditionForm'),
 
     url : {
-        list : '<%= path.route %>/list',
-        remove : '<%= path.route %>/remove',
-        save : '<%= path.route %>/save/{id}',
-        detail : '<%= path.route %>/detail/{id}',
-        importData : Dolphin.path.contextPath + '<%= path.route %>/import',
-        exportData : '<%= path.route %>/export',
+        list : '/system/auth/org/find',
+        tree : '/system/auth/org/tree',
+        remove : '/system/auth/org/remove/{id}',
+        save : '/system/auth/org/save/{id}',
+        detail : '/system/auth/org/detail/{id}',
+        importData : Dolphin.path.contextPath + '/system/auth/org/import',
+        exportData : '/system/auth/org/export',
     },
 
     _id : null,
     list : null,
+    tree : null,
     editModal : null,
-    detailModal : null,
 
     init: null,
     initElement: null,
     initEvent: null,
     showDetail: null,
     formatterDate: null,
+    toggleEditState: null,
 };
 
 page.init = function () {
@@ -38,23 +40,40 @@ page.initElement = function () {
     const thisPage = this;
     Dolphin.form.parse();
 
+    thisPage.tree = new Dolphin.TREE({
+        panel : "#dataTree",
+        url : thisPage.url.tree,
+        idField : '_id',
+        title : '组织树',
+        multiple: false,
+        onChecked: function (node) {
+            thisPage.showDetail(node);
+        },
+        onLoad: function () {
+            if(thisPage._id){
+                this.check(this.findById(thisPage._id), true);
+            }
+        }
+    });
+
     thisPage.list = new Dolphin.LIST({
-        panel : "#datalist",
+        panel : "#dataList",
         url : thisPage.url.list,
-        title : "<%= modelNameText %>列表",
+        data : {rows:[]},
+        pagination: false,
+        checkbox: false,
+        title : "子组织",
         queryParams : Dolphin.form.getValue('queryConditionForm'),
-        columns : [<% var count = 0, key;%><% for (key in field){if(!unLister[key]){ %><%= count > 0?",":"" %>{
-            code: "<%= key %>",
-            title : "<%= nameFormatter[key] || key %>",
-            <% if(count == 0){%>
-            formatter : function (val, row, index) {
-                let link = $('<a href="javascript:void(0);">');
-                link.click(function () {
-                    thisPage.showDetail(row._id);
-                }).html(val);
-                return link;
-            }<% } %>
-        }<% count++; }} %>]
+        columns : [{
+            code: "name",
+            title : "名称",
+        },{
+            code: "code",
+            title : "编码",
+        },{
+            code: "sort",
+            title : "排序",
+        }]
     });
 
     thisPage.editModal = new Dolphin.modalWin({
@@ -66,15 +85,6 @@ page.initElement = function () {
             Dolphin.form.empty(thisPage.editForm);
         }
     });
-
-    thisPage.detailModal = new Dolphin.modalWin({
-        content : thisPage.detailForm,
-        title : "查看详情",
-        defaultHidden : true,
-        hidden : function () {
-            Dolphin.form.empty(thisPage.detailForm);
-        }
-    })
 };
 
 
@@ -93,44 +103,60 @@ page.initEvent = function () {
         thisPage.editModal.modal('show');
     });
 
+    //新增子节点
+    $('#addChildrenData').click(function () {
+        let checkedData = thisPage.tree.getChecked();
+        if(checkedData.length != 1){
+            Dolphin.alert("请选择一条数据");
+        }else{
+            let data = {
+                parent: checkedData[0]._id,
+                parentName: checkedData[0].name,
+            };
+            thisPage._id = "";
+            Dolphin.form.setValue(data, thisPage.editForm);
+            thisPage.editModal.modal('show');
+        }
+    });
+
     //修改
     $('#editDate').click(function () {
-        let checkedData = thisPage.list.getChecked();
+        let checkedData = thisPage.tree.getChecked();
         if(checkedData.length != 1){
             Dolphin.alert("请选择一条数据");
         }else{
             thisPage._id = checkedData[0]._id;
-            Dolphin.form.setValue(checkedData[0], thisPage.editForm);
+            let data = $.extend({}, checkedData[0]);
+            if(data._parent){
+                data.parentName = data._parent.name;
+                data.parent = data.parent._id;
+            }
+            Dolphin.form.setValue(data, thisPage.editForm);
             thisPage.editModal.modal('show');
         }
     });
 
     //删除
     $('#removeDate').click(function () {
-        let checkedData = thisPage.list.getChecked(), ids=[];
-        if(checkedData.length == 0){
-            Dolphin.alert("请至少选择一条数据");
+        let checkedData = thisPage.tree.getChecked();
+        if(checkedData.length != 1){
+            Dolphin.alert("请选择一条数据");
         }else{
-            checkedData.forEach(function (oa) {
-                ids.push(oa._id);
-            });
-
-            Dolphin.confirm("确定要删除这些数据吗？", {
+            Dolphin.confirm("确定要删除这条数据吗？", {
                 callback : function (flag) {
                     if(flag){
                         Dolphin.ajax({
                             url : thisPage.url.remove,
-                            data : Dolphin.json2string({ids : ids}),
-                            type : Dolphin.requestMethod.POST,
+                            pathData : {id : checkedData[0]._id},
                             onSuccess : function (reData) {
                                 Dolphin.alert(reData.message, {
                                     callback : function () {
-                                        thisPage.editModal.modal('hide');
-                                        thisPage.list.reload();
+                                        thisPage._id = '';
+                                        thisPage.tree.reload();
                                     }
                                 })
                             }
-                        });
+                        })
                     }
                 }
             });
@@ -148,13 +174,16 @@ page.initEvent = function () {
             onSuccess : function (reData) {
                 Dolphin.alert(reData.message, {
                     callback : function () {
+                        thisPage._id = reData.data._id;
+                        thisPage.tree.reload();
+                        thisPage.showDetail(reData.data._id);
                         thisPage.editModal.modal('hide');
-                        thisPage.list.reload();
                     }
                 });
             }
         });
     });
+
 
     //导入
     $('#importData').fileupload({
@@ -163,7 +192,7 @@ page.initEvent = function () {
         done: function (e, data) {
             Dolphin.alert(data.result.message, {
                 callback: function () {
-                    thisPage.list.reload();
+                    thisPage.tree.reload();
                 }
             })
         },
@@ -177,34 +206,37 @@ page.initEvent = function () {
     });
 };
 
-page.showDetail = function (_id) {
+page.showDetail = function (node) {
     let thisPage = this;
-    Dolphin.ajax({
-        url : thisPage.url.detail,
-        pathData : {id : _id},
-        loading : true,
-        onSuccess : function (reData) {
-            Dolphin.form.setValue(reData.data, thisPage.detailForm, {
-                formatter : {
-                    createTime : function (val) {
-                        return thisPage.formatterDate(val);
-                    },
-                    updateTime : function (val) {
-                        return thisPage.formatterDate(val);
-                    }
-                }
-            });
-            thisPage.detailModal.modal('show');
-        }
-    })
+    Dolphin.form.empty(thisPage.detailForm);
+    Dolphin.form.setValue(node, thisPage.detailForm);
+    thisPage.tree.expandTo(node);
+    thisPage.list.query({parent:node._id});
 };
 
 page.formatterDate = function (val) {
     return Dolphin.date2string(new Date(Dolphin.string2date(val, "yyyy-MM-ddThh:mm:ss.").getTime() + 8 * 60 * 60 * 1000), "yyyy-MM-dd hh:mm:ss");
 };
+page.toggleEditState = function (state = 'detail', flag = false) {
+    let thisPage = this;
+    if(flag){
+        Dolphin.form.empty(thisPage.detailForm);
+        Dolphin.form.empty(thisPage.editForm);
+    }
+    switch(state){
+        case 'edit':
+            thisPage.detailForm.hide();
+            thisPage.editForm.show();
+            break;
+        case 'detail':
+            thisPage.detailForm.show();
+            thisPage.editForm.hide();
+            break;
+    }
+};
 
 
 $(function () {
-    Menu.select("<%= modelName %>");
+    Menu.select("M_Org");
     page.init();
 });

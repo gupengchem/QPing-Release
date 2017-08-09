@@ -1,0 +1,21 @@
+@import "constant";
+
+.dolphin_list{
+  label.switch{
+    margin-bottom: 0;
+  }
+
+  img.thumbnail{
+    max-width: 40px;
+    max-height: 40px;
+    display: inline-block;
+    margin-bottom: 0;
+    margin-right: 3px;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+  }
+}
+#imgPreview > img{
+  margin: 0 auto;
+}

@@ -106,7 +106,7 @@ router.get('/options/:code', function(req, res, next) {
     service
         .findOne(req.curUser, query)
         .then(
-            data => res.send(resUtil.success({res: data.options})),
+            data => res.send(resUtil.success({rows: data.options})),
             err => res.send(resUtil.error())
         );
 });

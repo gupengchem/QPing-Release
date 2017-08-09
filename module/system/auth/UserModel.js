@@ -5,7 +5,7 @@
 'use strict';
 
 /**
- * 用户信息
+ * 用户管理
  */
 
 const uuid = require('uuid');

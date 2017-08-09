@@ -5,7 +5,7 @@
 'use strict';
 
 /**
- * 公众号
+ * 数据字典
  */
 
 const uuid = require('uuid');
@@ -31,6 +31,7 @@ const schema = new Schema({
     updateTime : { type: Date, default: Date.now},  //最后更新时间
     updater : { type: String, ref : "M_User", default: config.dbUser.robot._id}         //最后更新者
 });
+schema.index({code: 1});
 
 const model = mongoose.model('M_Dict',schema);
 

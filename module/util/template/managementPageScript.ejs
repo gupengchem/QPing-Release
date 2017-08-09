@@ -44,10 +44,9 @@ page.initElement = function () {
         title : "<%= modelNameText %>列表",
         queryParams : Dolphin.form.getValue('queryConditionForm'),
         columns : [<% var count = 0, key;%><% for (key in field){if(!unLister[key]){ %><%= count > 0?",":"" %>{
-                code: "<%= key %>",
-                title : "<%= nameFormatter[key] || key %>",
-            }<% count++; }} %>
-        ],
+            code: "<%= key %>",
+            title : "<%= nameFormatter[key] || key %>",
+        }<% count++; }} %>],
         onClick: function (data) {
             thisPage.showDetail(data._id);
         },

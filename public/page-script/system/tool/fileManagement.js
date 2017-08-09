@@ -1,26 +1,28 @@
 /**
-* Created by wangshuyi on <%= new Date().toLocaleString() %>.
+* Created by wangshuyi on 8/9/2017, 9:00:40 AM.
 */
 
 'use strict';
 const page = {
     editForm : $('#edit-form'),
     detailForm : $('#detail-form'),
+    imgPreviewModal : $('#imgPreview'),
     queryConditionForm: $('#queryConditionForm'),
 
     url : {
-        list : '<%= path.route %>/list',
-        remove : '<%= path.route %>/remove',
-        save : '<%= path.route %>/save/{id}',
-        detail : '<%= path.route %>/detail/{id}',
-        importData : Dolphin.path.contextPath + '<%= path.route %>/import',
-        exportData : '<%= path.route %>/export',
+        list : '/system/tool/file/list',
+        remove : '/system/tool/file/remove',
+        add : Dolphin.path.contextPath + '/system/tool/file/save',
+        update : '/system/tool/file/save/{id}',
+        detail : '/system/tool/file/detail/{id}',
+        importData : Dolphin.path.contextPath + '/system/tool/file/import',
+        exportData : '/system/tool/file/export',
     },
 
     _id : null,
     list : null,
     editModal : null,
-    detailModal : null,
+    imageModal : null,
 
     init: null,
     initElement: null,
@@ -41,20 +43,68 @@ page.initElement = function () {
     thisPage.list = new Dolphin.LIST({
         panel : "#datalist",
         url : thisPage.url.list,
-        title : "<%= modelNameText %>列表",
+        title : "文件列表",
         queryParams : Dolphin.form.getValue('queryConditionForm'),
-        columns : [<% var count = 0, key;%><% for (key in field){if(!unLister[key]){ %><%= count > 0?",":"" %>{
-            code: "<%= key %>",
-            title : "<%= nameFormatter[key] || key %>",
-            <% if(count == 0){%>
+        columns : [{
+            code: "name",
+            title : "名称",
             formatter : function (val, row, index) {
-                let link = $('<a href="javascript:void(0);">');
-                link.click(function () {
-                    thisPage.showDetail(row._id);
-                }).html(val);
-                return link;
-            }<% } %>
-        }<% count++; }} %>]
+                let div = $('<div>');
+                if(/^image/.test(row.fileType)){
+                    $('<img class="thumbnail">').attr('src', Dolphin.path.uploadPath+row.filePath).click(function (e) {
+                        e.stopPropagation();
+                        $('<img class="img-responsive">').attr('src', Dolphin.path.uploadPath+row.filePath).appendTo(thisPage.imgPreviewModal);
+                        thisPage.imageModal.modal('show');
+                    }).appendTo(div);
+                }
+
+                $('<span>').html(val).appendTo(div);
+                return div;
+            }
+        },{
+            code: "fileSize",
+            title : "文件大小",
+            formatter: function (val) {
+                return getFileSize(val);
+            }
+
+        },{
+            code: "fileType",
+            title : "文件类型",
+
+        },{
+            code: "lastUseTime",
+            title : "上次使用时间",
+
+        },{
+            code: "locked",
+            title : "是否锁定",
+            formatter: function (val, row) {
+                let label = $('<label class="switch switch-primary">').click(function (e) {
+                    e.stopPropagation();
+                });
+                let input = $('<input type="checkbox" class="switch-input">').appendTo(label);
+                if(val === 1){
+                    input.attr('checked', 'checked');
+                }
+                input.change(function () {
+                    let locked = $(this).attr('checked')?1:0;
+                    Dolphin.ajax({
+                        url : thisPage.url.update,
+                        type : Dolphin.requestMethod.POST,
+                        data : Dolphin.json2string({locked: locked}),
+                        pathData: {id:row._id},
+                    })
+                });
+                $('<span class="switch-label" data-on="On" data-off="Off">').appendTo(label);
+                $('<span class="switch-handle">').appendTo(label);
+                return label;
+            }
+        },{
+            code: "type",
+            title : "业务类型",
+
+        }]
     });
 
     thisPage.editModal = new Dolphin.modalWin({
@@ -67,14 +117,14 @@ page.initElement = function () {
         }
     });
 
-    thisPage.detailModal = new Dolphin.modalWin({
-        content : thisPage.detailForm,
-        title : "查看详情",
+    thisPage.imageModal = new Dolphin.modalWin({
+        content : thisPage.imgPreviewModal,
+        title : "图片预览",
         defaultHidden : true,
         hidden : function () {
-            Dolphin.form.empty(thisPage.detailForm);
+            thisPage.imgPreviewModal.empty();
         }
-    })
+    });
 };
 
 
@@ -88,9 +138,19 @@ page.initEvent = function () {
     });
 
     //新增
-    $('#addData').click(function () {
-        thisPage._id = "";
-        thisPage.editModal.modal('show');
+    $('#addData').fileupload({
+        url: thisPage.url.add,
+        dataType: 'json',
+        done: function (e, data) {
+            Dolphin.alert(data.result.message, {
+                callback: function () {
+                    thisPage.list.reload();
+                }
+            })
+        },
+        progressall: function (e, data) {
+            // console.log(data);
+        }
     });
 
     //修改
@@ -177,34 +237,12 @@ page.initEvent = function () {
     });
 };
 
-page.showDetail = function (_id) {
-    let thisPage = this;
-    Dolphin.ajax({
-        url : thisPage.url.detail,
-        pathData : {id : _id},
-        loading : true,
-        onSuccess : function (reData) {
-            Dolphin.form.setValue(reData.data, thisPage.detailForm, {
-                formatter : {
-                    createTime : function (val) {
-                        return thisPage.formatterDate(val);
-                    },
-                    updateTime : function (val) {
-                        return thisPage.formatterDate(val);
-                    }
-                }
-            });
-            thisPage.detailModal.modal('show');
-        }
-    })
-};
-
 page.formatterDate = function (val) {
     return Dolphin.date2string(new Date(Dolphin.string2date(val, "yyyy-MM-ddThh:mm:ss.").getTime() + 8 * 60 * 60 * 1000), "yyyy-MM-dd hh:mm:ss");
 };
 
 
 $(function () {
-    Menu.select("<%= modelName %>");
+    Menu.select("U_File");
     page.init();
 });

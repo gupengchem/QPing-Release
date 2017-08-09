@@ -117,3 +117,19 @@ a.link:hover {
 .checkbox-block > input[type='checkbox']:checked + label,
 .checkbox-block > input[type='radio']:checked + label {
   border: 2px solid #337ab7; }
+
+.dolphin_list label.switch {
+  margin-bottom: 0; }
+
+.dolphin_list img.thumbnail {
+  max-width: 40px;
+  max-height: 40px;
+  display: inline-block;
+  margin-bottom: 0;
+  margin-right: 3px;
+  padding: 0;
+  border: 0;
+  cursor: pointer; }
+
+#imgPreview > img {
+  margin: 0 auto; }

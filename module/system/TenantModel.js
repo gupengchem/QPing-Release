@@ -5,7 +5,7 @@
 'use strict';
 
 /**
- * 公众号
+ * 租户管理
  */
 
 const uuid = require('uuid');

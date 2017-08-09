@@ -65,3 +65,18 @@ function bindSearchPanel(inputPanel, callback) {
         return false;
     })
 }
+
+
+function getFileSize(num, unit) {
+    unit = unit || 'B';
+    let units = ['B', 'K', 'M', 'G'];
+
+    let i = units.findIndex(function (u) {
+        return u === unit;
+    });
+    for(;i < units.length && num > 1024; i++){
+        num = num / 1024;
+    }
+
+    return num.toFixed(2) + units[i];
+}

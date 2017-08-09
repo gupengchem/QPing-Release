@@ -2095,7 +2095,7 @@
                                     break;
                             }
                             $(this).append(
-                                '<option value="' + options[i][codeField] + '">'
+                                '<option value="' + (options[i][codeField] || '') + '">'
                                 + optionName + '</option>');
                         }
                         if (selectedOption) {
