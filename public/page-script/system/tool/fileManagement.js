@@ -139,7 +139,7 @@ page.initEvent = function () {
 
     //新增
     $('#addData').fileupload({
-        url: thisPage.url.add,
+        url: thisPage.url.add+'?type=test',
         dataType: 'json',
         done: function (e, data) {
             Dolphin.alert(data.result.message, {
@@ -148,9 +148,6 @@ page.initEvent = function () {
                 }
             })
         },
-        progressall: function (e, data) {
-            // console.log(data);
-        }
     });
 
     //修改
@@ -201,7 +198,7 @@ page.initEvent = function () {
     $('#edit_form_save').click(function () {
         let data = Dolphin.form.getValue("edit-form");
         Dolphin.ajax({
-            url : thisPage.url.save,
+            url : thisPage.url.update,
             type : Dolphin.requestMethod.POST,
             data : Dolphin.json2string(data),
             pathData : {id : thisPage._id},

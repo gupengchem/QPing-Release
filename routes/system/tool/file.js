@@ -14,6 +14,7 @@ const logger = require('log4js').getLogger("sys");
 const resUtil = require("../../../module/util/resUtil");
 const reqUtil = require("../../../module/util/reqUtil");
 const CONSTANT = require("../../../config/systemConstant");
+const config = require("../../../config/config");
 
 const service = require("../../../service/system/tool/FileService");
 
@@ -62,10 +63,19 @@ router.post('/save/:id', function(req, res, next) {
 //新增
 router.post('/save', function(req, res, next) {
     let form = new formidable.IncomingForm();   //创建上传表单
+    let type = req.query.type;
+
     form.encoding = CONSTANT.CHARACTER.UTF8;		//设置编辑
     form.keepExtensions = true;	 //保留后缀
     // form.maxFieldsSize = 5 * 1024 * 1024;   //文件大小
     form.uploadDir= global.config.path.uploadPath;
+    if(type){
+        form.uploadDir += '/'+type;
+        if(!fs.existsSync(form.uploadDir)){
+            fs.mkdirSync(form.uploadDir);
+        }
+    }
+
 
     form.parse(req, function (err, fields, files) {
         if (err) {
@@ -78,10 +88,14 @@ router.post('/save', function(req, res, next) {
             file = files.media;
 
             data.name = file.name;
-            data.filePath = file.path.split('/').pop();
+            data.filePath = '/'+file.path.split('/').pop();
             data.fileSize = file.size;
             data.fileType = file.type;
             data.lastModifiedDate = file.lastModifiedDate;
+            if(type){
+                data.type = type;
+                data.filePath = '/' + type + data.filePath;
+            }
 
             service.save(req.curUser, data).then(
                 data => res.send(resUtil.success({data:data})),
@@ -127,6 +141,26 @@ router.get('/detail/:id', function(req, res, next) {
             data => res.send(resUtil.success({data:data})),
             err => res.send(resUtil.error())
         );
+});
+//获取文件
+router.get('/get/:id', function(req, res, next) {
+    let _id = req.params.id;
+    let populate = "";
+
+    service.updateById(req.curUser, _id, {lastUseTime: new Date()}).then(
+        file => res.redirect(config.path.publicUploadPath + file.filePath),
+        err => res.redirect('/view/common/notFound')
+    );
+});
+//下载文件
+router.get('/download/:id', function(req, res, next) {
+    let _id = req.params.id;
+    let populate = "";
+
+    service.updateById(req.curUser, _id, {lastUseTime: new Date()}).then(
+        file => res.download(config.path.uploadPath + file.filePath),
+        err => res.redirect('/view/common/notFound')
+    );
 });
 
 //导入

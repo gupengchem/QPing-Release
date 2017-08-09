@@ -25,7 +25,8 @@ class ModuleService extends CommonService{
     removeById(curUser, id){
         return new Promise((resolve, reject) => {
             super.findById(curUser, id, undefined, 'filePath').then(file => {
-                fs.unlink(config.path.uploadPath+file.filePath, err => {
+                let path = config.path.uploadPath+file.filePath;
+                fs.unlink(path, err => {
                     if(err){
 
                     }
@@ -53,7 +54,8 @@ class ModuleService extends CommonService{
                 };
 
                 files.forEach(file => {
-                    fs.unlink(config.path.uploadPath+file.filePath, err => {
+                    let path = config.path.uploadPath+file.filePath;
+                    fs.unlink(path, err => {
                         if(err){
 
                         }
@@ -62,6 +64,33 @@ class ModuleService extends CommonService{
                 })
             })
         })
+    }
+
+    updateById(curUser, id, data){
+        return new Promise((resolve, reject) => {
+
+            super.findById(curUser, id).then(file => {
+                let cb = () => {
+                    super.updateById(curUser, id, data).then(
+                        result => resolve(result),
+                        err => reject(err)
+                    )
+                };
+                if(data.type !== undefined && file.type !== data.type){
+                    let newPath = '/' + data.type + '/' + file.filePath.split('/').pop();
+                    fs.rename(config.path.uploadPath + file.filePath, config.path.uploadPath + newPath, err => {
+                        if(err){
+
+                        }else{
+                            data.filePath = newPath;
+                            cb();
+                        }
+                    })
+                }else{
+                    cb();
+                }
+            })
+        });
     }
 }
 

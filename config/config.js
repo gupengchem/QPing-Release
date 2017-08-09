@@ -12,7 +12,7 @@ module.exports = {
         contextPath : "",
         viewPrefix : "/view",
         publicPath : "",
-        uploadPath: `${__dirname}/../public/uploadFiles/`,
+        uploadPath: `${__dirname}/../public/uploadFiles`,
         publicUploadPath: '/uploadFiles',
         mode : ""
     }
