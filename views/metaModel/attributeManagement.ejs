@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../views/common/meta.ejs %>
+    <% include ../../views/common/public.ejs %>
+</head>
+<body>
+<% include ../../views/common/header.ejs %>
+
+<div class="container">
+    <div class="row">
+        <% include ../../views/common/menu.ejs %>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="page-header">
+                <h1>
+                    属性管理
+                    <small id="parseInfo">
+
+                    </small>
+                </h1>
+                <div class="operationButton">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-primary" id="addData">
+                            <span class="glyphicon glyphicon-plus"></span> 添加
+                        </button>
+                        <button class="btn btn-warning" id="editDate">
+                            <span class="glyphicon glyphicon-pencil"></span> 修改
+                        </button>
+                        <button class="btn btn-danger" id="removeDate">
+                            <span class="glyphicon glyphicon-trash"></span> 删除
+                        </button>
+                    </div>
+
+                    <!--<form id="imageButton" class="inline-block">-->
+                    <!--<div class="btn-group" role="group">-->
+                    <!--<button type="button" class="btn btn-primary fileinput-button">-->
+                    <!--<span class="glyphicon glyphicon-import"></span> 导入-->
+                    <!--<input id="importData" type="file" name="media" multiple>-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-default" id="exportDate" type="button">-->
+                    <!--<span class="glyphicon glyphicon-export"></span> 导出-->
+                    <!--</button>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="queryCondition">
+                        <form class="form-horizontal query-form" id="queryConditionForm">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">名称</label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" placeholder="根据名称查询" name="name_like" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-default btn-query" type="submit">
+                                        搜索
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="datalist"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">属性信息</div>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal detail-form" id="detail-form">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">名称</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="name"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">编码</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="code"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">必填</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="required" options="Boolean"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">默认值</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="defaultValue"></p>
+                                    </div>
+                                </div>
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-md-3 control-label">国际化</label>-->
+                                    <!--<div class="col-md-9">-->
+                                        <!--<p class="form-control-static" name="i18n" options="Boolean"></p>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">输入类型</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="inputType" options="formInputType"></p>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div class="form-group default-hidden" inputType="number">
+                                    <label class="col-md-3 control-label">最小值</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="min"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group default-hidden" inputType="number">
+                                    <label class="col-md-3 control-label">最大值</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="max"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group default-hidden" inputType="number">
+                                    <label class="col-md-3 control-label">小数精度</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="decimal"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group default-hidden" inputType="string">
+                                    <label class="col-md-3 control-label">最小长度</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="minLength"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group default-hidden" inputType="string">
+                                    <label class="col-md-3 control-label">最大长度</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="maxLength"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group default-hidden" inputType="select">
+                                    <label class="col-md-3 control-label">字典项</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="options"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">其它参数</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static" name="params"></p>
+                                    </div>
+                                </div>
+                            </form>
+                            <form class="form-horizontal edit-form default-hidden" id="edit-form">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">名称</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="name" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">编码</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="code" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">必填</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" name="required" options="Boolean"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">默认值</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="defaultValue" type="text" />
+                                    </div>
+                                </div>
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-md-3 control-label">国际化</label>-->
+                                    <!--<div class="col-md-9">-->
+                                        <!--<select class="form-control" name="i18n" options="Boolean"></select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">输入类型</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" name="inputType" options="formInputType"></select>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div class="form-group" inputType="number">
+                                    <label class="col-md-3 control-label">最小值</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="min" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group" inputType="number">
+                                    <label class="col-md-3 control-label">最大值</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="max" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group" inputType="number">
+                                    <label class="col-md-3 control-label">数字精度</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="decimal" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group" inputType="string">
+                                    <label class="col-md-3 control-label">最小长度</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="minLength" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group" inputType="string">
+                                    <label class="col-md-3 control-label">最大长度</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="maxLength" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group" inputType="select">
+                                    <label class="col-md-3 control-label">字典项</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" name="options" type="text" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">其它参数</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" name="params"></textarea>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
+                                    <button type="button" class="btn btn-default btn-small" id="edit_form_cancel">取消</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../../views/common/footer.ejs %>
+<% include ../../views/common/script.ejs %>
+
+
+</body>
+</html>

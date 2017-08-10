@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../views/common/meta.ejs %>
+    <% include ../../views/common/public.ejs %>
+</head>
+<body>
+<% include ../../views/common/header.ejs %>
+
+<div class="container">
+    <div class="row">
+        <% include ../../views/common/menu.ejs %>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="page-header">
+                <h1>
+                    模型管理
+                    <small id="parseInfo">
+
+                    </small>
+                </h1>
+                <div class="operationButton">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-primary" id="addData">
+                            <span class="glyphicon glyphicon-plus"></span> 添加根节点
+                        </button>
+                        <button class="btn btn-info" id="addChildrenData">
+                            <span class="glyphicon glyphicon-plus"></span> 添加子节点
+                        </button>
+                        <button class="btn btn-warning" id="editDate">
+                            <span class="glyphicon glyphicon-pencil"></span> 修改
+                        </button>
+                        <button class="btn btn-danger" id="removeDate">
+                            <span class="glyphicon glyphicon-trash"></span> 删除
+                        </button>
+                    </div>
+
+                    <!--<form id="imageButton" class="inline-block">-->
+                    <!--<div class="btn-group" role="group">-->
+                    <!--<button type="button" class="btn btn-primary fileinput-button">-->
+                    <!--<span class="glyphicon glyphicon-import"></span> 导入-->
+                    <!--<input id="importData" type="file" name="media" multiple>-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-default" id="exportDate" type="button">-->
+                    <!--<span class="glyphicon glyphicon-export"></span> 导出-->
+                    <!--</button>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">模型树</div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="dataTree"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-title">模型信息</div>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal detail-form" id="detail-form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">名称</label>
+                                            <div class="col-md-9">
+                                                <p class="form-control-static" name="name"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">编码</label>
+                                            <div class="col-md-9">
+                                                <p class="form-control-static" name="code"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">排序</label>
+                                            <div class="col-md-9">
+                                                <p class="form-control-static" name="sort"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">上级节点</label>
+                                            <div class="col-md-9">
+                                                <p class="form-control-static" name="parent.name"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">创建时间</label>
+                                            <div class="col-md-9">
+                                                <p class="form-control-static" name="createTime"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">更新时间</label>
+                                            <div class="col-md-9">
+                                                <p class="form-control-static" name="updateTime"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                模型属性
+                                <div class="operationButton">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary" id="transferAttribute" disabled>
+                                            <span class="glyphicon glyphicon-transfer"></span> 添加/删除属性
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dataList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="default-hidden">
+    <!------------------------------------------ edit form modal ------------------------------------------>
+    <form class="form-horizontal edit-form" id="edit-form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">名称</label>
+            <div class="col-md-10">
+                <input class="form-control" name="name" type="text" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">编码</label>
+            <div class="col-md-10">
+                <input class="form-control" name="code" type="text" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">排序</label>
+            <div class="col-md-10">
+                <input class="form-control" name="sort" type="text" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">上级节点</label>
+            <div class="col-md-10">
+                <input class="form-control" name="parentName" type="text" readonly />
+                <input class="form-control" name="parent" type="hidden" />
+            </div>
+        </div>
+    </form>
+    <div id="edit_form_footer">
+        <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
+        <button type="button" class="btn btn-default btn-small dol-hideModal" id="edit_form_cancel">取消</button>
+    </div>
+</div>
+
+<% include ../../views/common/footer.ejs %>
+<% include ../../views/common/script.ejs %>
+<script src="<%= global.config.path.publicPath %>/custom/js/pickModal.js"></script>
+
+</body>
+</html>
