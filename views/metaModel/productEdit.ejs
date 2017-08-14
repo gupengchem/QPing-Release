@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../views/common/meta.ejs %>
+    <% include ../../views/common/public.ejs %>
+</head>
+<body>
+<% include ../../views/common/header.ejs %>
+<div class="container">
+    <div class="row">
+        <% include ../../views/common/menu.ejs %>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="page-header">
+                <h1>
+                    产品维护
+                    <small id="parseInfo">
+
+                    </small>
+                </h1>
+                <div class="operationButton">
+                    <button class="btn btn-primary" id="save">
+                        <span class="glyphicon glyphicon-save"></span> 保存
+                    </button>
+                    <button class="btn btn-default" id="cancel">
+                        <span class="glyphicon glyphicon-share-alt flipX"></span> 取消
+                    </button>
+
+                    <!--<form id="imageButton" class="inline-block">-->
+                    <!--<div class="btn-group" role="group">-->
+                    <!--<button type="button" class="btn btn-primary fileinput-button">-->
+                    <!--<span class="glyphicon glyphicon-import"></span> 导入-->
+                    <!--<input id="importData" type="file" name="media" multiple>-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-default" id="exportDate" type="button">-->
+                    <!--<span class="glyphicon glyphicon-export"></span> 导出-->
+                    <!--</button>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                </div>
+            </div>
+            <form class="form-horizontal edit-form" id="edit-form">
+                <input type="hidden" name="model" value="<%=data.model%>" />
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title">基本信息</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">名称</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" name="name" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">编码</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" name="code" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <% let __df_params = {attrs: body.attrs};%>
+                <% include ./dynamicForm.ejs %>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% include ../../views/common/footer.ejs %>
+<% include ../../views/common/script.ejs %>
+
+
+</body>
+</html>

@@ -146,7 +146,9 @@ page.initElement = function () {
             let node = thisPage.tree.getChecked()[0];
             let attributes = [];
             data.forEach(function (d) {
-                attributes.push(d._id);
+                if(d.type === 'self'){
+                    attributes.push(d._id);
+                }
             });
 
             Dolphin.ajax({
@@ -322,6 +324,5 @@ page.toggleEditState = function (state = 'detail', flag = false) {
 
 
 $(function () {
-    Menu.select("D_Model");
     page.init();
 });

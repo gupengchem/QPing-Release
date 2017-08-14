@@ -237,6 +237,5 @@ page.toggleEditState = function (state = 'detail', flag = false) {
 
 
 $(function () {
-    Menu.select("M_Org");
     page.init();
 });

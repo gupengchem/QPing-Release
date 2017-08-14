@@ -1,0 +1,39 @@
+<%
+    let __df = {
+        title : '扩展信息',
+        type : 'panel-info',
+        attrs : [],
+    };
+    if(typeof __df_params !== 'undefined'){
+        Object.assign(__df, __df_params);
+    }
+%>
+<div class="panel <%=__df.type %>">
+    <div class="panel-heading">
+        <div class="panel-title"><%=__df.title %></div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <% let i;%>
+            <% for(i = 0; i < __df.attrs.length; i++){ %>
+            <% let attr = __df.attrs[i]; %>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-2 control-label"><%=attr.name %></label>
+                    <div class="col-md-10">
+                        <% if(attr.inputType == 'string'){ %>
+                        <input class="form-control" name="params.<%=attr.code %>" type="text" />
+                        <% }else if(attr.inputType == 'select'){%>
+                        <select class="form-control" name="params.<%=attr.code %>" options="<%=attr.options %>" ></select>
+                        <% }else if(attr.inputType == 'number'){%>
+                        <input class="form-control" name="params.<%=attr.code %>" type="number" />
+                        <% }else{ %>
+                        <input class="form-control" name="params.<%=attr.code %>" type="text" />
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>

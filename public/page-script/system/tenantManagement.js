@@ -214,6 +214,5 @@ page.toggleEditState = function (state, flag) {
 
 
 $(function () {
-    Menu.select("M_Tenant");
     page.init();
 });

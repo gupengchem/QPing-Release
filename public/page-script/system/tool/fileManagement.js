@@ -240,6 +240,5 @@ page.formatterDate = function (val) {
 
 
 $(function () {
-    Menu.select("U_File");
     page.init();
 });

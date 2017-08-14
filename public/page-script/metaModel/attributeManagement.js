@@ -248,6 +248,5 @@ page.toggleEditState = function (state, flag) {
 
 
 $(function () {
-    Menu.select("D_Attribute");
     page.init();
 });
