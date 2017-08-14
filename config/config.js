@@ -64,6 +64,7 @@ module.exports = {
             code : "admin",
             password : "admin123",
             role : "b8fa6284-6990-4798-84e6-2082fdbd4d3f",
+            tenant : "33f0fe38-fcd1-4f11-8a55-1831821b38c5",
         },
         robot : {
             _id : "f07ffe71-7235-4231-8246-d64aaaadcc14",

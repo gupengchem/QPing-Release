@@ -3,6 +3,25 @@
  */
 
 module.exports = [
+    /* 1 */
+    {
+        "name" : "文件业务类型",
+        "code" : "fileFolder",
+        "state" : 1,
+        "options" : [
+            {
+                "text" : "无",
+                "state" : 1
+            },
+            {
+                "text" : "测试",
+                "code" : "test",
+                "state" : 1
+            }
+        ],
+    },
+
+    /* 2 */
     {
         "code" : "sex",
         "name" : "性别",
@@ -21,19 +40,63 @@ module.exports = [
         ],
     },
 
-    /* 2 */
+    /* 3 */
     {
-        "name" : "文件业务类型",
-        "code" : "fileFolder",
+        "code" : "Boolean",
+        "name" : "布尔值",
         "state" : 1,
         "options" : [
             {
-                "text" : "无",
+                "code" : "1",
+                "text" : "是",
                 "state" : 1
             },
             {
-                "text" : "测试",
-                "code" : "test",
+                "code" : "0",
+                "text" : "否",
+                "state" : 1
+            }
+        ],
+    },
+
+    /* 4 */
+    {
+        "code" : "formInputType",
+        "name" : "表单输入类型",
+        "state" : 1,
+        "options" : [
+            {
+                "text" : "文本",
+                "code" : "string",
+                "state" : 1
+            },
+            {
+                "text" : "选择",
+                "code" : "select",
+                "state" : 1
+            },
+            {
+                "text" : "数字",
+                "code" : "number",
+                "state" : 1
+            }
+        ],
+    },
+
+    /* 5 */
+    {
+        "code" : "attributeBelong",
+        "name" : "属性类型",
+        "state" : 1,
+        "options" : [
+            {
+                "code" : "inherit",
+                "text" : "继承",
+                "state" : 1
+            },
+            {
+                "code" : "self",
+                "text" : "自有",
                 "state" : 1
             }
         ],

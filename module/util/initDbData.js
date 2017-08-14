@@ -7,8 +7,10 @@ const config = require('../../config/config');
 const dictConfig = require('../../config/dictConfig');
 const menuConfig = require('../../config/menuConfig');
 const roleConfig = require('../../config/roleConfig');
+const tenantConfig = require('../../config/tenantConfig');
 const logger = require('log4js').getLogger("sys");
 
+const TenantService = require('../../service/system/TenantService');
 const DictService = require('../../service/system/DictService');
 const UserService = require('../../service/system/auth/UserService');
 const MenuService = require('../../service/system/MenuService');
@@ -67,6 +69,17 @@ InitDbData.initRole = function () {
         if(!flag){
             RoleService.create({}, roleConfig).then(() => {
                 logger.info("create " + "default role" + " success");
+            }, err => {
+                logger.error("Error:" + err);
+            });
+        }
+    })
+};
+InitDbData.initTenant = function () {
+    TenantService.findOne({}, {_id : tenantConfig[0]._id}).then(flag => {
+        if(!flag){
+            TenantService.create({}, tenantConfig).then(() => {
+                logger.info("create " + "default tenant" + " success");
             }, err => {
                 logger.error("Error:" + err);
             });
