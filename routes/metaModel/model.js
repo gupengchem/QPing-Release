@@ -56,6 +56,17 @@ router.post('/find', function(req, res, next) {
             err => res.send(resUtil.error())
         );
 });
+//所有
+router.post('/attribute', function(req, res, next) {
+    let condition = req.body;
+
+    service
+        .getAttributeById(req.curUser, condition.id)
+        .then(
+            data => res.send(resUtil.success({rows:data})),
+            err => res.send(resUtil.error())
+        );
+});
 //更新
 router.post('/save/:id', function(req, res, next) {
     let data = req.body;

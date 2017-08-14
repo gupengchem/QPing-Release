@@ -44,6 +44,8 @@
             rowIndex: false,
         },
         dataFilter:{
+            checkSelect: function (data) { return data },
+            checkUnSelect: function (data) { return data },
             select: function (data) { return data; },
             unSelect: function (data) { return data; },
         },
@@ -128,6 +130,10 @@
         let _this = this;
         this.button.select.click(function () {
             let data = _this.unSelectList.getChecked();
+            if(typeof _this.opts.dataFilter.checkSelect === 'function'){
+                data = _this.opts.dataFilter.checkSelect.call(_this, data);
+            }
+
             _this.unSelectList.removeRows(data);
 
             if(typeof _this.opts.dataFilter.select === 'function'){
@@ -140,6 +146,9 @@
         });
         this.button.selectAll.click(function () {
             let data = _this.unSelectList.data.rows.concat();
+            if(typeof _this.opts.dataFilter.checkSelect === 'function'){
+                data = _this.opts.dataFilter.checkSelect.call(_this, data);
+            }
             _this.unSelectList.removeRows(data);
 
             if(typeof _this.opts.dataFilter.select === 'function'){
@@ -152,6 +161,9 @@
         });
         this.button.unSelect.click(function () {
             let data = _this.selectedList.getChecked();
+            if(typeof _this.opts.dataFilter.checkUnSelect === 'function'){
+                data = _this.opts.dataFilter.checkUnSelect.call(_this, data);
+            }
             _this.selectedList.removeRows(data);
 
             if(typeof _this.opts.dataFilter.unSelect === 'function'){
@@ -164,6 +176,9 @@
         });
         this.button.unSelectAll.click(function () {
             let data = _this.selectedList.data.rows.concat();
+            if(typeof _this.opts.dataFilter.checkUnSelect === 'function'){
+                data = _this.opts.dataFilter.checkUnSelect.call(_this, data);
+            }
             _this.selectedList.removeRows(data);
 
             if(typeof _this.opts.dataFilter.unSelect === 'function'){

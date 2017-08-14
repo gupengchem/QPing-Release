@@ -18,7 +18,9 @@ const page = {
         importData : Dolphin.path.contextPath + '/metaModel/model/import',
         exportData : '/metaModel/model/export',
 
-        attribute : {
+        attribute: '/metaModel/model/attribute',
+
+        Attribute : {
             find : '/metaModel/attribute/find',
         }
     },
@@ -63,7 +65,7 @@ page.initElement = function () {
 
     thisPage.list = new Dolphin.LIST({
         panel : "#dataList",
-        url : thisPage.url.attribute.find,
+        url : thisPage.url.attribute,
         data : {rows:[]},
         pagination: false,
         checkbox: false,
@@ -73,6 +75,12 @@ page.initElement = function () {
         },{
             code: "code",
             title : "编码",
+        },{
+            code: "type",
+            title : "类型",
+            formatter: function (val) {
+                return Dolphin.enum.getEnumText('attributeBelong', val);
+            }
         }]
     });
 
@@ -88,16 +96,51 @@ page.initElement = function () {
 
     thisPage.pickModal = new PickModal({
         selectedList:{
-            url: thisPage.url.attribute.find
+            url: thisPage.url.attribute,
+            columns:[{
+                code: "name",
+                title : "名称",
+            },{
+                code: "code",
+                title : "编码",
+            },{
+                code: "type",
+                title : "类型",
+                formatter: function (val) {
+                    return Dolphin.enum.getEnumText('attributeBelong', val);
+                }
+            }]
         },
         unSelectList:{
-            url: thisPage.url.attribute.find
+            url: thisPage.url.Attribute.find
+        },
+        dataFilter:{
+            checkUnSelect: function (data) {
+                for(let i = 0; i < data.length; i++){
+                    if(data[i].type === 'inherit'){
+                        data.splice(i, 1);
+                    }else{
+                        i++;
+                    }
+                }
+                return data;
+            },
+            select: function (data) {
+                data.forEach(function (d) {
+                    d.type = 'self';
+                });
+                return data;
+            },
         },
         onShow: function () {
-            let node = thisPage.tree.getChecked()[0];
+            let data = thisPage.list.data.rows;
+            let ids = [];
+            data.forEach(function (d) {
+                ids.push(d._id);
+            });
 
-            this.selectedList.query({_id:{'$in':node.attribute}});
-            this.unSelectList.query({_id:{'$nin':node.attribute}});
+            this.selectedList.loadData(thisPage.list.data);
+            this.unSelectList.query({_id:{'$nin':ids}});
         },
         onSubmit: function (data) {
             let node = thisPage.tree.getChecked()[0];
@@ -252,7 +295,7 @@ page.showDetail = function (node) {
     Dolphin.form.empty(thisPage.detailForm);
     Dolphin.form.setValue(node, thisPage.detailForm);
     thisPage.tree.expandTo(node);
-    thisPage.list.query({_id:{'$in':node.attribute}});
+    thisPage.list.query({id:node._id});
     Dolphin.toggleEnable(thisPage.transferButton, true);
 };
 

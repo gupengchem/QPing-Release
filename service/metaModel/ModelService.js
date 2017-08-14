@@ -11,6 +11,8 @@ const CommonService = require("../../service/common/dbService");
 const Model = require("../../module/metaModel/ModelModel");
 const SYSTEM_CONSTANT = require('../../config/systemConstant');
 
+const AttributeService = require('./AttributeService');
+
 const defaultParams = {
     model : Model
 };
@@ -94,6 +96,38 @@ class ModuleService extends CommonService{
                     resolve(data);
                 }
             }, err => reject(err))
+        });
+    }
+
+    getAttributeById(curUser, id){
+        return new Promise((resolve, reject) => {
+            let attributes = [];
+            super.findById(curUser, id).then(selfModel => {
+                AttributeService.find(curUser, {_id: {'$in': selfModel.attribute}}).then(selfAttrs => {
+                    selfAttrs.forEach(a => {
+                        a._doc.type = 'self';
+                    });
+                    attributes = attributes.concat(selfAttrs);
+
+                    let getParent = (model) => {
+                        if(model.parent){
+                            super.findById(curUser, model.parent).then(parentModel => {
+                                AttributeService.find(curUser, {_id: {'$in': parentModel.attribute}}).then(parentAttrs => {
+                                    parentAttrs.forEach(a => {
+                                        a._doc.type = 'inherit';
+                                    });
+
+                                    attributes = attributes.concat(parentAttrs);
+                                    getParent(parentModel);
+                                }, err => reject(err))
+                            }, err => reject(err));
+                        }else{
+                            resolve(attributes);
+                        }
+                    };
+                    getParent(selfModel);
+                }, err => reject(err));
+            }, err => reject(err));
         });
     }
 }
