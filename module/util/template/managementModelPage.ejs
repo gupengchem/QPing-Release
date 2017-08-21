@@ -45,24 +45,28 @@
                 </div>
             </div>
 
-            <div class="queryCondition">
-                <form class="form-horizontal query-form" id="queryConditionForm">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label class="col-md-4 control-label">名称</label>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" placeholder="根据名称查询" name="name_like" />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="queryCondition">
+                        <form class="form-horizontal query-form" id="queryConditionForm">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">名称</label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" placeholder="根据名称查询" name="name_like" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-default btn-query" type="submit">
+                                        搜索
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-default btn-query" type="submit">
-                                搜索
-                            </button>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
 
             <div id="datalist"></div>

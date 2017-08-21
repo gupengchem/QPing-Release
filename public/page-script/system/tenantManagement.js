@@ -1,5 +1,5 @@
 /**
-* Created by wangshuyi on 8/8/2017, 1:12:24 PM.
+* Created by wangshuyi on 8/21/2017, 6:39:10 PM.
 */
 
 'use strict';
@@ -10,7 +10,7 @@ const page = {
 
     url : {
         list : '/system/tenant/list',
-        remove : '/system/tenant/remove/{id}',
+        remove : '/system/tenant/remove',
         save : '/system/tenant/save/{id}',
         detail : '/system/tenant/detail/{id}',
         importData : Dolphin.path.contextPath + '/system/tenant/import',
@@ -19,13 +19,14 @@ const page = {
 
     _id : null,
     list : null,
+    editModal : null,
+    detailModal : null,
 
     init: null,
     initElement: null,
     initEvent: null,
     showDetail: null,
     formatterDate: null,
-    toggleEditState: null,
 };
 
 page.init = function () {
@@ -40,29 +41,48 @@ page.initElement = function () {
     thisPage.list = new Dolphin.LIST({
         panel : "#datalist",
         url : thisPage.url.list,
-        multiple: false,
         title : "租户列表",
         queryParams : Dolphin.form.getValue('queryConditionForm'),
         columns : [{
-                code: "name",
-                title : "名称",
-            },{
-                code: "code",
-                title : "编码",
-            },{
-                code: "remark",
-                title : "备注",
+            code: "name",
+            title : "名称",
+            
+            formatter : function (val, row, index) {
+                let link = $('<a href="javascript:void(0);">');
+                link.click(function () {
+                    thisPage.showDetail(row._id);
+                }).html(val);
+                return link;
             }
-        ],
-        onClick: function (data) {
-            thisPage.showDetail(data._id);
-        },
-        onLoadSuccess: function () {
-            if(thisPage._id){
-                this.check(thisPage._id, true);
-            }
+        },{
+            code: "code",
+            title : "编码",
+            
+        },{
+            code: "remark",
+            title : "备注",
+            
+        }]
+    });
+
+    thisPage.editModal = new Dolphin.modalWin({
+        content : thisPage.editForm,
+        title : "修改信息",
+        defaultHidden : true,
+        footer : $('#edit_form_footer'),
+        hidden : function () {
+            Dolphin.form.empty(thisPage.editForm);
         }
     });
+
+    thisPage.detailModal = new Dolphin.modalWin({
+        content : thisPage.detailForm,
+        title : "查看详情",
+        defaultHidden : true,
+        hidden : function () {
+            Dolphin.form.empty(thisPage.detailForm);
+        }
+    })
 };
 
 
@@ -78,7 +98,7 @@ page.initEvent = function () {
     //新增
     $('#addData').click(function () {
         thisPage._id = "";
-        thisPage.toggleEditState('edit', true);
+        thisPage.editModal.modal('show');
     });
 
     //修改
@@ -89,32 +109,36 @@ page.initEvent = function () {
         }else{
             thisPage._id = checkedData[0]._id;
             Dolphin.form.setValue(checkedData[0], thisPage.editForm);
-            thisPage.toggleEditState('edit');
+            thisPage.editModal.modal('show');
         }
     });
 
     //删除
     $('#removeDate').click(function () {
-        let checkedData = thisPage.list.getChecked();
-        if(checkedData.length != 1){
-            Dolphin.alert("请选择一条数据");
+        let checkedData = thisPage.list.getChecked(), ids=[];
+        if(checkedData.length == 0){
+            Dolphin.alert("请至少选择一条数据");
         }else{
-            Dolphin.confirm("确定要删除这条数据吗？", {
+            checkedData.forEach(function (oa) {
+                ids.push(oa._id);
+            });
+
+            Dolphin.confirm("确定要删除这些数据吗？", {
                 callback : function (flag) {
                     if(flag){
                         Dolphin.ajax({
                             url : thisPage.url.remove,
-                            pathData : {id : checkedData[0]._id},
+                            data : Dolphin.json2string({ids : ids}),
+                            type : Dolphin.requestMethod.POST,
                             onSuccess : function (reData) {
                                 Dolphin.alert(reData.message, {
                                     callback : function () {
-                                        thisPage._id = '';
+                                        thisPage.editModal.modal('hide');
                                         thisPage.list.reload();
-                                        thisPage.toggleEditState('detail', true);
                                     }
                                 })
                             }
-                        })
+                        });
                     }
                 }
             });
@@ -132,18 +156,12 @@ page.initEvent = function () {
             onSuccess : function (reData) {
                 Dolphin.alert(reData.message, {
                     callback : function () {
-                        thisPage._id = reData.data._id;
+                        thisPage.editModal.modal('hide');
                         thisPage.list.reload();
-                        thisPage.showDetail(reData.data._id);
-                        thisPage.toggleEditState('detail');
                     }
                 });
             }
         });
-    });
-    //取消
-    $('#edit_form_cancel').click(function () {
-        thisPage.toggleEditState();
     });
 
     //导入
@@ -172,9 +190,8 @@ page.showDetail = function (_id) {
     Dolphin.ajax({
         url : thisPage.url.detail,
         pathData : {id : _id},
-        //loading : true,
+        loading : true,
         onSuccess : function (reData) {
-            thisPage.toggleEditState(null, true);
             Dolphin.form.setValue(reData.data, thisPage.detailForm, {
                 formatter : {
                     createTime : function (val) {
@@ -185,31 +202,13 @@ page.showDetail = function (_id) {
                     }
                 }
             });
+            thisPage.detailModal.modal('show');
         }
     })
 };
 
 page.formatterDate = function (val) {
     return Dolphin.date2string(new Date(Dolphin.string2date(val, "yyyy-MM-ddThh:mm:ss.").getTime() + 8 * 60 * 60 * 1000), "yyyy-MM-dd hh:mm:ss");
-};
-page.toggleEditState = function (state, flag) {
-    state = state || 'detail';
-    flag = flag || false;
-    let thisPage = this;
-    if(flag){
-        Dolphin.form.empty(thisPage.detailForm);
-        Dolphin.form.empty(thisPage.editForm);
-    }
-    switch(state){
-        case 'edit':
-            thisPage.detailForm.hide();
-            thisPage.editForm.show();
-            break;
-        case 'detail':
-            thisPage.detailForm.show();
-            thisPage.editForm.hide();
-            break;
-    }
 };
 
 

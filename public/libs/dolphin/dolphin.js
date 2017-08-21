@@ -1586,81 +1586,46 @@
             this.parseSelect($(_panel).find('select[options]'));
 
             //date
-            if($.datepicker){
-                $(_panel).find('.input-group.dolphin_date_picker').datepicker({
+            $.each($(_panel).find('.dolphin_date_picker'), function (i, picker) {
+                var param = {
                     format: "yyyy-mm-dd",
-                    language: navigator.language,
                     autoclose: true,
-                    orientation: "bottom left"
-                });
-            }
+                    minView: 2,
+                    pickerPosition: "bottom-left"
+                };
+
+                if($(picker).attr('startDate')){
+                    param.startDate = $(this).attr('startDate');
+                }
+                if($(picker).attr('endDate')){
+                    param.endDate = $(this).attr('endDate');
+                }
+                if($(picker).attr('daysOfWeekDisabled')){
+                    param.daysOfWeekDisabled = $(this).attr('daysOfWeekDisabled');
+                }
+                if($(picker).attr('minuteStep')){
+                    param.minuteStep = $(this).attr('minuteStep');
+                }
+                if($(picker).attr('initialDate')){
+                    param.initialDate = $(this).attr('initialDate');
+                }
+                if($(picker).attr('pickerPosition')){
+                    param.pickerPosition = $(this).attr('pickerPosition');
+                }
+                $(picker).datetimepicker(param);
+            });
 
 
             //datetime
-            if($.datetimepicker){
-                $(_panel).find('.input-group.dolphin_datetime_picker').datetimepicker({
-                    format: "yyyy-mm-dd hh:ii",
-                    autoclose: true,
-                    pickerPosition: "bottom-left"
-                });
-            }
+            $(_panel).find('.dolphin_datetime_picker').datetimepicker({
+                format: "yyyy-mm-dd hh:ii",
+                autoclose: true,
+            });
 
             //i18n
             $(_panel).find('.dolphin_i18n_box').each(function () {
                 $(this).i18nBox();
             });
-
-            //ref-tree
-            // $(_panel).find('.form-control-ref').each(function () {
-            //     var thisControl = $(this);
-            //     var url = thisTool.path.contextPath + thisControl.attr('data-ref-url');
-            //     var idField = thisControl.attr('idField');
-            //     var nameField = thisControl.attr('nameField');
-            //
-            //     var refTree = new REFWIN({
-            //         type: thisControl.attr('data-ref-type'),
-            //         url: url,
-            //         mockPathData: thisControl.attr('mockPathData').split(","),
-            //
-            //         idField: idField || 'code',
-            //         textField: nameField || 'name',
-            //
-            //         multiple: thisControl.attr('data-ref-multiple') === "true" ? true : false,
-            //         checkbox: thisControl.attr('data-ref-checkbox') === "false" ? false : true,
-            //         cascadeCheck: thisControl.attr('data-ref-cascadeCheck') === "true" ? true : false,
-            //         onlyLeafCheck: thisControl.attr('data-ref-onlyLeafCheck') === "true" ? true : false,
-            //         onShow: function () {
-            //             var selected = thisControl.find('.form-control-hidden').val().split(',');
-            //
-            //             for (var i = 0; i < selected.length; i++) {
-            //                 this.refObj.check(this.refObj.findById(selected[i]));
-            //             }
-            //         },
-            //         onSubmit: function (data) {
-            //             var selectNode = '';
-            //             var selectId = '';
-            //             for (var i = 0; i < data.length; i++) {
-            //                 if (i != 0) {
-            //                     selectNode += ', ';
-            //                     selectId += ', ';
-            //                 }
-            //                 selectNode += data[i][this.opts.textField];
-            //                 selectId += data[i][this.opts.idField];
-            //             }
-            //             thisControl.find('.form-control').val(selectNode);
-            //             thisControl.find('.form-control-hidden').val(selectId);
-            //         }
-            //     });
-            //     thisControl.find('.input-group-addon').bind('click', function () {
-            //         //console.log(tree.getChecked());
-            //         refTree.show();
-            //     });
-            // });
-
-            //file
-            // $(_panel).find('.dolphin_file_box').each(function () {
-            //     $(this).fileBox();
-            // });
 
             //validate
             thisTool.validate.monitor($(this.opts.panel).find('[' + thisTool.validate.defaults.attr + ']'));

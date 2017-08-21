@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-    title: 'Dolphin-Clean',
+    title: '风起',
     mock : true,
 
     path : {

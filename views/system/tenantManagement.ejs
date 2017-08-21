@@ -6,7 +6,6 @@
 </head>
 <body>
 <% include ../../views/common/header.ejs %>
-
 <div class="container">
     <div class="row">
         <% include ../../views/common/menu.ejs %>
@@ -46,12 +45,12 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
                     <div class="queryCondition">
                         <form class="form-horizontal query-form" id="queryConditionForm">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">名称</label>
                                         <div class="col-md-8">
@@ -67,77 +66,75 @@
                             </div>
                         </form>
                     </div>
-
-                    <div id="datalist"></div>
-                </div>
-                <div class="col-md-4">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <div class="panel-title">租户信息</div>
-                        </div>
-                        <div class="panel-body">
-                            <form class="form-horizontal detail-form" id="detail-form">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">名称</label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static" name="name"></p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">编码</label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static" name="code"></p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">备注</label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static" name="remark"></p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">创建时间</label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static" name="createTime"></p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">更新时间</label>
-                                    <div class="col-md-9">
-                                        <p class="form-control-static" name="updateTime"></p>
-                                    </div>
-                                </div>
-                            </form>
-                            <form class="form-horizontal edit-form default-hidden" id="edit-form">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">名称</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" name="name" type="text" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">编码</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" name="code" type="text" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">备注</label>
-                                    <div class="col-md-9">
-                                        <textarea class="form-control" name="remark"></textarea>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
-                                    <button type="button" class="btn btn-default btn-small" id="edit_form_cancel">取消</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
+
+            <div id="datalist"></div>
         </div>
     </div>
+</div>
+
+<div class="default-hidden">
+    <!------------------------------------------ edit form modal ------------------------------------------>
+    <form class="form-horizontal edit-form" id="edit-form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">名称</label>
+            <div class="col-md-10">
+                <input class="form-control" name="name" type="text" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">编码</label>
+            <div class="col-md-10">
+                <input class="form-control" name="code" type="text" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">备注</label>
+            <div class="col-md-10">
+                <input class="form-control" name="remark" type="text" />
+            </div>
+        </div>
+    </form>
+    <div id="edit_form_footer">
+        <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
+        <button type="button" class="btn btn-default btn-small dol-hideModal" id="edit_form_cancel">取消</button>
+    </div>
+
+
+    <!------------------------------------------ detail modal ------------------------------------------>
+    <form class="form-horizontal detail-form" id="detail-form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">名称</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="name"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">编码</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="code"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">备注</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="remark"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">创建时间</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="createTime"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">更新时间</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="updateTime"></p>
+            </div>
+        </div>
+    </form>
 </div>
 
 <% include ../../views/common/footer.ejs %>
