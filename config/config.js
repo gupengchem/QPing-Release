@@ -31,7 +31,8 @@ module.exports = {
     ,session : {
         secret: "keyboard cat",
         name: "fengqi",                                //这里的name值得是cookie的name，默认cookie的name是：connect.sid
-        cookie: {"maxAge": 1800000 },                     //设置maxAge是1800000ms，即30min后session和相应的cookie失效过期
+        cookie: {"maxAge": 1800000 },                  //设置maxAge是1800000ms，即30min后session和相应的cookie失效过期
+        rolling: true,                                 //每次用户交互后，重新计算时间
         resave: false,
         saveUninitialized: true
     }
