@@ -23,6 +23,7 @@ InitDbData.init = function () {
     this.initRole();
     this.initUser();
     this.initDict();
+    this.initTenant();
 };
 
 InitDbData.initUser = function () {
