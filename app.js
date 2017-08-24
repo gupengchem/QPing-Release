@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const xmlParser = require('express-xml-bodyparser');
 
 const session = require('express-session');
-const FileStore = require('session-file-store')(session);
 const extend = require('extend');
 const i18n = require('i18n');
 const fs = require('fs');
@@ -43,16 +42,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(xmlParser({}));
 
 app.use(cookieParser());
-// app.use(session(global.config.session));
-app.use(session(extend({},                  //session写文件
-    global.config.session,
-    {
-        store : new FileStore({
-            path: path.join(__dirname, 'log/sessions')
-        })
-    })
-    )
-);
+app.use(session(global.config.session));
 
 logger.debug('/--------------------- init i18n -------------------/');
 global.config.i18n.directory = path.join(__dirname, global.config.i18n.directory);

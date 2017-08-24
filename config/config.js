@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2016 Breezee.org. All Rights Reserved.
  */
+const path = require('path');
+const FileStore = require('session-file-store')(session);
 
 module.exports = {
     title: '风起',
@@ -34,7 +36,10 @@ module.exports = {
         cookie: {"maxAge": 1800000 },                  //设置maxAge是1800000ms，即30min后session和相应的cookie失效过期
         rolling: true,                                 //每次用户交互后，重新计算时间
         resave: false,
-        saveUninitialized: true
+        saveUninitialized: true,
+        store : new FileStore({
+            path: path.join(__dirname, '../log/sessions')
+        })
     }
 
     ,i18n : {
