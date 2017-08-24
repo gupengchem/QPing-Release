@@ -161,7 +161,7 @@ module.exports = [
     /* 13 */
     {
         "_id" : "7d4f7f66-9cbb-4565-a10d-6d49d7dc05f0",
-        "name" : "模型管理",
+        "name" : "元模型",
         "code" : "MetaModel",
         "link" : "/view/metaModel/productList",
         "icon" : "fa-puzzle-piece",
