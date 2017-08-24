@@ -7,12 +7,13 @@
 var app = require('../app');
 var debug = require('debug')('backoffice:server');
 var http = require('http');
+let config = require('../config/config');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '6030');
+var port = normalizePort(process.env.PORT || config.port);
 app.set('port', port);
 
 /**
