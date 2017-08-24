@@ -8,6 +8,7 @@ const FileStore = require('session-file-store')(session);
 module.exports = {
     title: '风起',
     mock : true,
+    port : '18080',
 
     path : {
         projectPath: `${__dirname}/..`,
