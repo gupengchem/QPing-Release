@@ -2,6 +2,7 @@
  * Copyright (c) 2016 Breezee.org. All Rights Reserved.
  */
 const path = require('path');
+const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 
 module.exports = {
