@@ -18,14 +18,6 @@ module.exports = {
         publicUploadPath: '/uploadFiles',
         mode : ""
     }
-    // path : {
-    //     hostname: "http://127.0.0.1:18080",
-    //     contextPath : "/weum",
-    //     viewPrefix : "/view",
-    //     publicPath : "/static-weum",
-    //     uploadPath: '/home/wang/app/Wechat_um/wum/public/uploadFile/',
-    //     mode : ""
-    // }
     ,api : {
         serverUrl : 'http://127.0.0.1:3130',
         filePath : '/../../config/apiConfig.json'
@@ -50,11 +42,10 @@ module.exports = {
 
     ,db : {
         host : '127.0.0.1',
-        // host : 'gy.rechange.cn',
         port : '27017',
-        database : "FENGQI",
-        username : 'fengqi',
-        password : 'fengqi123',
+        database : "TEST",
+        username : 'test',
+        password : 'test123',
         options : {
             server: {
                 auto_reconnect: true,
