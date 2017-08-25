@@ -70,7 +70,8 @@ myUtil.addLength = function(str, length){
  * @param format 格式
  * @returns {*} 格式化后的字符串值
  */
-myUtil.dateFormatter = function (date, format) {
+myUtil.date2string = function (date, format) {
+    format = format || 'yyyy-MM-dd';
     let o = {
         "M+" : date.getMonth() + 1, //month
         "d+" : date.getDate(),      //day

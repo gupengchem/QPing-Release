@@ -21,7 +21,7 @@ const schema = new Schema({
 
     product: {type: String, ref:'T_Product'},       //产品
     status: {type: String, default: 'created'},     //订单状态，created/unReview/unFeedback/unReturn/finished
-    date: {type: Date},                             //下单时间
+    date: {type: Date, default: Date.now},          //下单时间
 
     orderNo: {type: String},                        //订单号
     buyer: {type: String, ref:'T_Buyer'},           //买手
@@ -43,6 +43,7 @@ const schema = new Schema({
     updateTime : { type: Date, default: Date.now},  //最后更新时间
     updater : { type: String, ref : "M_User", default: config.dbUser.robot._id}         //最后更新者
 });
+schema.index({createTime: -1});
 
 const Model = mongoose.model('T_Sales',schema);
 

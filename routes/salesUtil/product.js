@@ -15,6 +15,7 @@ const resUtil = require("../../module/util/resUtil");
 const reqUtil = require("../../module/util/reqUtil");
 
 const service = require("../../service/salesUtil/ProductService");
+const SalesService = require("../../service/salesUtil/SalesService");
 
 const formidable = require('formidable');
 const xlsx = require('node-xlsx');
@@ -23,16 +24,49 @@ const fs = require('fs');
 /* GET users listing. */
 //列表
 router.post('/list', function(req, res, next) {
-    let condition = req.body, query = req.query,
-    populate = 'store';
+    let condition = req.body,
+        query = req.query,
+        sort = {store: 1},
+        populate = 'store';
     condition = reqUtil.formatCondition(condition);
 
     service
-        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate)
+        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
         .then(
             data => res.send(resUtil.success(data)),
             err => res.send(resUtil.error())
         );
+});
+router.post('/portalList', function(req, res, next) {
+    let condition = req.body,
+        query = req.query,
+        sort = {store: 1},
+        populate = 'store';
+    condition = reqUtil.formatCondition(condition);
+
+    service
+        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
+        .then(data => {
+            let countAll = [];
+            data.rows.forEach(d => {
+                countAll.push(SalesService.count(req.curUser, {
+                    product: d._id
+                }));
+                countAll.push(SalesService.count(req.curUser, {
+                    product: d._id,
+                    status: {'$ne':'finished'},
+                }));
+            });
+            Promise.all(countAll).then(countTotal => {
+                data.rows.forEach((d, i) => {
+                    d._doc.totalCount = countTotal[i*2];
+                    d._doc.unFinishedCount = countTotal[i*2 + 1];
+                });
+
+                res.send(resUtil.success(data));
+            });
+
+        },err => res.send(resUtil.error()));
 });
 //所有
 router.get('/find', function(req, res, next) {

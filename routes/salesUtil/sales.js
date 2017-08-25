@@ -24,11 +24,12 @@ const fs = require('fs');
 //列表
 router.post('/list', function(req, res, next) {
     let condition = req.body, query = req.query,
-    populate = 'product';
+    populate = 'product buyer';
     condition = reqUtil.formatCondition(condition);
+    let sort = {date: -1};
 
     service
-        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate)
+        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
         .then(
             data => res.send(resUtil.success(data)),
             err => res.send(resUtil.error())
@@ -57,13 +58,51 @@ router.post('/save/:id', function(req, res, next) {
             data => res.send(resUtil.success({data:data})),
             err => res.send(resUtil.error())
         );
-    });
+});
+//上传订单信息 / 上传review / 上传feedback
+router.post('/updateInfo/:type/:id', function(req, res, next) {
+    let data = req.body;
+    let _id = req.params.id;
+    let type = req.params.type;
+
+    switch (type){
+        case 'orderNo':
+            service
+                .updateOrderNoById(req.curUser, _id, data)
+                .then(
+                    data => res.send(resUtil.success({data:data})),
+                    err => res.send(resUtil.error())
+                );
+            break;
+        case 'review':
+            service
+                .reviewById(req.curUser, _id, data)
+                .then(
+                    data => res.send(resUtil.success({data:data})),
+                    err => res.send(resUtil.error())
+                );
+            break;
+        default:
+            res.send(resUtil.error({message: '信息补全类型不存在'}));
+    }
+});
 //新增
 router.post('/save', function(req, res, next) {
     let data = req.body;
 
     service
         .save(req.curUser, data)
+        .then(
+            data => res.send(resUtil.success({data:data})),
+            err => res.send(resUtil.error())
+        );
+});
+//新增
+router.post('/quickCreate', function(req, res, next) {
+    let data = req.body;
+
+    service
+        .quickCreate(req.curUser, data, data.count)
         .then(
             data => res.send(resUtil.success({data:data})),
             err => res.send(resUtil.error())

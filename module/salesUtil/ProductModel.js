@@ -36,6 +36,7 @@ const schema = new Schema({
     updateTime : { type: Date, default: Date.now},  //最后更新时间
     updater : { type: String, ref : "M_User", default: config.dbUser.robot._id}         //最后更新者
 });
+schema.index({store: 1});
 
 const Model = mongoose.model('T_Product',schema);
 

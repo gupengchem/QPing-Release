@@ -146,7 +146,17 @@ page.initEvent = function () {
             Dolphin.alert("请选择一条数据");
         }else{
             thisPage._id = checkedData[0]._id;
-            Dolphin.form.setValue(checkedData[0], thisPage.editForm);
+            let data = Object.assign({}, checkedData[0]);
+            if(data.store){
+                data.store = data.store._id;
+            }
+            Dolphin.form.setValue(data, thisPage.editForm);
+            if(checkedData[0].image){
+                let img = $('<img class="img-responsive">').css('max-height','100px').attr('src', Dolphin.path.uploadFileGet+checkedData[0].image);
+                $('#productImgPreview').html(img);
+            }
+            Dolphin.toggleCheck(thisPage.editForm.find('input[name="reviewFlag"]'), !!checkedData[0].reviewFlag);
+            Dolphin.toggleCheck(thisPage.editForm.find('input[name="feedbackFlag"]'), !!checkedData[0].feedbackFlag);
             thisPage.editModal.modal('show');
         }
     });

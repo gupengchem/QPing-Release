@@ -3162,6 +3162,9 @@
             $.each(this.__columns, function (i, column) {
                 var value, valueArr, level, curLevelData;
                 col = $('<td>').attr('columnCode', column.code).appendTo(row);
+                if(column.className){
+                    col.addClass(column.className);
+                }
                 if(column.width){
                     col.css('width', column.width);
                 }
