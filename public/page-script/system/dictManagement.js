@@ -57,9 +57,6 @@ page.initElement = function () {
         },{
             code : "text",
             title : "名称"
-        }, {
-            code : "state",
-            title : "状态"
         }]
     });
 

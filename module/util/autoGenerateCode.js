@@ -73,8 +73,8 @@ const generateConfig = {
     },
 };
 
-let modelPathConfig = ['auth','User'];
-let modelName = '用户';
+let modelPathConfig = ['salesUtil','Sales'];
+let modelName = '销售';
 let serviceType = 'dbService';//apiService   dbService
 // let generateMenu = true;//是否在mongo中添加菜单
 /**
@@ -86,7 +86,7 @@ let serviceType = 'dbService';//apiService   dbService
  *    "treeService", "treeRoute",
  *    "managementTreePage", "managementTreePageScript"
  */
-generateConfig.generatePart = ["service", "route", "managementPage", "managementPageScript"];
+generateConfig.generatePart = ["service", "route", "managementModelPage", "managementModelPageScript"];
 
 let basePath = "../".repeat(modelPathConfig.length);
 let modelPath = modelPathConfig.join('/');
@@ -124,6 +124,7 @@ let model = {
         type : '类型',
         link : '链接',
         sort : '排序',
+        tenant : '租户',
     },
 
     unEditor : {
@@ -134,6 +135,7 @@ let model = {
         updateTime : '更新时间',
         updater : '更新人',
         __type : '节点类型',
+        tenant : '租户',
     },
     unDetail : {
         _id : 'id',
@@ -141,6 +143,7 @@ let model = {
         state : '状态',
         creater : '创建人',
         updater : '更新人',
+        tenant : '租户',
     },
     unLister : {
         _id : 'id',
@@ -150,6 +153,7 @@ let model = {
         updateTime : '更新时间',
         updater : '更新人',
         __type : '节点类型',
+        tenant : '租户',
     }
 };
 

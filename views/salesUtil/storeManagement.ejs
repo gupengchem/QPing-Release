@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../../views/common/meta.ejs %>
+    <% include ../../views/common/public.ejs %>
+</head>
+<body>
+<% include ../../views/common/header.ejs %>
+<div class="container">
+    <div class="row">
+        <% include ../../views/common/menu.ejs %>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="page-header">
+                <h1>
+                    店铺管理
+                    <small id="parseInfo">
+
+                    </small>
+                </h1>
+                <div class="operationButton">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-primary" id="addData">
+                            <span class="glyphicon glyphicon-plus"></span> 添加
+                        </button>
+                        <button class="btn btn-warning" id="editDate">
+                            <span class="glyphicon glyphicon-pencil"></span> 修改
+                        </button>
+                        <button class="btn btn-danger" id="removeDate">
+                            <span class="glyphicon glyphicon-trash"></span> 删除
+                        </button>
+                    </div>
+
+                    <!--<form id="imageButton" class="inline-block">-->
+                    <!--<div class="btn-group" role="group">-->
+                    <!--<button type="button" class="btn btn-primary fileinput-button">-->
+                    <!--<span class="glyphicon glyphicon-import"></span> 导入-->
+                    <!--<input id="importData" type="file" name="media" multiple>-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-default" id="exportDate" type="button">-->
+                    <!--<span class="glyphicon glyphicon-export"></span> 导出-->
+                    <!--</button>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="queryCondition">
+                        <form class="form-horizontal query-form" id="queryConditionForm">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">名称</label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" placeholder="根据名称查询" name="name_like" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-default btn-query" type="submit">
+                                        搜索
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="datalist"></div>
+        </div>
+    </div>
+</div>
+
+<div class="default-hidden">
+    <!------------------------------------------ edit form modal ------------------------------------------>
+    <form class="form-horizontal edit-form" id="edit-form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">名称</label>
+            <div class="col-md-10">
+                <input class="form-control" name="name" type="text" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">编码</label>
+            <div class="col-md-10">
+                <input class="form-control" name="code" type="text" />
+            </div>
+        </div>
+    </form>
+    <div id="edit_form_footer">
+        <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
+        <button type="button" class="btn btn-default btn-small dol-hideModal" id="edit_form_cancel">取消</button>
+    </div>
+
+
+    <!------------------------------------------ detail modal ------------------------------------------>
+    <form class="form-horizontal detail-form" id="detail-form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">名称</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="name"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">编码</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="code"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">创建时间</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="createTime"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">更新时间</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="updateTime"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<% include ../../views/common/footer.ejs %>
+<% include ../../views/common/script.ejs %>
+
+
+</body>
+</html>

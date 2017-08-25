@@ -6,13 +6,13 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 
 module.exports = {
-    title: '风起',
+    title: 'SalesUtil',
     mock : true,
-    port : '18080',
+    port : '9017',
 
     path : {
         projectPath: `${__dirname}/..`,
-        hostname: "http://127.0.0.1:18080",
+        hostname: "http://127.0.0.1:9017",
         contextPath : "",
         viewPrefix : "/view",
         publicPath : "",
@@ -26,7 +26,7 @@ module.exports = {
     }
     ,session : {
         secret: "keyboard cat",
-        name: "fengqi",                                //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+        name: "SalesUtil",                                //这里的name值得是cookie的name，默认cookie的name是：connect.sid
         cookie: {"maxAge": 1800000 },                  //设置maxAge是1800000ms，即30min后session和相应的cookie失效过期
         rolling: true,                                 //每次用户交互后，重新计算时间
         resave: false,
@@ -45,9 +45,9 @@ module.exports = {
     ,db : {
         host : '127.0.0.1',
         port : '27017',
-        database : "TEST",
-        username : 'test',
-        password : 'test123',
+        database : "SALES",
+        username : 'sales',
+        password : 'sales123',
         options : {
             server: {
                 auto_reconnect: true,
@@ -89,7 +89,7 @@ module.exports = {
     }
 
     ,cdn : {
-        path : "//cdn.bootcss.com"              //boot cdn
-        // path : "/libs"                        //locale
+        // path : "//cdn.bootcss.com"              //boot cdn
+        path : "/libs"                        //locale
     }
 };

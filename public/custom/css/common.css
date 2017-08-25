@@ -137,5 +137,8 @@ a.link:hover {
   border: 0;
   cursor: pointer; }
 
+.dolphin_list .table > tbody > tr > td {
+  vertical-align: middle; }
+
 #imgPreview > img {
   margin: 0 auto; }
