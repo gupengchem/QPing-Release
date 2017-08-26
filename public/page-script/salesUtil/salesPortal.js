@@ -68,7 +68,6 @@ page.initElement = function () {
         },{
             code: "buyer.name",
             title : "买手",
-            
         },{
             code: "status",
             title : "状态",
@@ -175,10 +174,16 @@ page.initElement = function () {
             }
         }],
         onChecked: function (data) {
+            thisPage._id = data._id;
             thisPage.list.query({
                 product: data._id,
             });
             Dolphin.toggleEnable(thisPage.quickCreateButton, true);
+        },
+        onLoadSuccess: function (data) {
+            if(thisPage._id){
+                $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
+            }
         }
     });
 
@@ -283,21 +288,28 @@ page.initEvent = function () {
 
     //保存
     $('#edit_form_save').click(function () {
-        let data = Dolphin.form.getValue("edit-form");
-        Dolphin.ajax({
-            url : thisPage.url.save,
-            type : Dolphin.requestMethod.POST,
-            data : Dolphin.json2string(data),
-            pathData : {id : thisPage._id},
-            onSuccess : function (reData) {
-                Dolphin.alert(reData.message, {
-                    callback : function () {
-                        thisPage.editModal.modal('hide');
-                        thisPage.list.reload();
-                    }
-                });
-            }
-        });
+        let checkedData = thisPage.productList.getChecked();
+        if(checkedData.length != 1){
+            Dolphin.alert("请选择一条数据");
+        }else{
+            let data = Dolphin.form.getValue("edit-form");
+            data.product = checkedData[0]._id;
+            Dolphin.ajax({
+                url : thisPage.url.quickCreate,
+                type : Dolphin.requestMethod.POST,
+                data : Dolphin.json2string(data),
+                onSuccess : function (reData) {
+                    Dolphin.alert(reData.message, {
+                        callback : function () {
+                            thisPage.editModal.modal('hide');
+                            thisPage.list.reload();
+                            thisPage.productList.reload();
+                        }
+                    });
+                }
+            });
+        }
+
     });
 
     //导入
@@ -350,6 +362,7 @@ page.initEvent = function () {
             data : Dolphin.json2string({product: product, count: 1}),
             onSuccess : function (reData) {
                 thisPage.list.reload();
+                thisPage.productList.reload();
             }
         });
     });

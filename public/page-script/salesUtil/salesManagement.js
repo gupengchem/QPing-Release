@@ -66,7 +66,7 @@ page.initElement = function () {
             title : "出单日期",
             
         },{
-            code: "buyer",
+            code: "buyer.name",
             title : "买手",
             
         },{
@@ -119,7 +119,14 @@ page.initEvent = function () {
             Dolphin.alert("请选择一条数据");
         }else{
             thisPage._id = checkedData[0]._id;
-            Dolphin.form.setValue(checkedData[0], thisPage.editForm);
+            let data = Object.assign({}, checkedData[0]);
+            if(data.product){
+                data.product = data.product._id;
+            }
+            if(data.buyer){
+                data.buyer = data.buyer._id;
+            }
+            Dolphin.form.setValue(data, thisPage.editForm);
             thisPage.editModal.modal('show');
         }
     });
