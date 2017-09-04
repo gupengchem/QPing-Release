@@ -1591,7 +1591,7 @@
                     format: "yyyy-mm-dd",
                     autoclose: true,
                     minView: 2,
-                    pickerPosition: "bottom-left"
+                    language: 'zh-CN',
                 };
 
                 if($(picker).attr('startDate')){
