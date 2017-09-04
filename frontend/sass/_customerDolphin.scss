@@ -15,6 +15,16 @@
     border: 0;
     cursor: pointer;
   }
+
+  .table > tbody > tr > td{
+    vertical-align: middle;
+
+    &.DolphinOperation{
+      .btn + .btn{
+        margin-left: 5px;
+      }
+    }
+  }
 }
 #imgPreview > img{
   margin: 0 auto;
