@@ -2802,6 +2802,9 @@
                 if(column.hidden){
                     th.addClass('hiddenCol');
                 }
+                if(column.width){
+                    th.css('width', column.width);
+                }
                 if(column.orderFlag || thisList.opts.orderFlag){
                     orderButton = $('<span class="glyphicon iconButton">').addClass(thisList.opts.orderIcon.no).attr({
                         'aria-hidden': true,

@@ -10,7 +10,7 @@ const page = {
     queryConditionForm: $('#queryConditionForm'),
     imgPreviewModal : $('#imgPreview'),
 
-    quickCreateButton : $('#quickCreate'),
+    processPdfButton : $('#processPdf'),
 
     url : {
         list : '/salesUtil/sales/list',
@@ -18,12 +18,17 @@ const page = {
         save : '/salesUtil/sales/save/{id}',
         updateInfo : '/salesUtil/sales/updateInfo/{type}/{id}',
         quickCreate : '/salesUtil/sales/quickCreate',
+        processPdf : '/salesUtil/sales/processPdf',
         detail : '/salesUtil/sales/detail/{id}',
         importData : Dolphin.path.contextPath + '/salesUtil/sales/import',
         exportData : '/salesUtil/sales/export',
 
         product: {
             list: '/salesUtil/product/portalList',
+        },
+
+        file : {
+            add : Dolphin.path.contextPath + '/system/tool/file/save?type=order',
         }
     },
 
@@ -54,6 +59,64 @@ page.initElement = function () {
         autoclose: true,
     });
 
+    thisPage.productList = new Dolphin.LIST({
+        panel : "#productList",
+        url : thisPage.url.product.list,
+        title : "产品列表",
+        paginationSimpleFlag: true,
+        queryParams : Dolphin.form.getValue('queryConditionForm'),
+        multiple: false,
+        columns : [{
+            code: "name",
+            title : "名称",
+            width: '50%',
+            formatter: function (val, row) {
+                let div = $('<div>');
+                $('<img class="thumbnail">').css('float','left').attr('src', Dolphin.path.uploadFileGet+row.image).click(function (e) {
+                    e.stopPropagation();
+                    $('<img class="img-responsive">').attr('src', Dolphin.path.uploadFileGet+row.image).appendTo(thisPage.imgPreviewModal);
+                    thisPage.imageModal.modal('show');
+                }).appendTo(div);
+
+                $('<div class="textNowrap">').html(val).appendTo(div);
+                $('<div>').html(row.searchName).appendTo(div);
+                return div;
+            }
+
+        },{
+            code: "keyword",
+            title : "关键字",
+
+        },{
+            code: "store.name",
+            title : "店铺",
+
+        },{
+            code: "price",
+            title : "价格",
+            textAlign: 'right',
+            width:'50px',
+        },{
+            code: '__',
+            title: '概况',
+            width:'45px',
+            formatter: function (val, row) {
+                return `${row.unFinishedCount} / ${row.totalCount}`;
+            }
+        }],
+        onChecked: function (data) {
+            thisPage._id = data._id;
+            thisPage.list.query({
+                product: data._id,
+            });
+        },
+        onLoadSuccess: function (data) {
+            if(thisPage._id){
+                $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
+            }
+        }
+    });
+
     thisPage.list = new Dolphin.LIST({
         panel : "#dataList",
         url : thisPage.url.list,
@@ -63,11 +126,14 @@ page.initElement = function () {
             code: "orderNo",
             title : "订单号",
             formatter: function (val) {
-                return val?val:'暂无'
+                return val?$('<div class="textNowrap">').html(val):'暂无';
             }
         },{
-            code: "buyer.name",
+            code: "buyer",
             title : "买手",
+            formatter: function (val) {
+                return val?`${val.name} (${val.code})`:'';
+            }
         },{
             code: "status",
             title : "状态",
@@ -135,58 +201,6 @@ page.initElement = function () {
         }]
     });
 
-    thisPage.productList = new Dolphin.LIST({
-        panel : "#productList",
-        url : thisPage.url.product.list,
-        title : "产品列表",
-        paginationSimpleFlag: true,
-        queryParams : Dolphin.form.getValue('queryConditionForm'),
-        multiple: false,
-        columns : [{
-            code: "name",
-            title : "名称",
-            formatter: function (val, row) {
-                let div = $('<div>');
-                $('<img class="thumbnail">').css('float','left').attr('src', Dolphin.path.uploadFileGet+row.image).click(function (e) {
-                    e.stopPropagation();
-                    $('<img class="img-responsive">').attr('src', Dolphin.path.uploadFileGet+row.image).appendTo(thisPage.imgPreviewModal);
-                    thisPage.imageModal.modal('show');
-                }).appendTo(div);
-
-                $('<div>').html(val).appendTo(div);
-                $('<div>').html(row.appName).appendTo(div);
-                return div;
-            }
-
-        },{
-            code: "price",
-            title : "价格",
-
-        },{
-            code: "store.name",
-            title : "店铺",
-
-        },{
-            code: '__',
-            title: '概况',
-            formatter: function (val, row) {
-                return `${row.unFinishedCount} / ${row.totalCount}`;
-            }
-        }],
-        onChecked: function (data) {
-            thisPage._id = data._id;
-            thisPage.list.query({
-                product: data._id,
-            });
-            Dolphin.toggleEnable(thisPage.quickCreateButton, true);
-        },
-        onLoadSuccess: function (data) {
-            if(thisPage._id){
-                $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
-            }
-        }
-    });
-
     thisPage.editModal = new Dolphin.modalWin({
         content : thisPage.editForm,
         title : "修改信息",
@@ -236,54 +250,20 @@ page.initEvent = function () {
         return false;
     });
 
-    //新增
-    $('#addData').click(function () {
-        thisPage._id = "";
-        thisPage.editModal.modal('show');
-    });
-
-    //修改
-    $('#editDate').click(function () {
-        let checkedData = thisPage.list.getChecked();
-        if(checkedData.length != 1){
-            Dolphin.alert("请选择一条数据");
-        }else{
-            thisPage._id = checkedData[0]._id;
-            Dolphin.form.setValue(checkedData[0], thisPage.editForm);
-            thisPage.editModal.modal('show');
-        }
-    });
-
-    //删除
-    $('#removeDate').click(function () {
-        let checkedData = thisPage.list.getChecked(), ids=[];
-        if(checkedData.length == 0){
-            Dolphin.alert("请至少选择一条数据");
-        }else{
-            checkedData.forEach(function (oa) {
-                ids.push(oa._id);
-            });
-
-            Dolphin.confirm("确定要删除这些数据吗？", {
-                callback : function (flag) {
-                    if(flag){
-                        Dolphin.ajax({
-                            url : thisPage.url.remove,
-                            data : Dolphin.json2string({ids : ids}),
-                            type : Dolphin.requestMethod.POST,
-                            onSuccess : function (reData) {
-                                Dolphin.alert(reData.message, {
-                                    callback : function () {
-                                        thisPage.editModal.modal('hide');
-                                        thisPage.list.reload();
-                                    }
-                                })
-                            }
-                        });
+    //处理pdf
+    thisPage.processPdfButton.click(function () {
+        Dolphin.ajax({
+            url: thisPage.url.processPdf,
+            loading: true,
+            onSuccess: function (result) {
+                Dolphin.alert(`order处理：成功${result.data.order.success}条，失败${result.data.order.fail}条。<br/>review处理：成功${result.data.review.success}条，失败${result.data.review.fail}条。`, {
+                    callback: function () {
+                        thisPage.list.empty();
+                        thisPage.productList.reload();
                     }
-                }
-            });
-        }
+                });
+            }
+        })
     });
 
     //保存
@@ -312,26 +292,6 @@ page.initEvent = function () {
 
     });
 
-    //导入
-    $('#importData').fileupload({
-        url: thisPage.url.importData,
-        dataType: 'json',
-        done: function (e, data) {
-            Dolphin.alert(data.result.message, {
-                callback: function () {
-                    thisPage.list.reload();
-                }
-            })
-        },
-        progressall: function (e, data) {
-            // console.log(data);
-        }
-    });
-    //导出
-    $('#exportDate').click(function () {
-        window.open(thisPage.url.exportData + '?' + thisPage.queryConditionForm.serialize());
-    });
-
     //更新订单号
     $('#order_form_save').click(function () {
         let data = Dolphin.form.getValue("order-form");
@@ -353,18 +313,18 @@ page.initEvent = function () {
         });
     });
 
-    //快速添加明日订单
-    thisPage.quickCreateButton.click(function () {
-        let product = thisPage.productList.getChecked()[0]._id;
-        Dolphin.ajax({
-            url : thisPage.url.quickCreate,
-            type : Dolphin.requestMethod.POST,
-            data : Dolphin.json2string({product: product, count: 1}),
-            onSuccess : function (reData) {
-                thisPage.list.reload();
-                thisPage.productList.reload();
-            }
-        });
+    //上传订单文件
+    $('#productImage').fileupload({
+        url: thisPage.url.file.add,
+        dataType: 'json',
+        done: function (e, data) {
+            let img = $('<img class="img-responsive">').css('max-height','100px').attr('src', Dolphin.path.uploadPath+data.result.data.filePath);
+            $('#productImgPreview').html(img);
+            $('input[name="image"]').val(data.result.data._id);
+        },
+        progressall: function (e, data) {
+            // console.log(data);
+        }
     });
 };
 

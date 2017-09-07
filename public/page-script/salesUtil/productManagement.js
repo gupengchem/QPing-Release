@@ -61,13 +61,17 @@ page.initElement = function () {
                 }).appendTo(div);
 
                 $('<div>').html(val).appendTo(div);
-                $('<div>').html(row.appName).appendTo(div);
+                $('<div>').html(row.searchName).appendTo(div);
                 return div;
             }
 
         },{
-            code: "shortName",
-            title : "短名",
+            code: "keyword",
+            title : "关键字",
+
+        },{
+            code: "store.name",
+            title : "所属店铺",
 
         },{
             code: "price",
@@ -87,10 +91,6 @@ page.initElement = function () {
                 return Dolphin.enum.getEnumText('Boolean', val);
             }
 
-        },{
-            code: "store.name",
-            title : "所属店铺",
-            
         }]
     });
 
@@ -198,6 +198,7 @@ page.initEvent = function () {
         let data = Dolphin.form.getValue("edit-form");
         data.reviewFlag = !!data.reviewFlag;
         data.feedbackFlag = !!data.feedbackFlag;
+        data.searchName = data.name.replace(/ /g, '').substr(0, 15);
 
         Dolphin.ajax({
             url : thisPage.url.save,

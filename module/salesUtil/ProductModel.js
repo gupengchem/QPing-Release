@@ -20,8 +20,8 @@ const schema = new Schema({
     name : { type: String },                        //名称
     code: {type: String, unique: true, default: uuid.v4},             //编码
 
-    shortName : { type: String },                   //短名
-    appName : { type: String },                     //app名称
+    searchName : { type: String },                  //短名
+    keyword : { type: String },                     //关键字
     image : { type: String, ref:'U_File' },         //图片
     price : { type: String },                       //价格
     reviewFlag : { type: Number, default: 0 },      //是否需评价订单

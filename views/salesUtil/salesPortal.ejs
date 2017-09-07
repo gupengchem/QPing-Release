@@ -3,6 +3,11 @@
 <head>
     <% include ../../views/common/meta.ejs %>
     <% include ../../views/common/public.ejs %>
+    <style>
+        #productList .dolphin_list > table{
+            table-layout: fixed;
+        }
+    </style>
 </head>
 <body>
 <% include ../../views/common/header.ejs %>
@@ -19,23 +24,10 @@
                     </small>
                 </h1>
                 <div class="operationButton">
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-primary" id="addData">
-                            <span class="glyphicon glyphicon-plus"></span> quick Create
-                        </button>
-                    </div>
 
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-success" id="addData">
-                            <span class="glyphicon glyphicon-open"></span> order
-                        </button>
-                        <button class="btn btn-warning" id="editDate">
-                            <span class="glyphicon glyphicon-open"></span> review
-                        </button>
-                        <button class="btn btn-danger" id="removeDate">
-                            <span class="glyphicon glyphicon-open"></span> feedback
-                        </button>
-                    </div>
+                    <button class="btn btn-primary" id="processPdf">
+                        <span class="glyphicon glyphicon-file"></span> pdf
+                    </button>
 
                     <!--<form id="imageButton" class="inline-block">-->
                     <!--<div class="btn-group" role="group">-->
@@ -144,14 +136,17 @@
                 <input class="form-control" name="orderNo" type="text"/>
             </div>
         </div>
-        <!--<div class="form-group">-->
-            <!--<label class="col-md-2 control-label">买手</label>-->
-            <!--<div class="col-md-10">-->
-                <!--<select name="buyer" class="form-control" options-->
-                        <!--optionUrl="/salesUtil/buyer/find" ajaxType="get" codeField="_id" nameField="name">-->
-                <!--</select>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="form-group">
+            <label class="col-md-2 control-label">订单文件</label>
+            <div class="col-md-10">
+                <input class="form-control" name="orderFile" type="hidden" />
+                <input class="form-control" id="orderFileName" type="text" />
+                <button type="button" class="btn btn-primary fileinput-button">
+                    <span class="glyphicon glyphicon-plus"></span> 上传文件
+                    <input id="productImage" type="file" name="media" />
+                </button>
+            </div>
+        </div>
     </form>
     <div id="order_form_footer">
         <button type="button" class="btn btn-primary btn-small" id="order_form_save">保存</button>

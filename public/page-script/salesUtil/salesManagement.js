@@ -68,9 +68,12 @@ page.initElement = function () {
         },{
             code: "buyer.name",
             title : "买手",
-            
         },{
-            code: "store",
+            code: "buyer.code",
+            title : "编号",
+
+        },{
+            code: "store.name",
             title : "店铺",
             
         }]

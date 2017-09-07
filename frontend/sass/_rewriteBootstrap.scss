@@ -7,6 +7,10 @@
   }
 }
 
+.dolphin_list > table > thead > tr > th{
+  white-space: nowrap;
+}
+
 .form-horizontal .control-label{
   text-align: left;
 }

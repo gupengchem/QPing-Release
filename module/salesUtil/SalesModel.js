@@ -31,9 +31,9 @@ const schema = new Schema({
     feedbackFlag: {type: Number, default: 0},       //是否已feedback
     feedbackDate: {type: Date},                     //feedback时间
 
-    orderImg: {type: String, ref:'U_File'},         //订单图片
-    reviewImg: {type: String, ref:'U_File'},        //review图片
-    feedbackImg: {type: String, ref:'U_File'},      //feedback图片
+    orderFile: {type: String, ref:'U_File'},         //订单图片
+    reviewFile: {type: String, ref:'U_File'},        //review图片
+    feedbackFile: {type: String, ref:'U_File'},      //feedback图片
 
     tenant : { type: String, ref : "M_Tenant" },    //所属租户
 

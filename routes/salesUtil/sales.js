@@ -24,7 +24,7 @@ const fs = require('fs');
 //列表
 router.post('/list', function(req, res, next) {
     let condition = req.body, query = req.query,
-    populate = 'product buyer';
+    populate = 'product buyer store';
     condition = reqUtil.formatCondition(condition);
     let sort = {date: -1};
 
@@ -278,6 +278,13 @@ router.get('/export', function(req, res, next) {
             });
         });
     });
+});
+
+//处理pdf
+router.get('/processPdf', function(req, res, next) {
+    service.processFile(req.curUser).then(result => {
+        res.send(resUtil.success({data: result}));
+    })
 });
 
 module.exports = router;

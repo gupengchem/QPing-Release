@@ -5,17 +5,23 @@
 'use strict';
 
 const extend = require('extend');
+const fs = require('fs');
 const logger = require('log4js').getLogger("sys");
 
 const CommonService = require("../../service/common/dbService");
 const Model = require("../../module/salesUtil/SalesModel");
+const pdfReader = require('../../module/util/pdfReader');
+const tool = require('../../module/util/tool');
 
+const StoreService = require('./StoreService');
 const BuyerService = require('./BuyerService');
 const ProductService = require('./ProductService');
 
 const defaultParams = {
     model : Model
 };
+
+let pdfFolder = __dirname + '/../../OrderFileFolder';
 
 class ModuleService extends CommonService{
     constructor(param){
@@ -49,7 +55,7 @@ class ModuleService extends CommonService{
     }
     quickCreate(curUser, data, count){
         return new Promise((resolve, reject) => {
-            let t = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+            let t = new Date();
             let createData = Object.assign({
                 date: t,
                 tenant: curUser.tenant,
@@ -114,7 +120,7 @@ class ModuleService extends CommonService{
                                     buyerWithStore[i]._doc.sales = s.rows[0];
                                     buyerWithProduct.push(buyerWithStore[i]);
                                 }else{
-                                    buyerWithoutProduct.push()
+                                    buyerWithoutProduct.push(buyerWithStore[i])
                                 }
                             });
 
@@ -190,10 +196,184 @@ class ModuleService extends CommonService{
         }
         return status;
     }
+
+    processFile(curUser){
+        return new Promise((resolve, reject) => {
+            let allPromise = [], result = {
+                order: {
+                    success: 0,
+                    fail: 0,
+                },
+                review: {
+                    success: 0,
+                    fail: 0,
+                }
+            };
+            tool.traversalFolderSync(pdfFolder+'/new/emailPdf', {
+                eachFile : (path, pathArr, level) => {
+                    allPromise.push(this.processEmailPdf(curUser, path));
+                }
+            });
+            tool.traversalFolderSync(pdfFolder+'/new/webPdf', {
+                eachFile : (path, pathArr, level) => {
+                    allPromise.push(this.processWebPdf(curUser, path, pathArr[0].replace(/\d*\.pdf/g, '')));
+                }
+            });
+
+            Promise.all(allPromise).then(data => {
+                data.forEach(d => {
+                    if(d.data.orderId){
+                        if(d.result){
+                            result.order.success++;
+                        }else{
+                            result.order.fail++;
+                        }
+                    }else{
+                        if(d.result){
+                            result.review.success++;
+                        }else{
+                            result.review.fail++;
+                        }
+                    }
+                });
+
+                resolve(result);
+            });
+        });
+    }
+
+    processEmailPdf(curUser, pdfPath){
+        return new Promise((resolve, reject) => {
+            pdfReader.loadEmailPdf(pdfPath).then(data => {
+                BuyerService.find(curUser, {name: data.buyer}).then(buyerList => {
+                    if(buyerList.length === 1){
+                        let buyer = buyerList[0];
+                        ProductService.find(curUser, {searchName: data.productName.replace(/ /g, '').substr(0, 15)}, 'store').then(productList => {
+                            if(productList.length === 1){
+                                let product = productList[0];
+                                super.findOne(curUser, {buyer: buyer._id, product: product._id}).then(sales => {
+                                    if(sales){
+                                        let folder = tool.date2string(sales.date, 'yyyyMMdd');
+                                        let type = data.orderId?'order':'review';
+
+                                        if(type === 'review' && !sales.orderNo){
+                                            resolve({result: false, data: data});
+                                        }else{
+                                            let filePath = `${folder}/${product.store.name}_${product.searchName}_${data.orderId || sales.orderNo}_${type}.pdf`;
+                                            if(!fs.existsSync(`${pdfFolder}/finished/${folder}`)){
+                                                fs.mkdirSync(`${pdfFolder}/finished/${folder}`);
+                                            }
+                                            fs.renameSync(pdfPath,
+                                                `${pdfFolder}/finished/${filePath}`);
+                                            let salesData;
+                                            if(type === 'order'){
+                                                salesData = {
+                                                    orderNo : data.orderId,
+                                                    orderFile: filePath,
+                                                };
+                                            }else{
+                                                salesData = {
+                                                    reviewFlag : 1,
+                                                    reviewFile: filePath,
+                                                };
+                                            }
+                                            this.reviewById(curUser, sales._id, salesData).then(saveResult => {
+                                                resolve({result: true, data: data});
+                                            });
+                                        }
+                                    }else{
+                                        resolve({result: false, data: data});
+                                    }
+                                });
+                            }else{
+                                resolve({result: false, data: data});
+                            }
+                        });
+                    }else{
+                        resolve({result: false, data: data});
+                    }
+                })
+            });
+        });
+    }
+    processWebPdf(curUser, pdfPath, buyerName){
+        return new Promise((resolve, reject) => {
+            pdfReader.loadWebPdf(pdfPath).then(data => {
+                BuyerService.find(curUser, {name: buyerName}).then(buyerList => {
+                    if(buyerList.length === 1){
+                        let buyer = buyerList[0];
+                        let findAllProductPromise = [];
+                        data.productName.forEach(productName => {
+                            findAllProductPromise.push(ProductService.find(curUser, {searchName: productName.replace(/ /g, '').substr(0, 15)}, 'store'));
+                        });
+                        Promise.all(findAllProductPromise).then(productList => {
+                            let findAllsalesPromise = [];
+                            productList.forEach(products => {
+                                findAllsalesPromise.push(new Promise((resolve, reject) => {
+                                    if(products.length === 1){
+                                        let product = products[0];
+                                        super.findOne(curUser, {buyer: buyer._id, product: product._id}).then(sales => {
+                                            if(sales){
+                                                let folder = tool.date2string(sales.date, 'yyyyMMdd');
+                                                let type = data.orderId?'order':'review';
+                                                let filePath = `${folder}/${product.store.name}_${product.searchName}_${data.orderId || sales.orderNo}_${type}.pdf`;
+                                                if(!fs.existsSync(`${pdfFolder}/finished/${folder}`)){
+                                                    fs.mkdirSync(`${pdfFolder}/finished/${folder}`);
+                                                }
+                                                fs.writeFileSync(`${pdfFolder}/finished/${filePath}`, fs.readFileSync(pdfPath));
+                                                let salesData;
+                                                if(type === 'order'){
+                                                    salesData = {
+                                                        orderNo : data.orderId,
+                                                        orderFile: filePath,
+                                                    };
+                                                }else{
+                                                    salesData = {
+                                                        reviewFlag : 1,
+                                                        reviewFile: filePath,
+                                                    };
+                                                }
+                                                this.reviewById(curUser, sales._id, salesData).then(saveResult => {
+                                                    resolve({result: true, data: data});
+                                                });
+                                            }else{
+                                                resolve({result: false, data: data});
+                                            }
+                                        });
+                                    }else{
+                                        resolve({result: false, data: data});
+                                    }
+                                }));
+                            });
+
+                            Promise.all(findAllsalesPromise).then(results => {
+                                let flag = true;
+                                results.some(result => {
+                                    if(result.result === false){
+                                        flag = false;
+                                        return true;
+                                    }
+                                });
+                                if(flag){
+                                    fs.unlinkSync(pdfPath);
+                                }
+                                resolve({result: flag, data: data});
+                            })
+                        });
+                    }else{
+                        resolve({result: false, data: data});
+                    }
+                })
+            });
+        });
+    }
 }
 
 let service = new ModuleService();
 module.exports = service;
 
+// service.processFile({tenant:"33f0fe38-fcd1-4f11-8a55-1831821b38c5"}).then(result => {
+//     console.log(`order处理：成功${result.order.success}条，失败${result.order.fail}条。\nreview处理：成功${result.review.success}条，失败${result.review.fail}条。`)
+// });
 
 
