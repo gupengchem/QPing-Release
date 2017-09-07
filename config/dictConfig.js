@@ -101,4 +101,49 @@ module.exports = [
             }
         ],
     },
+
+
+
+    /* 6 */
+    {
+        "code" : "validateType",
+        "name" : "验证类型",
+        "state" : 1,
+        "options" : [
+            {
+                "code" : "EMAIL",
+                "text" : "企业邮箱",
+                "state" : 1
+            },
+            {
+                "code" : "PIN",
+                "text" : "安全码",
+                "state" : 1
+            }
+        ],
+    },
+
+    /* 7 */
+    {
+        "code" : "orgCategory",
+        "name" : "组织级别",
+        "state" : 1,
+        "options" : [
+            {
+                "code" : "1",
+                "text" : "客户",
+                "state" : 1
+            },
+            {
+                "code" : "2",
+                "text" : "站点",
+                "state" : 1
+            },
+            {
+                "code" : "3",
+                "text" : "服务线",
+                "state" : 1
+            }
+        ],
+    },
 ];
