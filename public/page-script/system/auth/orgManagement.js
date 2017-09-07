@@ -53,6 +53,9 @@ page.initElement = function () {
         idField : '_id',
         title : '组织树',
         multiple: false,
+        nameField: function (data) {
+            return data.name + "【" + data.code + "】";
+        },
         onChecked: function (node) {
             thisPage.showDetail(node);
         },
