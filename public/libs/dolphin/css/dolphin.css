@@ -20,7 +20,8 @@
 }
 .panel .operationButton {
   float: right;
-  margin-top: -6px;
+  margin-top: -5px;
+  margin-bottom: 0;
 }
 /******************************************** overwrite bootstrap *******************************************/
 .input-group-btn-icon {

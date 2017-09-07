@@ -19,6 +19,8 @@ const schema = new Schema({
     _id : {type : String, default: uuid.v4},
     name : { type: String },                        //名称
     code: {type: String, unique: true},             //编码
+    category: {type : Number},                      //层级
+    validateType : {type : String},                 // 验证类型
 
     parent : { type: String, ref: 'M_Org' },         //父级节点
     __type: {type: String, default : Constant.TREE_MODEL.LEAF},       //节点类型

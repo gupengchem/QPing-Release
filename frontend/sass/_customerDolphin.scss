@@ -17,13 +17,13 @@
     cursor: pointer;
   }
 
-  .table>tbody>tr>td{
+  .table > tbody > tr > td{
     vertical-align: middle;
-  }
 
-  td.DolphinOperation{
-    .btn + .btn{
-      margin-left: 5px;
+    &.DolphinOperation{
+      .btn + .btn{
+        margin-left: 5px;
+      }
     }
   }
 }

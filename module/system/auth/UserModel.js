@@ -23,8 +23,8 @@ const schema = new Schema({
     email: {type: String},                          //邮箱
     type : { type: String },                        //会员类型
     icon : { type: String },                        //头像
-    org: {type: String},                            //所属组织
-    role : { type: String, ref : "M_Role" },          //所属角色
+    org: {type: String, ref : "M_Org" },           //所属组织
+    role : { type: String, ref : "M_Role" },        //所属角色
 
     tenant : { type: String, ref : "M_Tenant" },    //所属租户
 

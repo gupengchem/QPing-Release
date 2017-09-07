@@ -95,6 +95,50 @@ myUtil.date2string = function (date, format) {
     }
     return format;
 };
+myUtil.string2date = function(string, format){
+    format = format || 'yyyy-MM-dd';
+    var y = string.substring(format.indexOf('y'),format.lastIndexOf('y')+1);//年
+    var M = string.substring(format.indexOf('M'),format.lastIndexOf('M')+1);//月
+    var d = string.substring(format.indexOf('d'),format.lastIndexOf('d')+1);//日
+    var h = string.substring(format.indexOf('h'),format.lastIndexOf('h')+1);//时
+    var m = string.substring(format.indexOf('m'),format.lastIndexOf('m')+1);//分
+    var s = string.substring(format.indexOf('s'),format.lastIndexOf('s')+1);//秒
+
+    if(s == null ||s == "" || isNaN(s)) {s = new Date().getSeconds();}
+    if(m == null ||m == "" || isNaN(m)) {m = new Date().getMinutes();}
+    if(h == null ||h == "" || isNaN(h)) {h = new Date().getHours();}
+    if(d == null ||d == "" || isNaN(d)) {d = new Date().getDate();}
+    if(M == null ||M == "" || isNaN(M)) {M = new Date().getMonth()+1;}
+    if(y == null ||y == "" || isNaN(y)) {y = new Date().getFullYear();}
+    var dt = null ;
+    eval ("dt = new Date('"+ y+"', '"+(M-1)+"','"+ d+"','"+ h+"','"+ m+"','"+ s +"')");
+    return dt;
+};
+myUtil.date2string = function(date, format){
+    format = format || 'yyyy-MM-dd';
+    var o = {
+        "M+" : date.getMonth() + 1, //month
+        "d+" : date.getDate(),      //day
+        "h+" : date.getHours(),     //hour
+        "m+" : date.getMinutes(),   //minute
+        "s+" : date.getSeconds(),   //second
+        "w+" : "天一二三四五六".charAt(date.getDay()),   //week
+        "q+" : Math.floor((date.getMonth() + 3) / 3),  //quarter
+        "S"  : date.getMilliseconds() //millisecond
+    };
+    if(/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1,
+            (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for(var k in o){
+        if(new RegExp("("+ k +")").test(format)){
+            format = format.replace(RegExp.$1,
+                RegExp.$1.length == 1 ? o[k] :
+                    ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+};
 
 /**
  * 客户信息的获取

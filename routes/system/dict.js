@@ -105,10 +105,13 @@ router.get('/options/:code', function(req, res, next) {
 
     service
         .findOne(req.curUser, query)
-        .then(
-            data => res.send(resUtil.success({rows: data.options})),
-            err => res.send(resUtil.error())
-        );
+        .then(data => {
+            if(data){
+                res.send(resUtil.success({rows: data.options}));
+            }else{
+                res.send(resUtil.success({message: `此数据项(${code})不存在`}));
+            }
+        }, err => res.send(resUtil.error()));
 });
 
 module.exports = router;

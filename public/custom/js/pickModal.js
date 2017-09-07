@@ -205,8 +205,9 @@
     };
     PickModal.prototype.submit = function () {
         let data = this.selectedList.data.rows;
+        let unData = this.unSelectList.data.rows;
         if(typeof this.opts.onSubmit === 'function'){
-            if(this.opts.onSubmit.call(this, data) !== false){
+            if(this.opts.onSubmit.call(this, data, unData) !== false){
                 this.modal.modal('hide');
             }
         }else{

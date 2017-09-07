@@ -3,6 +3,7 @@
  */
 
 'use strict';
+const tool = require('./tool');
 const util = {};
 
 util.formatCondition = function(condition){
@@ -28,6 +29,20 @@ util.formatCondition = function(condition){
                 condition[key.replace(/_dateTime_end$/, '')]['$lte'] = tool.string2date(condition[key], 'yyyy-MM-dd hh:mm')
             }else{
                 condition[key.replace(/_dateTime_end$/, '')] = {'$lte': tool.string2date(condition[key], 'yyyy-MM-dd hh:mm')};
+            }
+            delete condition[key];
+        }else if(/_date_start$/.test(key)){
+            if(condition[key.replace(/_date_start$/, '')]){
+                condition[key.replace(/_date_start$/, '')]['$gte'] = tool.string2date(condition[key], 'yyyy-MM-dd')
+            }else{
+                condition[key.replace(/_date_start$/, '')] = {'$gte': tool.string2date(condition[key], 'yyyy-MM-dd')};
+            }
+            delete condition[key];
+        }else if(/_date_end$/.test(key)){
+            if(condition[key.replace(/_date_end$/, '')]){
+                condition[key.replace(/_date_end$/, '')]['$lte'] = tool.string2date(condition[key], 'yyyy-MM-dd')
+            }else{
+                condition[key.replace(/_date_end$/, '')] = {'$lte': tool.string2date(condition[key], 'yyyy-MM-dd')};
             }
             delete condition[key];
         }else if(/_notEquil$/.test(key)){

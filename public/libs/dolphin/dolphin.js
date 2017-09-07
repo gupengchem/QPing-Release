@@ -1591,7 +1591,7 @@
                     format: "yyyy-mm-dd",
                     autoclose: true,
                     minView: 2,
-                    pickerPosition: "bottom-left"
+                    language: 'zh-CN',
                 };
 
                 if($(picker).attr('startDate')){
@@ -2264,7 +2264,7 @@
             });
 
             var enumData = null;
-            if(returnData.success){
+            if(returnData.success && returnData.rows && returnData.rows.length > 0){
                 if(typeof _this.opts.dataFilter == 'function'){
                     returnData = _this.opts.dataFilter.call(_this, returnData);
                 }
@@ -2272,6 +2272,8 @@
                 if (this.opts.enumCache === true) {
                     this.addEnum.call(this, name, enumData);
                 }
+            }else{
+                console.warn(`枚举项${name}服务端未配置`);
             }
 
             return enumData;

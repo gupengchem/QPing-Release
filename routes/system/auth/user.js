@@ -21,7 +21,7 @@ const fs = require('fs');
 //列表
 router.post('/list', function(req, res, next) {
     let condition = req.body, query = req.query,
-    populate = 'creater';
+    populate = 'creater org';
     condition = reqUtil.formatCondition(condition);
 
     service
@@ -112,7 +112,7 @@ router.post('/remove', function(req, res, next) {
 //详情
 router.get('/detail/:id', function(req, res, next) {
     let _id = req.params.id;
-    let populate = 'creater updater role tenant';
+    let populate = 'creater updater role tenant org';
 
     service
         .findById(req.curUser, _id, populate)

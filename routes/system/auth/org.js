@@ -56,6 +56,18 @@ router.post('/find', function(req, res, next) {
             err => res.send(resUtil.error())
         );
 });
+router.get('/find', function(req, res, next) {
+    let condition = req.query,
+    populate = '', sort = {'sort':1};
+    condition = reqUtil.formatCondition(condition);
+
+    service
+        .find(req.curUser, condition, populate, sort)
+        .then(
+            data => res.send(resUtil.success({rows:data})),
+            err => res.send(resUtil.error())
+        );
+});
 //更新
 router.post('/save/:id', function(req, res, next) {
     let data = req.body;
@@ -76,6 +88,17 @@ router.post('/save', function(req, res, next) {
         .save(req.curUser, data)
         .then(
             data => res.send(resUtil.success({data:data})),
+            err => res.send(resUtil.error())
+        );
+});
+//新增
+router.post('/updateUser', function(req, res, next) {
+    let data = req.body;
+
+    service
+        .updateUsers(req.curUser, data)
+        .then(
+            data => res.send(resUtil.success()),
             err => res.send(resUtil.error())
         );
 });
