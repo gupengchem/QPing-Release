@@ -7,6 +7,7 @@ const page = {
     editForm : $('#edit-form'),
     detailForm : $('#detail-form'),
     queryConditionForm: $('#queryConditionForm'),
+    transferButton: $('#transfer'),
 
     url : {
         list : '/system/auth/org/find',
@@ -16,12 +17,18 @@ const page = {
         detail : '/system/auth/org/detail/{id}',
         importData : Dolphin.path.contextPath + '/system/auth/org/import',
         exportData : '/system/auth/org/export',
+        updateUser : '/system/auth/org/updateUser',
+
+        user: {
+            list : '/system/auth/user/list',
+        }
     },
 
     _id : null,
     list : null,
     tree : null,
     editModal : null,
+    pickModal : null,
 
     init: null,
     initElement: null,
@@ -58,11 +65,10 @@ page.initElement = function () {
 
     thisPage.list = new Dolphin.LIST({
         panel : "#dataList",
-        url : thisPage.url.list,
+        url : thisPage.url.user.list,
         data : {rows:[]},
         pagination: false,
         checkbox: false,
-        title : "子组织",
         queryParams : Dolphin.form.getValue('queryConditionForm'),
         columns : [{
             code: "name",
@@ -71,8 +77,8 @@ page.initElement = function () {
             code: "code",
             title : "编码",
         },{
-            code: "sort",
-            title : "排序",
+            code: "phone",
+            title : "手机号",
         }]
     });
 
@@ -83,6 +89,65 @@ page.initElement = function () {
         footer : $('#edit_form_footer'),
         hidden : function () {
             Dolphin.form.empty(thisPage.editForm);
+        }
+    });
+
+    thisPage.pickModal = new PickModal({
+        selectedList:{
+            url: thisPage.url.user.list,
+            columns: [
+                {title:'名称', code: 'name'},
+                {title:'原组织', code: 'org.name'},
+            ]
+        },
+        unSelectList:{
+            url: thisPage.url.user.list,
+            columns: [
+                {title:'名称', code: 'name'},
+                {title:'原组织', code: 'org.name'},
+            ]
+        },
+        dataFilter:{
+            checkUnSelect: function (data) {
+                return data;
+            },
+            select: function (data) {
+                return data;
+            },
+        },
+        onShow: function () {
+            let node = thisPage.tree.getChecked()[0];
+
+            this.selectedList.query({org: node._id});
+            this.unSelectList.query({org:{'$ne':node._id}});
+        },
+        onSubmit: function (data, unData) {
+            let node = thisPage.tree.getChecked()[0], i;
+            let _data = {org: node._id, addUser:[], removeUser:[]};
+            data.forEach(function (d) {
+                if(!d.org || d.org._id !== node._id){
+                    _data.addUser.push(d._id);
+                }
+            });
+            unData.forEach(function (d) {
+                if(d.org && d.org._id === node._id){
+                    _data.removeUser.push(d._id);
+                }
+            });
+
+            Dolphin.ajax({
+                url : thisPage.url.updateUser,
+                type : Dolphin.requestMethod.POST,
+                data : Dolphin.json2string(_data),
+                pathData : {id : node._id},
+                onSuccess : function (reData) {
+                    Dolphin.alert(reData.message, {
+                        callback : function () {
+                            thisPage.list.reload();
+                        }
+                    });
+                }
+            });
         }
     });
 };
@@ -204,6 +269,10 @@ page.initEvent = function () {
     $('#exportDate').click(function () {
         window.open(thisPage.url.exportData + '?' + thisPage.queryConditionForm.serialize());
     });
+
+    thisPage.transferButton.click(function () {
+        thisPage.pickModal.show();
+    });
 };
 
 page.showDetail = function (node) {
@@ -211,7 +280,8 @@ page.showDetail = function (node) {
     Dolphin.form.empty(thisPage.detailForm);
     Dolphin.form.setValue(node, thisPage.detailForm);
     thisPage.tree.expandTo(node);
-    thisPage.list.query({parent:node._id});
+    thisPage.list.query({org:node._id});
+    Dolphin.toggleEnable(thisPage.transferButton, true);
 };
 
 page.formatterDate = function (val) {

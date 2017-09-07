@@ -112,7 +112,11 @@ page.initEvent = function () {
             Dolphin.alert("请选择一条数据");
         }else{
             thisPage._id = checkedData[0]._id;
-            Dolphin.form.setValue(checkedData[0], thisPage.editForm);
+            let data = Object.assign({}, checkedData[0]);
+            if(data.org){
+                data.org = data.org._id;
+            }
+            Dolphin.form.setValue(data, thisPage.editForm);
             thisPage.editModal.modal('show');
         }
     });

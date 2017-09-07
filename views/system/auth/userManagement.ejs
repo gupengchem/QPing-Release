@@ -108,7 +108,9 @@
         <div class="form-group">
             <label class="col-md-2 control-label">所属组织</label>
             <div class="col-md-10">
-                <input class="form-control" name="org" type="text" />
+                <select name="org" class="form-control" options
+                        optionUrl="/system/auth/org/find" ajaxType="get" codeField="_id" nameField="name">
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -175,7 +177,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">所属组织</label>
             <div class="col-md-10">
-                <p class="form-control-static" name="org"></p>
+                <p class="form-control-static" name="org.name"></p>
             </div>
         </div>
         <div class="form-group">

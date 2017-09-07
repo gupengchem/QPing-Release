@@ -121,7 +121,22 @@
                         </div>
                     </div>
 
-                    <div id="dataList"></div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                组织成员
+                                <div class="operationButton">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary" id="transfer" disabled>
+                                            <span class="glyphicon glyphicon-transfer"></span> 添加/删除属性
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dataList"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,6 +180,7 @@
 
 <% include ../../../views/common/footer.ejs %>
 <% include ../../../views/common/script.ejs %>
+<script src="<%= global.config.path.publicPath %>/custom/js/pickModal.js"></script>
 
 
 </body>

@@ -11,6 +11,8 @@ const CommonService = require("../../../service/common/dbService");
 const Model = require("../../../module/system/auth/OrgModel");
 const SYSTEM_CONSTANT = require('../../../config/systemConstant');
 
+const UserService = require('./UserService');
+
 const defaultParams = {
     model : Model
 };
@@ -95,6 +97,28 @@ class ModuleService extends CommonService{
                 }
             }, err => reject(err))
         });
+    }
+
+    /**
+     * 批量更新用户
+     * @param curUser
+     * @param data = {org: _id, addUser:[], removeUser:[]}
+     */
+    updateUsers(curUser, data){
+        return new Promise((resolve, reject) => {
+            let allPromise = [];
+            data.addUser.forEach(userId => {
+                allPromise.push(UserService.updateById(curUser, userId, {org: data.org}));
+            });
+            data.removeUser.forEach(userId => {
+                allPromise.push(UserService.updateById(curUser, userId, {org: ''}));
+            });
+            Promise.all(allPromise).then(
+                result => resolve(result),
+                err => reject(err)
+            )
+
+        })
     }
 }
 
