@@ -234,9 +234,9 @@ router.get('/export', function(req, res, next) {
                     d.product?d.product.keyword:'',
                     d.product?`$${d.product.price}`:'',
                     d.orderNo,
-                    d.orderFile.substr(9),
-                    d.reviewFile.substr(9),
-                    d.feedbackFile.substr(9),
+                    d.orderFile?d.orderFile.substr(9):'',
+                    d.reviewFile?d.reviewFile.substr(9):'',
+                    d.feedbackFile?d.feedbackFile.substr(9):'',
                 ]);
                 amount += d.product.price - 0;
 
