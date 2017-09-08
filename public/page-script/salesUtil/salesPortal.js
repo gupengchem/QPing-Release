@@ -131,6 +131,13 @@ page.initElement = function () {
                 return val?$('<div class="textNowrap">').html(val):'暂无';
             }
         },{
+            code: "date",
+            title : "出单时间",
+            formatter: function (val) {
+                return val?Dolphin.date2string(Dolphin.string2date(val,'yyyy-MM-ddThh:mm:dd.sssZ'),'yyyyMMdd'):'';
+            }
+
+        },{
             code: "buyer",
             title : "买手",
             formatter: function (val) {
@@ -364,7 +371,13 @@ page.initEvent = function () {
             }else{
                 condition += `&store=${thisPage.productList.getChecked()[0].store._id}`;
             }
-            window.open(thisPage.url.exportData + '?' + condition);
+            Dolphin.ajax({
+                url: thisPage.url.exportData + '?' + condition,
+                onSuccess: function () {
+                    thisPage.editModal.modal('hide');
+                    Dolphin.alert('导出成功');
+                }
+            })
         }
     });
     $('#exportModal').click(function () {

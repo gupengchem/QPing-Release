@@ -22,7 +22,7 @@ const JSZip = require('jszip');
 const fs = require('fs');
 
 let pdfFolder = __dirname + '/../../OrderFileFolder/finished/';
-let zipFolder = __dirname + '/../../OrderFileFolder/';
+let zipFolder = __dirname + '/../../OrderFileFolder/zip/';
 
 /* GET users listing. */
 //列表
@@ -205,6 +205,8 @@ router.get('/export', function(req, res, next) {
     let condition = req.query,
     _data = [];
     condition = reqUtil.formatCondition(condition);
+
+    let exportType = condition.exportType, fileNamePrefix;
     delete condition.exportType;
 
     service.find(req.curUser, condition, 'store product', {store: 1}).then(data => {
@@ -249,6 +251,13 @@ router.get('/export', function(req, res, next) {
                 if(d.feedbackFile){
                     zip.folder("feedbackPdf").file(d.feedbackFile.substr(9), fs.readFileSync(`${pdfFolder}${d.feedbackFile}`));
                 }
+                if(i === 0){
+                    if(exportType === 'product'){
+                        fileNamePrefix = d.product.searchName;
+                    }else{
+                        fileNamePrefix = d.store.name;
+                    }
+                }
             });
             _data.push([
                 '',
@@ -263,20 +272,18 @@ router.get('/export', function(req, res, next) {
             ]);
 
             const buffer = xlsx.build([{name: "report", data: _data}]);
-            let __name = `report${tool.date2string(condition.date.$gte, 'yyyyMMdd')}-${tool.date2string(condition.date.$lte, 'yyyyMMdd')}`;
-            let fileName = `/${__name}.xlsx`;
+            let __name = `${tool.date2string(new Date(), 'yyyyMMddhhmmss')}-${fileNamePrefix}-${tool.date2string(condition.date.$gte, 'yyyyMMdd')}-${tool.date2string(condition.date.$lte, 'yyyyMMdd')}`;
+            let fileName = `report.xlsx`;
             let zipFileName = `${__name}.zip`;
 
             fs.writeFile(`${__dirname}/../../${fileName}`, buffer, function () {
                 zip.file(fileName, fs.readFileSync(`${__dirname}/../../${fileName}`));
 
                 zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
-                    .pipe(fs.createWriteStream(`${zipFolder}/${zipFileName}`))
+                    .pipe(fs.createWriteStream(`${zipFolder}${zipFileName}`))
                     .on('finish', function () {
-                        res.download(`${zipFolder}/${zipFileName}`, zipFileName, function () {
-                            fs.unlink(`${__dirname}/../../${fileName}`);
-                            fs.unlink(`${zipFolder}/${zipFileName}`);
-                        });
+                        fs.unlink(`${__dirname}/../../${fileName}`);
+                        res.send(resUtil.success());
                     });
             });
         }
