@@ -230,7 +230,7 @@ router.get('/export', function(req, res, next) {
 
             data.forEach((d, i) => {
                 _data.push([
-                    i,
+                    i+1,
                     d.store?d.store.name:'',
                     d.product?d.product.name:'',
                     d.product?d.product.keyword:'',
@@ -273,7 +273,7 @@ router.get('/export', function(req, res, next) {
 
             const buffer = xlsx.build([{name: "report", data: _data}]);
             let __name = `${tool.date2string(new Date(), 'yyyyMMddhhmmss')}-${fileNamePrefix}-${tool.date2string(condition.date.$gte, 'yyyyMMdd')}-${tool.date2string(condition.date.$lte, 'yyyyMMdd')}`;
-            let fileName = `report.xlsx`;
+            let fileName = `report-${tool.date2string(new Date(), 'yyyyMMddhhmmss')}.xlsx`;
             let zipFileName = `${__name}.zip`;
 
             fs.writeFile(`${__dirname}/../../${fileName}`, buffer, function () {
