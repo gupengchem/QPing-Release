@@ -51,7 +51,7 @@ class ModuleService extends CommonService{
                     let folder = tool.date2string(sales.date, 'yyyyMMdd');
 
                     let fileType = orderFile.name.split('.');
-                    let filePath = `${folder}/${sales.product.store.name}_${sales.product.searchName}_${data.orderNo}_${type}.${fileType[fileType.length - 1]}`;
+                    let filePath = `${folder}/${sales.product.store.name}_${sales.product.searchName}_${data.orderNo || sales.orderNo}_${type}.${fileType[fileType.length - 1]}`;
                     if(!fs.existsSync(`${pdfFolder}/finished/${folder}`)){
                         fs.mkdirSync(`${pdfFolder}/finished/${folder}`);
                     }
