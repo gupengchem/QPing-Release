@@ -29,13 +29,20 @@ pdfReader.loadEmailPdf = function(filePath){
 
         this.loadPdfFile(filePath).then(pdf => {
             pdf.formImage.Pages[0].Texts.forEach((text, i) => {
-                if(/^From:$/.test(decodeURIComponent(text.R[0].T)) && !result.buyer){
-                    result.buyer = decodeURIComponent(pdf.formImage.Pages[0].Texts[i+1].R[0].T);
+                let _text = decodeURIComponent(text.R[0].T);
+                if(/^Hello (.*),$/.test(_text) && !result.buyer){
+                    result.buyer = _text.replace(/^Hello (.*),$/, '$1');
                 }
-                if(/^Subject:$/.test(decodeURIComponent(text.R[0].T)) && !result.productName){
+                if(/^Thanks (.*),$/.test(_text) && !result.buyer){
+                    result.buyer = _text.replace(/^Thanks (.*),$/, '$1');
+                }
+                if(/^Subject:( )+$/.test(_text) && !result.productName){
                     result.productName = decodeURIComponent(pdf.formImage.Pages[0].Texts[i+1].R[0].T);
                 }
-                if(/^Order $/.test(decodeURIComponent(text.R[0].T)) && !result.orderId){
+                if(/^Subject: (.*),$/.test(_text) && !result.productName){
+                    result.productName = _text.replace(/^Subject: (.*),$/, '$1');
+                }
+                if(/^Order $/.test(_text) && !result.orderId){
                     orderId = decodeURIComponent(pdf.formImage.Pages[0].Texts[i+1].R[0].T);
                     if(/^#\d{3}-\d{7}-\d{7}$/.test(orderId)){
                         result.orderId = orderId.replace('#', '');
@@ -45,9 +52,9 @@ pdfReader.loadEmailPdf = function(filePath){
 
             result.buyer = result.buyer.replace(/ <.*>/,'');
             if(result.orderId){
-                result.productName = result.productName.replace(/Fwd: Your Amazon.com order of (.*)"(.*)"./, '$2');
+                result.productName = result.productName.replace(/(Fwd: )+Your Amazon.com order of (.*)"(.*)"./, '$3');
             }else{
-                result.productName = result.productName.replace(/Fwd: Thank you for reviewing (.*) on Amazon/, '$1');
+                result.productName = result.productName.replace(/(Fwd: )+Thank you for reviewing (.*) on Amazon/, '$2');
             }
 
             resolve(result);
