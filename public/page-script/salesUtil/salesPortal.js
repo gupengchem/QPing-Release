@@ -217,7 +217,7 @@ page.initElement = function () {
 
     thisPage.editModal = new Dolphin.modalWin({
         content : thisPage.editForm,
-        title : "修改信息",
+        title : "导出",
         defaultHidden : true,
         footer : $('#edit_form_footer'),
         hidden : function () {
@@ -352,6 +352,27 @@ page.initEvent = function () {
                 thisPage.productList.reload();
             }
         });
+    });
+
+    //导出
+    $('#exportButton').click(function () {
+        if(Dolphin.form.validate('#edit-form')){
+            let data = Dolphin.form.getValue('#edit-form');
+            let condition = $('#edit-form').serialize();
+            if(data.exportType === 'product'){
+                condition += `&product=${thisPage.productList.getChecked()[0]._id}`;
+            }else{
+                condition += `&store=${thisPage.productList.getChecked()[0].store._id}`;
+            }
+            window.open(thisPage.url.exportData + '?' + condition);
+        }
+    });
+    $('#exportModal').click(function () {
+        if(thisPage.productList.getChecked().length === 0) {
+            Dolphin.alert('请选中一条产品');
+        }else{
+            thisPage.editModal.modal('show');
+        }
     });
 };
 

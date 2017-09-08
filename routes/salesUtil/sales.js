@@ -18,7 +18,11 @@ const service = require("../../service/salesUtil/SalesService");
 
 const formidable = require('formidable');
 const xlsx = require('node-xlsx');
+const JSZip = require('jszip');
 const fs = require('fs');
+
+let pdfFolder = __dirname + '/../../OrderFileFolder/finished/';
+let zipFolder = __dirname + '/../../OrderFileFolder/';
 
 /* GET users listing. */
 //列表
@@ -198,71 +202,84 @@ router.post('/import', function (req, res, next) {
 });
 //导出
 router.get('/export', function(req, res, next) {
-    let condition = req.query, tableConfig,
-    _data = [],
-    i, j, y;
+    let condition = req.query,
+    _data = [];
     condition = reqUtil.formatCondition(condition);
+    delete condition.exportType;
 
-    service.find(req.curUser, condition).then(data => {
-        _data.push([
-            '_id',
-            '名称',
-            '编码',
-            'product',
-            'status',
-            'date',
-            'orderNo',
-            'buyer',
-            'store',
-            'reviewFlag',
-            'reviewDate',
-            'feedbackFlag',
-            'feedbackDate',
-            'orderImg',
-            'reviewImg',
-            'feedbackImg',
-            '租户',
-            '状态',
-            '创建时间',
-            '创建人',
-            '更新时间',
-            '更新人',
-        ]);
+    service.find(req.curUser, condition, 'store product', {store: 1}).then(data => {
+        if(data.length == 0){
+            res.send(resUtil.error({message:'此条件无销售记录'}));
+        }else{
+            let zip = new JSZip();
 
-        data.forEach(d => {
+            let amount = 0;
             _data.push([
-                d['_id'],
-                d['name'],
-                d['code'],
-                d['product'],
-                d['status'],
-                d['date'],
-                d['orderNo'],
-                d['buyer'],
-                d['store'],
-                d['reviewFlag'],
-                d['reviewDate'],
-                d['feedbackFlag'],
-                d['feedbackDate'],
-                d['orderImg'],
-                d['reviewImg'],
-                d['feedbackImg'],
-                d['tenant'],
-                d['state'],
-                d['createTime'],
-                d['creater'],
-                d['updateTime'],
-                d['updater'],
+                'No.',
+                'Seller',
+                'Product',
+                'Search Term Spot',
+                'Price',
+                'Order#',
+                'Order PDF File',
+                'Review PDF File',
+                'Feedback PDF File',
             ]);
-        });
 
-        const buffer = xlsx.build([{name: "T_Sales", data: _data}]);
-        let fileName = `/T_Sales_export${tool.dateFormatter(new Date(), 'yyyyMMdd')}.xlsx`;
-        fs.writeFile(`${__dirname}/../../${fileName}`, buffer, function () {
-            res.download(`${__dirname}/../../${fileName}`, fileName, function () {
-                fs.unlink(`${__dirname}/../../${fileName}`);
+            data.forEach((d, i) => {
+                _data.push([
+                    i,
+                    d.store?d.store.name:'',
+                    d.product?d.product.name:'',
+                    d.product?d.product.keyword:'',
+                    d.product?`$${d.product.price}`:'',
+                    d.orderNo,
+                    d.orderFile.substr(9),
+                    d.reviewFile.substr(9),
+                    d.feedbackFile.substr(9),
+                ]);
+                amount += d.product.price - 0;
+
+                if(d.orderFile){
+                    zip.folder("orderPdf").file(d.orderFile.substr(9), fs.readFileSync(`${pdfFolder}${d.orderFile}`));
+                }
+                if(d.reviewFile){
+                    zip.folder("reviewPdf").file(d.reviewFile.substr(9), fs.readFileSync(`${pdfFolder}${d.reviewFile}`));
+                }
+                if(d.feedbackFile){
+                    zip.folder("feedbackPdf").file(d.feedbackFile.substr(9), fs.readFileSync(`${pdfFolder}${d.feedbackFile}`));
+                }
             });
-        });
+            _data.push([
+                '',
+                '',
+                '',
+                '',
+                `Total: $${amount}`,
+                '',
+                '',
+                '',
+                '',
+            ]);
+
+            const buffer = xlsx.build([{name: "report", data: _data}]);
+            let __name = `report${tool.date2string(condition.date.$gte, 'yyyyMMdd')}-${tool.date2string(condition.date.$lte, 'yyyyMMdd')}`;
+            let fileName = `/${__name}.xlsx`;
+            let zipFileName = `${__name}.zip`;
+
+            fs.writeFile(`${__dirname}/../../${fileName}`, buffer, function () {
+                zip.file(fileName, fs.readFileSync(`${__dirname}/../../${fileName}`));
+
+                zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
+                    .pipe(fs.createWriteStream(`${zipFolder}/${zipFileName}`))
+                    .on('finish', function () {
+                        res.download(`${zipFolder}/${zipFileName}`, zipFileName, function () {
+                            fs.unlink(`${__dirname}/../../${fileName}`);
+                            fs.unlink(`${zipFolder}/${zipFileName}`);
+                        });
+                    });
+            });
+        }
     });
 });
 

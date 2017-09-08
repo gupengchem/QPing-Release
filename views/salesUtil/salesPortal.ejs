@@ -29,17 +29,9 @@
                         <span class="glyphicon glyphicon-file"></span> pdf
                     </button>
 
-                    <!--<form id="imageButton" class="inline-block">-->
-                    <!--<div class="btn-group" role="group">-->
-                    <!--<button type="button" class="btn btn-primary fileinput-button">-->
-                    <!--<span class="glyphicon glyphicon-import"></span> 导入-->
-                    <!--<input id="importData" type="file" name="media" multiple>-->
-                    <!--</button>-->
-                    <!--<button class="btn btn-default" id="exportDate" type="button">-->
-                    <!--<span class="glyphicon glyphicon-export"></span> 导出-->
-                    <!--</button>-->
-                    <!--</div>-->
-                    <!--</form>-->
+                    <button class="btn btn-success" id="exportModal" type="button">
+                        <span class="glyphicon glyphicon-export"></span> 导出
+                    </button>
                 </div>
             </div>
 
@@ -108,23 +100,28 @@
             <label class="col-md-2 control-label">出单日期</label>
             <div class="col-md-10">
                 <div class="input-group date">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="date" type="text" class="form-control date-picker"
-                           id="date01" data-date-format="yyyy-mm-dd"
-                           value="<%=global.tool.date2string(new Date(new Date().getTime()+24*60*60*1000))%>"/>
+                    <input name="date_date_start" type="text" class="form-control date-picker"
+                           data-date-format="yyyy-mm-dd" dol-validate="required"/>
+                    <span class="input-group-addon" id="basic-addon2">至</span>
+                    <input name="date_date_end" type="text" class="form-control date-picker"
+                           data-date-format="yyyy-mm-dd"
+                           value="<%=global.tool.date2string(new Date(new Date().getTime()))%>"/>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label">数量</label>
+            <label class="col-md-2 control-label">导出类型</label>
             <div class="col-md-10">
-                <input class="form-control" name="count" type="number"/>
+                <select name="exportType" class="form-control" >
+                    <option value="product">产品</option>
+                    <option value="store">店铺</option>
+                </select>
             </div>
         </div>
     </form>
     <div id="edit_form_footer">
-        <button type="button" class="btn btn-primary btn-small" id="edit_form_save">保存</button>
-        <button type="button" class="btn btn-default btn-small dol-hideModal" id="edit_form_cancel">取消</button>
+        <button type="button" class="btn btn-primary btn-small" id="exportButton">导出</button>
+        <button type="button" class="btn btn-default btn-small dol-hideModal">取消</button>
     </div>
 
     <!------------------------------------------ order modal ------------------------------------------>
