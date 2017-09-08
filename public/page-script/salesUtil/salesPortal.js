@@ -11,6 +11,7 @@ const page = {
     imgPreviewModal : $('#imgPreview'),
 
     processPdfButton : $('#processPdf'),
+    quickCreateButton : $('#quickCreate'),
 
     url : {
         list : '/salesUtil/sales/list',
@@ -109,6 +110,7 @@ page.initElement = function () {
             thisPage.list.query({
                 product: data._id,
             });
+            Dolphin.toggleEnable($('#quickCreate'), true);
         },
         onLoadSuccess: function (data) {
             if(thisPage._id){
@@ -313,7 +315,7 @@ page.initEvent = function () {
             url : thisPage.url.updateInfo,
             type : Dolphin.requestMethod.POST,
             data : Dolphin.json2string(data),
-            pathData : {id : _id, type:'orderNo'},
+            pathData : {id : _id, type:'order'},
             onSuccess : function (reData) {
                 Dolphin.alert(reData.message, {
                     callback : function () {
@@ -336,6 +338,20 @@ page.initEvent = function () {
         progressall: function (e, data) {
             // console.log(data);
         }
+    });
+
+    //快速添加明日订单
+    thisPage.quickCreateButton.click(function () {
+        let product = thisPage.productList.getChecked()[0]._id;
+        Dolphin.ajax({
+            url : thisPage.url.quickCreate,
+            type : Dolphin.requestMethod.POST,
+            data : Dolphin.json2string({product: product, count: 1}),
+            onSuccess : function (reData) {
+                thisPage.list.reload();
+                thisPage.productList.reload();
+            }
+        });
     });
 };
 
