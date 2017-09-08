@@ -7,7 +7,7 @@ const resUtil = require("../module/util/resUtil");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.redirect(global.config.path.contextPath+'/view/index');
+    res.redirect(global.config.path.contextPath+'/view/salesUtil/salesPortal');
 });
 
 router.use('*', function(req, res, next) {

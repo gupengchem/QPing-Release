@@ -28,7 +28,7 @@ const page = {
         },
 
         file : {
-            add : Dolphin.path.contextPath + '/system/tool/file/save?type=order',
+            add : Dolphin.path.contextPath + '/system/tool/file/save',
         }
     },
 
@@ -157,43 +157,55 @@ page.initElement = function () {
                 }).appendTo(content);
 
                 if(row.product.reviewFlag){
-                    $('<button class="btn btn-default btn-sm">').html('review').click(function () {
-                        let data = {reviewFlag: 1};
-                        Dolphin.ajax({
-                            url : thisPage.url.updateInfo,
-                            type : Dolphin.requestMethod.POST,
-                            data : Dolphin.json2string(data),
-                            pathData : {id : row._id, type:'review'},
-                            onSuccess : function (reData) {
-                                Dolphin.alert(reData.message, {
-                                    callback : function () {
-                                        thisPage.orderModal.modal('hide');
-                                        thisPage.list.reload();
-                                    }
-                                });
-                            }
-                        });
-                    }).appendTo(content);
+                    let reviewButton = $('<button type="button" class="btn btn-default btn-sm fileinput-button">').html('review').appendTo(content);
+                    let uploadInput = $('<input type="file" name="media" />').appendTo(reviewButton);
+
+                    //上传订单文件
+                    uploadInput.fileupload({
+                        url: thisPage.url.file.add + '?type=review',
+                        dataType: 'json',
+                        done: function (e, data) {
+                            let _data = {reviewFlag: 1, reviewFile: data.result.data._id};
+                            Dolphin.ajax({
+                                url : thisPage.url.updateInfo,
+                                type : Dolphin.requestMethod.POST,
+                                data : Dolphin.json2string(_data),
+                                pathData : {id : row._id, type:'review'},
+                                onSuccess : function (reData) {
+                                    thisPage.list.reload();
+                                }
+                            });
+                        },
+                        progressall: function (e, data) {
+                            // console.log(data);
+                        }
+                    });
                 }
 
                 if(row.product.feedbackFlag){
-                    $('<button class="btn btn-default btn-sm">').html('feedback').click(function () {
-                        let data = {feedbackFlag: 1};
-                        Dolphin.ajax({
-                            url : thisPage.url.updateInfo,
-                            type : Dolphin.requestMethod.POST,
-                            data : Dolphin.json2string(data),
-                            pathData : {id : row._id, type:'review'},
-                            onSuccess : function (reData) {
-                                Dolphin.alert(reData.message, {
-                                    callback : function () {
-                                        thisPage.orderModal.modal('hide');
-                                        thisPage.list.reload();
-                                    }
-                                });
-                            }
-                        });
-                    }).appendTo(content);
+                    let feedbackButton = $('<button type="button" class="btn btn-default btn-sm fileinput-button">').html('feedback').appendTo(content);
+                    let uploadInput = $('<input type="file" name="media" />').appendTo(feedbackButton);
+
+                    //上传订单文件
+                    uploadInput.fileupload({
+                        url: thisPage.url.file.add + '?type=feedback',
+                        dataType: 'json',
+                        done: function (e, data) {
+                            let _data = {feedbackFlag: 1, feedbackFile: data.result.data._id};
+                            Dolphin.ajax({
+                                url : thisPage.url.updateInfo,
+                                type : Dolphin.requestMethod.POST,
+                                data : Dolphin.json2string(_data),
+                                pathData : {id : row._id, type:'feedback'},
+                                onSuccess : function (reData) {
+                                    thisPage.list.reload();
+                                }
+                            });
+                        },
+                        progressall: function (e, data) {
+                            // console.log(data);
+                        }
+                    });
                 }
 
                 return content;
@@ -314,13 +326,12 @@ page.initEvent = function () {
     });
 
     //上传订单文件
-    $('#productImage').fileupload({
-        url: thisPage.url.file.add,
+    $('#orderFile').fileupload({
+        url: thisPage.url.file.add + '?type=order',
         dataType: 'json',
         done: function (e, data) {
-            let img = $('<img class="img-responsive">').css('max-height','100px').attr('src', Dolphin.path.uploadPath+data.result.data.filePath);
-            $('#productImgPreview').html(img);
-            $('input[name="image"]').val(data.result.data._id);
+            $('#fileName').html(data.result.data.name);
+            $('input[name="orderFile"]').val(data.result.data._id);
         },
         progressall: function (e, data) {
             // console.log(data);

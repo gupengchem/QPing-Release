@@ -16,12 +16,14 @@ const tool = require('../../module/util/tool');
 const StoreService = require('./StoreService');
 const BuyerService = require('./BuyerService');
 const ProductService = require('./ProductService');
+const FileService = require("../system/tool/FileService");
 
 const defaultParams = {
     model : Model
 };
 
 let pdfFolder = __dirname + '/../../OrderFileFolder';
+let uploadFolder = __dirname + '/../../public/uploadFiles';
 
 class ModuleService extends CommonService{
     constructor(param){
@@ -29,18 +31,63 @@ class ModuleService extends CommonService{
         this.opts = extend(true, {}, this.opts, defaultParams, param);
         this._name = "T_SalesService";
     }
-    updateOrderNoById(curUser, id, data){
+
+    /**
+     *
+     * @param curUser
+     * @param id
+     * @param data
+     * @param type = order / review / feedback
+     * @return {Promise}
+     */
+    updateOrderNoById(curUser, id, data, type){
         return new Promise((resolve, reject) => {
-            super.findById(curUser, id, 'product').then(sales => {
-                let status = this.getState(sales);
-                data.status = status;
-                super.updateById(curUser, id, data).then(
-                    result => resolve(result),
-                    err => reject(err)
-                )
-            })
+            FileService.findById(curUser, data[type+'File']).then(orderFile => {
+                super.findById(curUser, id, [{
+                    path: 'product',
+                    populate: {
+                        path: 'store',
+                }}]).then(sales => {
+                    let folder = tool.date2string(sales.date, 'yyyyMMdd');
+
+                    let fileType = orderFile.name.split('.');
+                    let filePath = `${folder}/${sales.product.store.name}_${sales.product.searchName}_${data.orderNo}_${type}.${fileType[fileType.length - 1]}`;
+                    if(!fs.existsSync(`${pdfFolder}/finished/${folder}`)){
+                        fs.mkdirSync(`${pdfFolder}/finished/${folder}`);
+                    }
+                    fs.renameSync(uploadFolder + orderFile.filePath,
+                        `${pdfFolder}/finished/${filePath}`);
+                    let salesData;
+                    switch (type){
+                        case 'order':
+                            salesData = {
+                                orderNo : data.orderNo,
+                                orderFile: filePath,
+                            };
+                            break;
+                        case 'review':
+                            salesData = {
+                                reviewFlag : data.reviewFlag,
+                                reviewFile: filePath,
+                            };
+                            break;
+                        case 'feedback':
+                            salesData = {
+                                feedbackFlag : data.feedbackFlag,
+                                feedbackFile: filePath,
+                            };
+                            break;
+                    }
+                    this.reviewById(curUser, sales._id, salesData).then(saveResult => {
+                        FileService.removeById(curUser, orderFile._id).then(r => {
+                            resolve({result: true, data: saveResult});
+                        });
+                    });
+                });
+            });
         });
     }
+
     reviewById(curUser, id, data){
         return new Promise((resolve, reject) => {
             super.findById(curUser, id, 'product').then(sales => {

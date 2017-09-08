@@ -65,26 +65,12 @@ router.post('/updateInfo/:type/:id', function(req, res, next) {
     let _id = req.params.id;
     let type = req.params.type;
 
-    switch (type){
-        case 'orderNo':
-            service
-                .updateOrderNoById(req.curUser, _id, data)
-                .then(
-                    data => res.send(resUtil.success({data:data})),
-                    err => res.send(resUtil.error())
-                );
-            break;
-        case 'review':
-            service
-                .reviewById(req.curUser, _id, data)
-                .then(
-                    data => res.send(resUtil.success({data:data})),
-                    err => res.send(resUtil.error())
-                );
-            break;
-        default:
-            res.send(resUtil.error({message: '信息补全类型不存在'}));
-    }
+    service
+        .updateOrderNoById(req.curUser, _id, data, type)
+        .then(
+            data => res.send(resUtil.success({data:data})),
+            err => res.send(resUtil.error())
+        );
 });
 //新增
 router.post('/save', function(req, res, next) {
