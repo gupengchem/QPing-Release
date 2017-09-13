@@ -52,9 +52,9 @@ pdfReader.loadEmailPdf = function(filePath){
 
             result.buyer = result.buyer.replace(/ <.*>/,'');
             if(result.orderId){
-                result.productName = result.productName.replace(/(Fwd: )+Your Amazon.com order of (.*)"(.*)"./, '$3');
+                result.productName = result.productName.replace(/(Fwd: )?Your Amazon.com order of (.*)"(.*)"./, '$3');
             }else{
-                result.productName = result.productName.replace(/(Fwd: )+Thank you for reviewing (.*) on Amazon/, '$2');
+                result.productName = result.productName.replace(/(Fwd: )?Thank you for reviewing (.*) on Amazon/, '$2');
             }
 
             resolve(result);
