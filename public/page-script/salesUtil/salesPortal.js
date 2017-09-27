@@ -60,7 +60,7 @@ page.initElement = function () {
         autoclose: true,
     });
 
-    thisPage.productList = new Dolphin.LIST({
+    let productListConfig = {
         panel : "#productList",
         url : thisPage.url.product.list,
         title : "产品列表",
@@ -97,13 +97,6 @@ page.initElement = function () {
             title : "价格",
             textAlign: 'right',
             width:'50px',
-        },{
-            code: '__',
-            title: '概况',
-            width:'45px',
-            formatter: function (val, row) {
-                return `${row.unFinishedCount} / ${row.totalCount}`;
-            }
         }],
         onChecked: function (data) {
             thisPage._id = data._id;
@@ -117,13 +110,29 @@ page.initElement = function () {
                 $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
             }
         }
-    });
+    };
+    if(contextData.userData.role.code !== 'buyer'){
+        productListConfig.columns.push({
+            code: '__',
+            title: '概况',
+            width:'45px',
+            formatter: function (val, row) {
+                return `${row.unFinishedCount} / ${row.totalCount}`;
+            }
+        });
+    }
+    if(contextData.userData.role.code === 'buyer'){
+        productListConfig.data = {rows:[]};
+        productListConfig.rowIndex = false;
+    }
+    thisPage.productList = new Dolphin.LIST(productListConfig);
 
-    thisPage.list = new Dolphin.LIST({
+    let salesListConfig = {
         panel : "#dataList",
         url : thisPage.url.list,
         data: {total: 0, rows:[]},
         checkbox: false,
+        paginationSimpleFlag: true,
         columns : [{
             code: "orderNo",
             title : "订单号",
@@ -137,12 +146,6 @@ page.initElement = function () {
                 return val?Dolphin.date2string(Dolphin.string2date(val,'yyyy-MM-ddThh:mm:dd.sssZ'),'yyyyMMdd'):'';
             }
 
-        },{
-            code: "buyer",
-            title : "买手",
-            formatter: function (val) {
-                return val?`${val.name} (${val.code})`:'';
-            }
         },{
             code: "status",
             title : "状态",
@@ -220,7 +223,17 @@ page.initElement = function () {
                 return content;
             }
         }]
-    });
+    };
+    if(contextData.userData.role.code === 'admin'){
+        salesListConfig.columns.splice(2, 0, {
+            code: "buyer",
+            title : "买手",
+            formatter: function (val) {
+                return val?`${val.name} (${val.code})`:'';
+            }
+        });
+    }
+    thisPage.list = new Dolphin.LIST(salesListConfig);
 
     thisPage.editModal = new Dolphin.modalWin({
         content : thisPage.editForm,
@@ -268,6 +281,7 @@ page.initEvent = function () {
     //查询
     thisPage.queryConditionForm.submit(function () {
         thisPage.productList.query(Dolphin.form.getValue('queryConditionForm'));
+        thisPage.list.empty();
         return false;
     });
 
@@ -371,13 +385,16 @@ page.initEvent = function () {
             }else{
                 condition += `&store=${thisPage.productList.getChecked()[0].store._id}`;
             }
-            Dolphin.ajax({
-                url: thisPage.url.exportData + '?' + condition,
-                onSuccess: function () {
-                    thisPage.editModal.modal('hide');
-                    Dolphin.alert('导出成功');
-                }
-            })
+            thisPage.editModal.modal('hide');
+            window.open(thisPage.url.exportData + '?' + condition);
+
+            // Dolphin.ajax({
+            //     url: thisPage.url.exportData + '?' + condition,
+            //     onSuccess: function () {
+            //         thisPage.editModal.modal('hide');
+            //         Dolphin.alert('导出成功');
+            //     }
+            // })
         }
     });
     $('#exportModal').click(function () {

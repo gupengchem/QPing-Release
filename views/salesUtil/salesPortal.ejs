@@ -24,14 +24,17 @@
                     </small>
                 </h1>
                 <div class="operationButton">
-
+                    <% if(userData.role.code === 'admin'){ %>
                     <button class="btn btn-primary" id="processPdf">
                         <span class="glyphicon glyphicon-file"></span> pdf
                     </button>
+                    <% } %>
 
+                    <% if(userData.role.code !== 'buyer'){ %>
                     <button class="btn btn-success" id="exportModal" type="button">
                         <span class="glyphicon glyphicon-export"></span> 导出
                     </button>
+                    <% } %>
                 </div>
             </div>
 
@@ -40,7 +43,8 @@
                     <div class="queryCondition">
                         <form class="form-horizontal query-form" id="queryConditionForm">
                             <div class="row">
-                                <div class="col-md-3">
+                                <% if(userData.role.code === 'admin'){ %>
+                                <div class="col-xs-3">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">名称</label>
                                         <div class="col-md-8">
@@ -48,7 +52,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-xs-3">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">店铺</label>
                                         <div class="col-md-8">
@@ -58,7 +62,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <% } else if(userData.role.code === 'store') { %>
+                                <div class="col-xs-9">
+                                    <input type="text" class="form-control" placeholder="根据名称查询" name="name_like" />
+                                </div>
+                                <% } else if(userData.role.code === 'buyer') { %>
+                                <div class="col-xs-9">
+                                    <input type="text" class="form-control" placeholder="根据名称查询" name="searchName" />
+                                </div>
+                                <% } %>
+                                <div class="col-xs-2">
                                     <button class="btn btn-default btn-query" type="submit">
                                         搜索
                                     </button>

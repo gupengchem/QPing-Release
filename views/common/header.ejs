@@ -5,7 +5,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand col-lg-2 col-sm-1 col-xs-12" href="<%=global.config.path.contextPath%>/"><span><%=global.config.title %></span></a>
+        <a class="navbar-brand col-lg-2 col-sm-1 col-xs-12 hidden-xs" href="<%=global.config.path.contextPath%>/"><span><%=global.config.title %></span></a>
         <a id="main-menu-toggle" class="main-menu hidden-xs open"><i class="fa fa-bars"></i></a>
         <% if(userData && userData.menu){ %>
         <%
@@ -15,7 +15,7 @@
             }
         %>
         <% for(i = 0; i < userData.menu.rows.length; i++){ %>
-        <a href="<%=global.config.path.contextPath + userData.menu.rows[i].link %>" id="main-menu-toggle" class="main-menu<%=body.__curMenu == userData.menu.rows[i].code?' active':'' %>"><i class="fa <%=userData.menu.rows[i].icon %>"></i> <%=userData.menu.rows[i].name %></a>
+        <a href="<%=global.config.path.contextPath + userData.menu.rows[i].link %>" id="main-menu-toggle" class="hidden-xs main-menu<%=body.__curMenu == userData.menu.rows[i].code?' active':'' %>"><i class="fa <%=userData.menu.rows[i].icon %>"></i> <%=userData.menu.rows[i].name %></a>
         <% } %>
         <% } %>
         <!-- start: Header Menu -->

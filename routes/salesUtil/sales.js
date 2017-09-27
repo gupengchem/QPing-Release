@@ -15,6 +15,7 @@ const resUtil = require("../../module/util/resUtil");
 const reqUtil = require("../../module/util/reqUtil");
 
 const service = require("../../service/salesUtil/SalesService");
+const BuyerService = require("../../service/salesUtil/BuyerService");
 
 const formidable = require('formidable');
 const xlsx = require('node-xlsx');
@@ -29,15 +30,23 @@ let zipFolder = __dirname + '/../../OrderFileFolder/zip/';
 router.post('/list', function(req, res, next) {
     let condition = req.body, query = req.query,
     populate = 'product buyer store';
-    condition = reqUtil.formatCondition(condition);
     let sort = {date: -1};
-
-    service
-        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
-        .then(
-            data => res.send(resUtil.success(data)),
-            err => res.send(resUtil.error())
-        );
+    let findForPage = () => {
+        service
+            .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
+            .then(
+                data => res.send(resUtil.success(data)),
+                err => res.send(resUtil.error())
+            );
+    };
+    if(req.curUser.role.code === 'buyer'){
+        BuyerService.findOne(req.curUser, {code: req.curUser.code}).then(buyer => {
+            condition.buyer = buyer._id;
+            findForPage();
+        })
+    }else{
+        findForPage();
+    }
 });
 //所有
 router.get('/find', function(req, res, next) {
@@ -211,7 +220,8 @@ router.get('/export', function(req, res, next) {
 
     service.find(req.curUser, condition, 'store product', {store: 1}).then(data => {
         if(data.length == 0){
-            res.send(resUtil.error({message:'此条件无销售记录'}));
+            // res.send(resUtil.error({message:'此条件无销售记录'}));
+            res.render('common/error', {message:'此条件无销售记录', error:{}});
         }else{
             let zip = new JSZip();
 
@@ -282,8 +292,10 @@ router.get('/export', function(req, res, next) {
                 zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
                     .pipe(fs.createWriteStream(`${zipFolder}${zipFileName}`))
                     .on('finish', function () {
-                        fs.unlink(`${__dirname}/../../${fileName}`);
-                        res.send(resUtil.success());
+                        res.download(`${zipFolder}${zipFileName}`, zipFileName, () => {
+                            fs.unlink(`${__dirname}/../../${fileName}`);
+                            fs.unlink(`${zipFolder}${zipFileName}`);
+                        });
                     });
             });
         }

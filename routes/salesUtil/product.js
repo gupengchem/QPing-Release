@@ -16,6 +16,7 @@ const reqUtil = require("../../module/util/reqUtil");
 
 const service = require("../../service/salesUtil/ProductService");
 const SalesService = require("../../service/salesUtil/SalesService");
+const StoreService = require("../../service/salesUtil/StoreService");
 
 const formidable = require('formidable');
 const xlsx = require('node-xlsx');
@@ -28,7 +29,6 @@ router.post('/list', function(req, res, next) {
         query = req.query,
         sort = {store: 1},
         populate = 'store';
-    condition = reqUtil.formatCondition(condition);
 
     service
         .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
@@ -42,31 +42,47 @@ router.post('/portalList', function(req, res, next) {
         query = req.query,
         sort = {store: 1},
         populate = 'store';
-    condition = reqUtil.formatCondition(condition);
+    if(req.curUser.role.code !== 'buyer'){
+        condition = reqUtil.formatCondition(condition);
+    }
+    if(req.curUser.role.code === 'store'){
+        condition = reqUtil.formatCondition(condition);
+    }
 
-    service
-        .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
-        .then(data => {
-            let countAll = [];
-            data.rows.forEach(d => {
-                countAll.push(SalesService.count(req.curUser, {
-                    product: d._id
-                }));
-                countAll.push(SalesService.count(req.curUser, {
-                    product: d._id,
-                    status: {'$ne':'finished'},
-                }));
-            });
-            Promise.all(countAll).then(countTotal => {
-                data.rows.forEach((d, i) => {
-                    d._doc.totalCount = countTotal[i*2];
-                    d._doc.unFinishedCount = countTotal[i*2 + 1];
+    let findForPage = () => {
+        service
+            .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
+            .then(data => {
+                let countAll = [];
+                data.rows.forEach(d => {
+                    countAll.push(SalesService.count(req.curUser, {
+                        product: d._id
+                    }));
+                    countAll.push(SalesService.count(req.curUser, {
+                        product: d._id,
+                        status: {'$ne':'finished'},
+                    }));
+                });
+                Promise.all(countAll).then(countTotal => {
+                    data.rows.forEach((d, i) => {
+                        d._doc.totalCount = countTotal[i*2];
+                        d._doc.unFinishedCount = countTotal[i*2 + 1];
+                    });
+
+                    res.send(resUtil.success(data));
                 });
 
-                res.send(resUtil.success(data));
-            });
+            },err => res.send(resUtil.error()));
+    };
 
-        },err => res.send(resUtil.error()));
+    if(req.curUser.role.code === 'store'){
+        StoreService.findOne(req.curUser, {code: req.curUser.code}).then(store => {
+            condition.store = store._id;
+            findForPage();
+        })
+    }else{
+        findForPage();
+    }
 });
 //所有
 router.get('/find', function(req, res, next) {

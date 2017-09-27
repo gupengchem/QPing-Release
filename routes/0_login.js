@@ -79,7 +79,7 @@ router.post('/', function(req, res, next){
 
 router.get('/logout', function(req, res, next){
     req.session.destroy(function(err) {
-        res.redirect(global.config.path.contextPath + '/view/index');
+        res.redirect(global.config.path.contextPath + '/');
     });
 });
 
