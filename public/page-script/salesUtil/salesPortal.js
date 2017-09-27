@@ -89,10 +89,6 @@ page.initElement = function () {
             title : "关键字",
 
         },{
-            code: "store.name",
-            title : "店铺",
-
-        },{
             code: "price",
             title : "价格",
             textAlign: 'right',
@@ -119,6 +115,13 @@ page.initElement = function () {
             formatter: function (val, row) {
                 return `${row.unFinishedCount} / ${row.totalCount}`;
             }
+        });
+    }
+    if(contextData.userData.role.code !== 'store'){
+        productListConfig.columns.splice(2, 0, {
+            code: "store.name",
+            title : "店铺",
+
         });
     }
     if(contextData.userData.role.code === 'buyer'){
