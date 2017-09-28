@@ -19,6 +19,10 @@ const schema = new Schema({
     _id : {type : String, default: uuid.v4},
     name : { type: String },                        //名称
     code: {type: String, unique: true},             //编码
+    payType: {type: String},                        //付款方式
+    payAccount: {type: String},                     //账号
+    wechatId: {type: String},                       //微信ID
+    remark: {type: String},                         //备注
 
     tenant : { type: String, ref : "M_Tenant" },    //所属租户
 
