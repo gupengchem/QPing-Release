@@ -147,7 +147,7 @@ page.initElement = function () {
             code: "date",
             title : "出单时间",
             formatter: function (val) {
-                return val?Dolphin.date2string(Dolphin.string2date(val,'yyyy-MM-ddThh:mm:dd.sssZ'),'yyyyMMdd'):'';
+                return val?Dolphin.date2string(Dolphin.string2date(val,'yyyy-MM-ddThh:mm:ss'),'yyyyMMdd'):'';
             }
 
         },{
