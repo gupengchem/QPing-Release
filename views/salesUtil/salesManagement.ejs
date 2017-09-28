@@ -62,7 +62,23 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">买手</label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control" placeholder="根据名称查询" name="buyer_ref_like" />
+                                            <input type="text" class="form-control" placeholder="根据买手查询" name="buyer_ref_like" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">买手</label>
+                                        <div class="col-md-10">
+                                            <div class="input-group date">
+                                                <input name="date_date_start" type="text" class="form-control date-picker"
+                                                       data-date-format="yyyy-mm-dd"
+                                                       value="<%=global.tool.date2string(new Date(new Date().getTime()))%>"/>
+                                                <span class="input-group-addon" id="basic-addon2">至</span>
+                                                <input name="date_date_end" type="text" class="form-control date-picker"
+                                                       data-date-format="yyyy-mm-dd"
+                                                       value="<%=global.tool.date2string(new Date(new Date().getTime()))%>"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
