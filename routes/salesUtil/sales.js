@@ -45,6 +45,16 @@ router.post('/list', function(req, res, next) {
             condition.buyer = buyer._id;
             findForPage();
         })
+    }else if(condition['buyer_ref']){
+        BuyerService.find(req.curUser, {name: condition['buyer_ref']}).then(buyers => {
+            let ids = [];
+            buyers.forEach(buyer => {
+                ids.push(buyer._id);
+            });
+            condition.buyer = {'$in': ids};
+
+            findForPage();
+        });
     }else{
         findForPage();
     }

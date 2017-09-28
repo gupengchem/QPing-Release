@@ -127,6 +127,7 @@ page.initElement = function () {
     if(contextData.userData.role.code === 'buyer'){
         productListConfig.data = {rows:[]};
         productListConfig.rowIndex = false;
+        productListConfig.pagination = false;
     }
     thisPage.productList = new Dolphin.LIST(productListConfig);
 
@@ -235,6 +236,11 @@ page.initElement = function () {
                 return val?`${val.name} (${val.code})`:'';
             }
         });
+    }
+    if(contextData.userData.role.code === 'buyer'){
+        productListConfig.data = {rows:[]};
+        productListConfig.rowIndex = false;
+        productListConfig.pagination = false;
     }
     thisPage.list = new Dolphin.LIST(salesListConfig);
 
