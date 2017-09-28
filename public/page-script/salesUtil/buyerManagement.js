@@ -58,6 +58,20 @@ page.initElement = function () {
             code: "code",
             title : "编码",
             
+        },{
+            code: "payType",
+            title : "付款方式",
+            formatter: function (val) {
+                return Dolphin.enum.getEnumText('payType', val);
+            }
+        },{
+            code: "payAccount",
+            title : "账号",
+
+        },{
+            code: "wechatId",
+            title : "微信ID",
+
         }]
     });
 
