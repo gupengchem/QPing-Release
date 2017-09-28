@@ -238,9 +238,7 @@ page.initElement = function () {
         });
     }
     if(contextData.userData.role.code === 'buyer'){
-        productListConfig.data = {rows:[]};
-        productListConfig.rowIndex = false;
-        productListConfig.pagination = false;
+        salesListConfig.pagination = false;
     }
     thisPage.list = new Dolphin.LIST(salesListConfig);
 
