@@ -8,7 +8,7 @@ const FileStore = require('session-file-store')(session);
 module.exports = (function () {
     //base
     const config = {
-        title: 'SalesUtil',
+        title: 'Quping',
         mock : true,
         port : '9017',
     };
