@@ -18,7 +18,7 @@
         <div id="content" class="col-lg-10 col-sm-11">
             <div class="page-header">
                 <h1>
-                    销售管理
+                    趣评管理
                     <small id="parseInfo">
 
                     </small>
@@ -68,7 +68,7 @@
                                 </div>
                                 <% } else if(userData.role.code === 'buyer') { %>
                                 <div class="col-xs-9">
-                                    <input type="text" class="form-control" placeholder="根据名称查询" name="searchName" />
+                                    <input type="text" class="form-control" placeholder="根据名称查询" name="keyword" />
                                 </div>
                                 <% } %>
                                 <div class="col-xs-2">
@@ -90,12 +90,14 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="panel-title">
-                                销售列表
+                                购买列表
+                                <% if(userData.role.code === 'admin'){ %>
                                 <div class="operationButton">
                                     <button class="btn btn-success" id="quickCreate" disabled>
                                         <span class="glyphicon glyphicon-plus"></span>
                                     </button>
                                 </div>
+                                <% } %>
                             </div>
                         </div>
                         <div id="dataList"></div>
