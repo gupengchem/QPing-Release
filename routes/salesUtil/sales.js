@@ -31,6 +31,7 @@ router.post('/list', function(req, res, next) {
     let condition = req.body, query = req.query,
     populate = 'product buyer store';
     let sort = {date: -1};
+    condition = reqUtil.formatCondition(condition);
     let findForPage = () => {
         service
             .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)

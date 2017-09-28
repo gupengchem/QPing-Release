@@ -29,6 +29,7 @@ router.post('/list', function(req, res, next) {
         query = req.query,
         sort = {store: 1},
         populate = 'store';
+    condition = reqUtil.formatCondition(condition);
 
     service
         .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
