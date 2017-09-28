@@ -52,6 +52,7 @@ router.post('/list', function(req, res, next) {
                 ids.push(buyer._id);
             });
             condition.buyer = {'$in': ids};
+            delete condition['buyer_ref'];
 
             findForPage();
         });
