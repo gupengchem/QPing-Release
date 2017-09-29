@@ -105,6 +105,9 @@ page.initElement = function () {
             if(thisPage._id){
                 $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
             }
+            if(data.rows.length > 0){
+                this.check(data.rows[0]._id);
+            }
         }
     };
     if(contextData.userData.role.code !== 'buyer'){
