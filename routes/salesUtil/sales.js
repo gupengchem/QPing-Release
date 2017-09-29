@@ -16,6 +16,7 @@ const reqUtil = require("../../module/util/reqUtil");
 
 const service = require("../../service/salesUtil/SalesService");
 const BuyerService = require("../../service/salesUtil/BuyerService");
+const ProductService = require("../../service/salesUtil/ProductService");
 
 const formidable = require('formidable');
 const xlsx = require('node-xlsx');
@@ -32,6 +33,8 @@ router.post('/list', function(req, res, next) {
     populate = 'product buyer store';
     let sort = {date: -1};
     condition = reqUtil.formatCondition(condition);
+
+    let conditionPromise = [];
     let findForPage = () => {
         service
             .findForPage(req.curUser, query.pageSize, query.pageNumber, condition, populate, sort)
@@ -41,24 +44,45 @@ router.post('/list', function(req, res, next) {
             );
     };
     if(req.curUser.role.code === 'buyer'){
-        BuyerService.findOne(req.curUser, {code: req.curUser.code}).then(buyer => {
-            condition.buyer = buyer._id;
-            findForPage();
-        })
-    }else if(condition['buyer_ref']){
-        BuyerService.find(req.curUser, {name: condition['buyer_ref']}).then(buyers => {
-            let ids = [];
-            buyers.forEach(buyer => {
-                ids.push(buyer._id);
-            });
-            condition.buyer = {'$in': ids};
-            delete condition['buyer_ref'];
-
-            findForPage();
-        });
-    }else{
-        findForPage();
+        conditionPromise.push(new Promise((resolve, reject) => {
+            BuyerService.findOne(req.curUser, {code: req.curUser.code}).then(buyer => {
+                condition.buyer = buyer._id;
+                resolve();
+            })
+        }));
     }
+    if(condition['buyer_ref']){
+        conditionPromise.push(new Promise((resolve, reject) => {
+            BuyerService.find(req.curUser, {name: condition['buyer_ref']}).then(buyers => {
+                let ids = [];
+                buyers.forEach(buyer => {
+                    ids.push(buyer._id);
+                });
+                condition.buyer = {'$in': ids};
+                delete condition['buyer_ref'];
+
+                resolve();
+            });
+        }));
+    }
+    if(condition['product_ref']){
+        conditionPromise.push(new Promise((resolve, reject) => {
+            ProductService.find(req.curUser, {name: condition['product_ref']}).then(products => {
+                let ids = [];
+                products.forEach(buyer => {
+                    ids.push(buyer._id);
+                });
+                condition.product = {'$in': ids};
+                delete condition['product_ref'];
+
+                resolve();
+            });
+        }));
+    }
+
+    Promise.all(conditionPromise).then(() => {
+        findForPage();
+    });
 });
 //所有
 router.get('/find', function(req, res, next) {
