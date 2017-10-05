@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('backoffice:server');
-var https = require('https');
+var http = require('http');
 var fs = require('fs');
 let config = require('../config/config');
 
@@ -29,7 +29,7 @@ var options = {
  * Create HTTP server.
  */
 
-var server = https.createServer(options, app);
+var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -38,6 +38,13 @@ var server = https.createServer(options, app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+//在最下面
+var https = require('https');
+
+https.createServer(options, app).listen(3011, function () {
+    console.log('Https server listening on port ' + 3011);
+});
 
 /**
  * Normalize a port into a number, string, or false.
