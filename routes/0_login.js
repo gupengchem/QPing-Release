@@ -10,23 +10,27 @@ const resUtil = require("../module/util/resUtil");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    if(req.session.userData){
-        res.redirect('/view/index');
+    if(req.protocol === 'http'){
+        res.redirect('https://www.qupingclub.com');
     }else{
-        req.endType = "";
-        // req.endType = global.tool.endType(req.headers['user-agent']);
+        if(req.session.userData){
+            res.redirect('/view/index');
+        }else{
+            req.endType = "";
+            // req.endType = global.tool.endType(req.headers['user-agent']);
 
-        let url = 'common/login';
+            let url = 'common/login';
 
-        res.render(url, {
-            path : "/"+url,
-            endType : "",
-            data : {},
-            body : {},
-            userData:{},
-            cookie : req.cookies,
-            redirect : req.query.redirect
-        });
+            res.render(url, {
+                path : "/"+url,
+                endType : "",
+                data : {},
+                body : {},
+                userData:{},
+                cookie : req.cookies,
+                redirect : req.query.redirect
+            });
+        }
     }
 });
 
