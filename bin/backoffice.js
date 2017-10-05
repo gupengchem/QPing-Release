@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('backoffice:server');
-var http = require('http');
+var https = require('https');
 var fs = require('fs');
 let config = require('../config/config');
 
@@ -29,7 +29,7 @@ var options = {
  * Create HTTP server.
  */
 
-var server = http.createServer(options, app);
+var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
