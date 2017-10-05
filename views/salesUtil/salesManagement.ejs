@@ -72,12 +72,10 @@
                                         <div class="col-md-10">
                                             <div class="input-group date">
                                                 <input name="date_date_start" type="text" class="form-control date-picker"
-                                                       data-date-format="yyyy-mm-dd"
-                                                       value="<%=global.tool.date2string(new Date(new Date().getTime()))%>"/>
+                                                       data-date-format="yyyy-mm-dd" />
                                                 <span class="input-group-addon" id="basic-addon2">至</span>
                                                 <input name="date_date_end" type="text" class="form-control date-picker"
-                                                       data-date-format="yyyy-mm-dd"
-                                                       value="<%=global.tool.date2string(new Date(new Date().getTime()))%>"/>
+                                                       data-date-format="yyyy-mm-dd"/>
                                             </div>
                                         </div>
                                     </div>
@@ -115,7 +113,8 @@
                 <!--<input class="form-control" name="date" type="text" />-->
                 <div class="input-group date">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input name="date" type="text" class="form-control date-picker" id="date01" data-date-format="yyyy-mm-dd"/>
+                    <input name="date" type="text" class="form-control date-picker" id="date01" data-date-format="yyyy-mm-dd"
+                           value="<%=global.tool.date2string(new Date(new Date().getTime()))%>"/>
                 </div>
             </div>
         </div>
