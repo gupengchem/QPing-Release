@@ -18,7 +18,7 @@ $(function () {
         if(Dolphin.form.validate(updatePwdForm)){
             let data = Dolphin.form.getValue(updatePwdForm);
             Dolphin.ajax({
-                url : '/auth/user/changePwd',
+                url : '/system/auth/user/changePwd',
                 type : Dolphin.requestMethod.POST,
                 data : Dolphin.json2string(data),
                 onSuccess : function (reData) {
