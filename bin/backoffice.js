@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('backoffice:server');
 var http = require('http');
+var fs = require('fs');
 let config = require('../config/config');
 
 /**
