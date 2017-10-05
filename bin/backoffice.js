@@ -17,10 +17,18 @@ var port = normalizePort(process.env.PORT || config.port);
 app.set('port', port);
 
 /**
+ * Create HTTPS certificate.pem.
+ */
+var options = {
+    key: fs.readFileSync('./214278774810399.key'),
+    cert: fs.readFileSync('./214278774810399.pem')
+};
+
+/**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
