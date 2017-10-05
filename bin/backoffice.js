@@ -30,16 +30,18 @@ var options = {
  * Create HTTP server.
  */
 
-// var server = http.createServer(app);
-var server = https.createServer(options, app);
+var server = http.createServer(app);
+var httpsServer = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
+server.listen(80);
 server.on('error', onError);
 server.on('listening', onListening);
+httpsServer.listen(port);
+httpsServer.on('error', onError);
+httpsServer.on('listening', onhttpsListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -95,6 +97,13 @@ function onError(error) {
 
 function onListening() {
     var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+}
+function onhttpsListening() {
+    var addr = httpsServer.address();
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
