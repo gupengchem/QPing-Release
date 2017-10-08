@@ -252,7 +252,7 @@ page.initElement = function () {
                 }).appendTo(div);
 
                 $('<div class="textNowrap">').html(val.name).appendTo(div);
-                $('<div>').html(row.store.name).appendTo(div);
+                $('<div>').html(row.store?row.store.name:'无店铺').appendTo(div);
                 return div;
             }
 
