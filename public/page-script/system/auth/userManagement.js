@@ -58,8 +58,8 @@ page.initElement = function () {
             code: "code",
             title : "编码",
         },{
-            code: "phone",
-            title : "手机号",
+            code: "role.name",
+            title : "角色",
         },{
             code: "createTime",
             title : "创建时间",

@@ -21,7 +21,7 @@ const fs = require('fs');
 //列表
 router.post('/list', function(req, res, next) {
     let condition = req.body, query = req.query,
-    populate = 'creater org';
+    populate = 'creater role org';
     condition = reqUtil.formatCondition(condition);
 
     service
