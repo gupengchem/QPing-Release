@@ -257,6 +257,7 @@ page.initElement = function () {
             }
 
         });
+        salesListConfig.columns[3].width = '60px';
         salesListConfig.data = null;
     }
     thisPage.list = new Dolphin.LIST(salesListConfig);
