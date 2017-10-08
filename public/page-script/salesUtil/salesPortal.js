@@ -60,79 +60,73 @@ page.initElement = function () {
         autoclose: true,
     });
 
-    let productListConfig = {
-        panel : "#productList",
-        url : thisPage.url.product.list,
-        title : "产品列表",
-        paginationSimpleFlag: true,
-        queryParams : Dolphin.form.getValue('queryConditionForm'),
-        multiple: false,
-        columns : [{
-            code: "name",
-            title : "名称",
-            width: '50%',
-            formatter: function (val, row) {
-                let div = $('<div>');
-                $('<img class="thumbnail">').css('float','left').attr('src', Dolphin.path.uploadFileGet+row.image).click(function (e) {
-                    e.stopPropagation();
-                    $('<img class="img-responsive">').attr('src', Dolphin.path.uploadFileGet+row.image).appendTo(thisPage.imgPreviewModal);
-                    thisPage.imageModal.modal('show');
-                }).appendTo(div);
-
-                $('<div class="textNowrap">').html(val).appendTo(div);
-                $('<div>').html(row.searchName).appendTo(div);
-                return div;
-            }
-
-        },{
-            code: "keyword",
-            title : "关键字",
-
-        },{
-            code: "price",
-            title : "价格",
-            textAlign: 'right',
-            width:'50px',
-        }],
-        onChecked: function (data) {
-            thisPage._id = data._id;
-            thisPage.list.query({
-                product: data._id,
-            });
-            Dolphin.toggleEnable($('#quickCreate'), true);
-        },
-        onLoadSuccess: function (data) {
-            if(thisPage._id){
-                $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
-            }
-            if(data.rows.length > 0){
-                this.check(data.rows[0]._id);
-            }
-        }
-    };
     if(contextData.userData.role.code !== 'buyer'){
-        productListConfig.columns.push({
-            code: '__',
-            title: '概况',
-            width:'45px',
-            formatter: function (val, row) {
-                return `${row.unFinishedCount} / ${row.totalCount}`;
-            }
-        });
-    }
-    if(contextData.userData.role.code !== 'store'){
-        productListConfig.columns.splice(2, 0, {
-            code: "store.name",
-            title : "店铺",
+        let productListConfig = {
+            panel : "#productList",
+            url : thisPage.url.product.list,
+            title : "产品列表",
+            paginationSimpleFlag: true,
+            queryParams : Dolphin.form.getValue('queryConditionForm'),
+            multiple: false,
+            columns : [{
+                code: "name",
+                title : "名称",
+                width: '50%',
+                formatter: function (val, row) {
+                    let div = $('<div>');
+                    $('<img class="thumbnail">').css('float','left').attr('src', Dolphin.path.uploadFileGet+row.image).click(function (e) {
+                        e.stopPropagation();
+                        $('<img class="img-responsive">').attr('src', Dolphin.path.uploadFileGet+row.image).appendTo(thisPage.imgPreviewModal);
+                        thisPage.imageModal.modal('show');
+                    }).appendTo(div);
 
-        });
+                    $('<div class="textNowrap">').html(val).appendTo(div);
+                    $('<div>').html(row.searchName).appendTo(div);
+                    return div;
+                }
+
+            },{
+                code: "keyword",
+                title : "关键字",
+
+            },{
+                code: "price",
+                title : "价格",
+                textAlign: 'right',
+                width:'50px',
+            },{
+                code: '__',
+                title: '概况',
+                width:'45px',
+                formatter: function (val, row) {
+                    return `${row.unFinishedCount} / ${row.totalCount}`;
+                }
+            }],
+            onChecked: function (data) {
+                thisPage._id = data._id;
+                thisPage.list.query({
+                    product: data._id,
+                });
+                Dolphin.toggleEnable($('#quickCreate'), true);
+            },
+            onLoadSuccess: function (data) {
+                if(thisPage._id){
+                    $(thisPage.productList.opts.panel).find('input[value="'+thisPage._id+'"]').attr('checked','checked');
+                }
+                if(data.rows.length > 0){
+                    this.check(data.rows[0]._id);
+                }
+            }
+        };
+        if(contextData.userData.role.code !== 'store'){
+            productListConfig.columns.splice(2, 0, {
+                code: "store.name",
+                title : "店铺",
+
+            });
+        }
+        thisPage.productList = new Dolphin.LIST(productListConfig);
     }
-    if(contextData.userData.role.code === 'buyer'){
-        productListConfig.data = {rows:[]};
-        productListConfig.rowIndex = false;
-        productListConfig.pagination = false;
-    }
-    thisPage.productList = new Dolphin.LIST(productListConfig);
 
     let salesListConfig = {
         panel : "#dataList",
@@ -166,16 +160,19 @@ page.initElement = function () {
             className: 'DolphinOperation',
             formatter: function (val, row) {
                 let content = $('<div>');
-                $('<button class="btn btn-default btn-sm">').html('order').click(function () {
-                    let data = Object.assign({}, row);
-                    if(data.buyer){
-                        data.buyer = data.buyer._id;
-                    }
-                    Dolphin.form.setValue(data, thisPage.orderForm);
-                    thisPage.orderModal.modal('show');
-                }).appendTo(content);
+                if(contextData.userData.role.code !== 'buyer' || (contextData.userData.role.code === 'buyer' && !row.orderNo)) {
+                    $('<button class="btn btn-default btn-sm">').html('order').click(function () {
+                        let data = Object.assign({}, row);
+                        if (data.buyer) {
+                            data.buyer = data.buyer._id;
+                        }
+                        Dolphin.form.setValue(data, thisPage.orderForm);
+                        thisPage.orderModal.modal('show');
+                    }).appendTo(content);
+                }
 
-                if(row.product.reviewFlag){
+                if(row.product.reviewFlag &&
+                    (contextData.userData.role.code !== 'buyer' || (contextData.userData.role.code === 'buyer' && row.reviewFlag === 0))){
                     let reviewButton = $('<button type="button" class="btn btn-default btn-sm fileinput-button">').html('review').appendTo(content);
                     let uploadInput = $('<input type="file" name="media" />').appendTo(reviewButton);
 
@@ -201,7 +198,8 @@ page.initElement = function () {
                     });
                 }
 
-                if(row.product.feedbackFlag){
+                if(row.product.feedbackFlag &&
+                    (contextData.userData.role.code !== 'buyer' || (contextData.userData.role.code === 'buyer' && row.feedbackFlag === 0))){
                     let feedbackButton = $('<button type="button" class="btn btn-default btn-sm fileinput-button">').html('feedback').appendTo(content);
                     let uploadInput = $('<input type="file" name="media" />').appendTo(feedbackButton);
 
@@ -241,7 +239,25 @@ page.initElement = function () {
         });
     }
     if(contextData.userData.role.code === 'buyer'){
-        salesListConfig.pagination = false;
+        salesListConfig.columns.splice(0, 1, {
+            code: "product",
+            title : "名称",
+            width: '50%',
+            formatter: function (val, row) {
+                let div = $('<div>');
+                $('<img class="thumbnail">').css('float','left').attr('src', Dolphin.path.uploadFileGet+val.image).click(function (e) {
+                    e.stopPropagation();
+                    $('<img class="img-responsive">').attr('src', Dolphin.path.uploadFileGet+val.image).appendTo(thisPage.imgPreviewModal);
+                    thisPage.imageModal.modal('show');
+                }).appendTo(div);
+
+                $('<div class="textNowrap">').html(val.name).appendTo(div);
+                $('<div>').html(val.searchName).appendTo(div);
+                return div;
+            }
+
+        });
+        salesListConfig.data = null;
     }
     thisPage.list = new Dolphin.LIST(salesListConfig);
 

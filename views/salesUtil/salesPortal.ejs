@@ -38,6 +38,7 @@
                 </div>
             </div>
 
+            <% if(userData.role.code !== 'buyer'){ %>
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="queryCondition">
@@ -81,12 +82,17 @@
                     </div>
                 </div>
             </div>
+            <% } %>
 
             <div class="row">
+                <% if(userData.role.code !== 'buyer') { %>
                 <div class="col-sm-6">
                     <div id="productList"></div>
                 </div>
                 <div class="col-sm-6">
+                <% } else { %>
+                <div class="col-sm-12">
+                <% } %>
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="panel-title">
