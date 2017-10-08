@@ -252,7 +252,7 @@ page.initElement = function () {
                 }).appendTo(div);
 
                 $('<div class="textNowrap">').html(val.name).appendTo(div);
-                $('<div>').html(val.searchName).appendTo(div);
+                $('<div>').html(row.store.name).appendTo(div);
                 return div;
             }
 
