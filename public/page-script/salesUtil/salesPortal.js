@@ -156,7 +156,6 @@ page.initElement = function () {
         },{
             code:'operation',
             title:' ',
-            width: '200px',
             className: 'DolphinOperation',
             formatter: function (val, row) {
                 let content = $('<div>');
@@ -239,6 +238,7 @@ page.initElement = function () {
         });
     }
     if(contextData.userData.role.code === 'buyer'){
+        salesListConfig.rowIndex = false;
         salesListConfig.columns.splice(0, 1, {
             code: "product",
             title : "名称",
