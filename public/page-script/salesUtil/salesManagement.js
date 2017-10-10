@@ -6,6 +6,7 @@
 const page = {
     editForm : $('#edit-form'),
     detailForm : $('#detail-form'),
+    payForm : $('#pay-form'),
     queryConditionForm: $('#queryConditionForm'),
 
     url : {
@@ -15,12 +16,18 @@ const page = {
         detail : '/salesUtil/sales/detail/{id}',
         importData : Dolphin.path.contextPath + '/salesUtil/sales/import',
         exportData : '/salesUtil/sales/export',
+
+        buyer: {
+            detail : '/salesUtil/buyer/detail/{id}',
+        }
     },
 
     _id : null,
     list : null,
     editModal : null,
     detailModal : null,
+    payModal : null,
+    _payId : null,
 
     init: null,
     initElement: null,
@@ -76,6 +83,30 @@ page.initElement = function () {
             code: "store.name",
             title : "店铺",
             
+        },{
+            code:'operation',
+            title:' ',
+            className: 'DolphinOperation',
+            formatter: function (val, row) {
+                let content = $('<div>');
+                if(row.status === 'finished'){
+                    let payButton = $('<button type="button" class="btn btn-default btn-sm fileinput-button">').html('pay').appendTo(content);
+                    payButton.click(function () {
+                        Dolphin.ajax({
+                            url : thisPage.url.buyer.detail,
+                            pathData : {id : row.buyer._id},
+                            loading : true,
+                            onSuccess : function (reData) {
+                                thisPage._payId = row._id;
+                                Dolphin.form.setValue(reData.data, thisPage.payForm);
+                                thisPage.payModal.modal('show');
+                            }
+                        })
+                    })
+                }
+
+                return content;
+            }
         }]
     });
 
@@ -96,6 +127,20 @@ page.initElement = function () {
         hidden : function () {
             Dolphin.form.empty(thisPage.detailForm);
         }
+    });
+
+    thisPage.payModal = new Dolphin.modalWin({
+        content : thisPage.payForm,
+        title : "查看详情",
+        defaultHidden : true,
+        footer : $('#pay_form_footer'),
+        hidden : function () {
+            Dolphin.form.empty(thisPage.payForm);
+        }
+    });
+
+    $('#buyerSelect').selectpicker({
+        "liveSearch":true
     });
 };
 
@@ -203,6 +248,21 @@ page.initEvent = function () {
     //导出
     $('#exportDate').click(function () {
         window.open(thisPage.url.exportData + '?' + thisPage.queryConditionForm.serialize());
+    });
+
+    //付款
+    $('#pay_form_save').click(function () {
+        let data = {status: 'paid'};
+        Dolphin.ajax({
+            url : thisPage.url.save,
+            type : Dolphin.requestMethod.POST,
+            data : Dolphin.json2string(data),
+            pathData : {id : thisPage._payId},
+            onSuccess : function (reData) {
+                thisPage.payModal.modal('hide');
+                thisPage.list.reload();
+            }
+        });
     });
 };
 

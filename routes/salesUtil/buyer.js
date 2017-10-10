@@ -38,9 +38,10 @@ router.post('/list', function(req, res, next) {
 router.get('/find', function(req, res, next) {
     let condition = req.query;
     condition = reqUtil.formatCondition(condition);
+    let sort = {spellName: 1};
 
     service
-        .find(req.curUser, condition)
+        .find(req.curUser, condition, undefined, sort)
         .then(
             data => res.send(resUtil.success({rows:data})),
             err => res.send(resUtil.error())

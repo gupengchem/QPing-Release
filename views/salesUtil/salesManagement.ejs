@@ -81,6 +81,14 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">状态</label>
+                                        <div class="col-md-8">
+                                            <select name="status" options="SalesStatus" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
                                     <button class="btn btn-default btn-query" type="submit">
                                         搜索
                                     </button>
@@ -127,7 +135,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">买手</label>
             <div class="col-md-10">
-                <select name="buyer" class="form-control" options
+                <select name="buyer" class="form-control" options id="buyerSelect"
                         optionUrl="/salesUtil/buyer/find" ajaxType="get" codeField="_id" nameField="name">
                 </select>
             </div>
@@ -244,6 +252,50 @@
             </div>
         </div>
     </form>
+
+    <!------------------------------------------ pay modal ------------------------------------------>
+    <form class="form-horizontal detail-form" id="pay-form">
+        <div class="form-group">
+            <label class="col-md-2 control-label">名称</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="name"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">编码</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="code"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">付款方式</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="payType" options="payType"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">账号</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="payAccount"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">微信ID</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="wechatId"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">备注</label>
+            <div class="col-md-10">
+                <p class="form-control-static" name="remark"></p>
+            </div>
+        </div>
+    </form>
+    <div id="pay_form_footer">
+        <button type="button" class="btn btn-primary btn-small" id="pay_form_save">Confirm</button>
+        <button type="button" class="btn btn-default btn-small dol-hideModal" id="pay_form_cancel">Cancel</button>
+    </div>
 </div>
 
 <% include ../../views/common/footer.ejs %>

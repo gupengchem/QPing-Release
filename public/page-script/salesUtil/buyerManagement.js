@@ -59,6 +59,10 @@ page.initElement = function () {
             title : "编码",
             
         },{
+            code: "spellName",
+            title : "拼音",
+
+        },{
             code: "payType",
             title : "付款方式",
             formatter: function (val) {
@@ -158,6 +162,9 @@ page.initEvent = function () {
     //保存
     $('#edit_form_save').click(function () {
         let data = Dolphin.form.getValue("edit-form");
+        if(data.spellName){
+            data.spellName = data.spellName.replace(/ /g, '').toLowerCase();
+        }
         Dolphin.ajax({
             url : thisPage.url.save,
             type : Dolphin.requestMethod.POST,
