@@ -59,6 +59,10 @@ page.initElement = function () {
                 return val?val:'暂无'
             }
         },{
+            code: "store.name",
+            title : "店铺",
+
+        },{
             code: "product.name",
             title : "产品",
             
@@ -80,9 +84,9 @@ page.initElement = function () {
             title : "编号",
 
         },{
-            code: "store.name",
-            title : "店铺",
-            
+            code: "product.price",
+            title : "价格",
+
         },{
             code:'operation',
             title:' ',
