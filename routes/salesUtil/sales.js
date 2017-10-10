@@ -121,12 +121,12 @@ router.post('/updateInfo/:type/:id', function(req, res, next) {
             err => res.send(resUtil.error())
         );
 });
-//新增
+//新增 自动通过产品关联店铺
 router.post('/save', function(req, res, next) {
     let data = req.body;
 
     service
-        .save(req.curUser, data)
+        .saveWithStore(req.curUser, data)
         .then(
             data => res.send(resUtil.success({data:data})),
             err => res.send(resUtil.error())

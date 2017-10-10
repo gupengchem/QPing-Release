@@ -87,6 +87,18 @@ class ModuleService extends CommonService{
             });
         });
     }
+    saveWithStore(curUser, data){
+        return new Promise((resolve, reject) => {
+            ProductService.findById(curUser, data.product).then(product => {
+                data.store = product.store;
+
+                super.save(curUser, data).then(
+                    data => resolve(data),
+                    err => reject(err)
+                )
+            });
+        });
+    }
 
     reviewById(curUser, id, data){
         return new Promise((resolve, reject) => {
