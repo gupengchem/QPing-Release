@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2016 Breezee.org. All Rights Reserved.
  */
 const path = require('path');
@@ -10,7 +10,7 @@ module.exports = (function () {
     const config = {
         title: 'Quping',
         mock : true,
-        port : '9017',
+        port : '443',
     };
 
     //path

@@ -1,4 +1,4 @@
-/**
+﻿/**
 * Created by wangshuyi on 8/9/2017, 9:00:40 AM.
 */
 
@@ -88,7 +88,7 @@ router.post('/save', function(req, res, next) {
             file = files.media;
 
             data.name = file.name;
-            data.filePath = '/'+file.path.split('/').pop();
+            data.filePath = '/'+file.path.split('\\').pop();
             data.fileSize = file.size;
             data.fileType = file.type;
             data.lastModifiedDate = file.lastModifiedDate;

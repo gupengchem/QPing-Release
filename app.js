@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -12,6 +12,7 @@ const extend = require('extend');
 const i18n = require('i18n');
 const fs = require('fs');
 
+
 //config
 console.log("/------------------------ 系统配置信息 ------------------------/");
 global.config = require(path.join(__dirname, 'config/config'));
@@ -22,6 +23,7 @@ let logger = log4js.getLogger("sys");
 global.tool = require(path.join(__dirname, 'module/util/tool'));
 
 let app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
